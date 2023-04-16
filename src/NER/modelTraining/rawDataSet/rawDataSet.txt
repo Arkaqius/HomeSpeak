@@ -1,0 +1,2 @@
+"Turn on the light in the kitchen"
+"Switch off the heating in the living room"

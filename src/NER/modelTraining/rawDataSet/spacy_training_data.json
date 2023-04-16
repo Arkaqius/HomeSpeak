@@ -1,0 +1,46 @@
+[
+  [
+    "\"Turn on the light in the kitchen\"",
+    {
+      "entities": [
+        [
+          6,
+          8,
+          "STATE"
+        ],
+        [
+          13,
+          18,
+          "THING"
+        ],
+        [
+          26,
+          33,
+          "LOCATION"
+        ]
+      ]
+    }
+  ],
+  [
+    "\"Switch off the heating in the living room\"",
+    {
+      "entities": [
+        [
+          8,
+          11,
+          "STATE"
+        ],
+        [
+          16,
+          23,
+          "THING"
+        ],
+        [
+          31,
+          42,
+          "LOCATION"
+        ]
+      ]
+    }
+  ]
+]
