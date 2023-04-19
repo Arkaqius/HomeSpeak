@@ -1,16 +1,16 @@
 import os
 import glob
 import json
+import config as cfg
 
 class Vocab:
-    labels_dir = './src/NER/vocab/en-us' 
 
     def __init__(self):
         self.label_entity_dict = {}
         self.synonyms_dict = {}
     
     def readData(self):
-        for label_dir in glob.glob(os.path.join(self.labels_dir, '*')):
+        for label_dir in glob.glob(os.path.join(cfg.PATH_VOCAB, '*')):
             label = os.path.basename(label_dir)
             label = label.lower()
             self.label_entity_dict[label] = []
