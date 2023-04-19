@@ -38,8 +38,8 @@ def trainModel(nlp: spacy.Language,trainData : T.List[T.Tuple[str, T.Dict[str, T
         examples.append(example)
 
     # Split the data into training and validation sets
-    train_examples = examples[:int(len(examples) * 0.8)]
-    val_examples = examples[int(len(examples) * 0.8):]
+    train_examples = examples[:int(len(examples) * 0.7)]
+    val_examples = examples[int(len(examples) * 0.7):]
 
     # Get the names of the model's other pipes (to disable during training)
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
@@ -62,7 +62,7 @@ def trainModel(nlp: spacy.Language,trainData : T.List[T.Tuple[str, T.Dict[str, T
     nlp.to_disk("./src/NER/modelTraining/trainedModel")
 
 def main():
-    spacy_file_path = "./src/NER/modelTraining/rawDataSet/spacy_training_data.json"
+    spacy_file_path = "./src/NER/modelTraining/rawDataSet/spacy_training_data_generated.json"
     TRAIN_DATA = load_spacy_json(spacy_file_path)
 
     nlp = createModel(TRAIN_DATA)

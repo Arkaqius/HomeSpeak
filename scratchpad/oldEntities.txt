@@ -1,0 +1,41 @@
+
+predefined_entities = {
+    'THING': ['door', 'window', 'heating', 'air condition', 'light', 'lock', 'plug', 'switch', 'warm water', 'thermostat', 'alarm'],
+    'ATTRIBUTE': ['temperature', 'color temperature', 'state', 'setpoint temperature', 'brightness', 'mode'],
+    'LOCATION': ['kitchen', 'living room', 'first floor', 'bathroom'],
+    'STATE': ['on', 'off', 'powered', 'lock', 'unlocked', 'closed', 'open'],
+    'ACTION': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'toggle', 'trigger', 'lock', 'unlock']
+}
+
+thing_action = {
+    'door': ['lock', 'unlock'],
+    'window': ['lock', 'unlock'],
+    'heating': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'trigger'],
+    'air condition': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'trigger'],
+    'light': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'trigger', 'toggle'],
+    'lock': ['lock', 'unlock'],
+    'plug': ['turn on', 'turn off', 'trigger', 'toggle'],
+    'switch': ['turn on', 'turn off', 'trigger', 'toggle'],
+    'warm water': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'trigger'],
+    'thermostat': ['adjust', 'increase', 'decrease', 'turn on', 'turn off', 'trigger'],
+    'alarm': ['lock', 'unlock']
+}
+
+thing_attributes = {
+    'door': [ 'state'],
+    'window': [ 'state'],
+    'heating': [ 'temperature', 'setpoint temperature', 'mode'],
+    'air condition': [ 'temperature', 'setpoint temperature', 'mode'],
+    'light': [ 'state', 'brightness', 'color temperature'],
+    'lock': [ 'state'],
+    'plug': [ 'state'],
+    'switch': [ 'state'],
+    'warm water': [ 'temperature'],
+    'thermostat': [ 'temperature', 'setpoint temperature', 'mode'],
+    'alarm': [ 'state']
+}
+
+action_synonyms = {
+    "turn on": ["set on"],
+    "turn off": ["set off"]
+}

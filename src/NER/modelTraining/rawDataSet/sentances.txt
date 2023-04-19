@@ -1,0 +1,250 @@
+deactivate the warm water in entryway
+disable the high heating in wardrobe
+activate the plug in kids room
+enable the lights in kids room
+enable the kid hot water in bathroom
+deactivate the low air conditioner in wardrobe
+off the heater in frontyard
+deactivate the ac in frontyard
+disable the socket in backyard
+on the ac in garage
+enable the heating in upper bathroom
+enable the heater in stairs
+turn on the bulbs in corridor
+deactivate the strip toggle switch in garage
+disable the toggle switch in frontyard
+disable the small toggle switch in corridor
+disable the wall heater in upper corridor
+activate the big ac in frontyard
+turn off the standing heater in back_balcony
+on the ac in backyard
+turn off the hot water in bathroom
+enable the air conditioner in frontyard
+off the kids light in corridor
+disable the wall socket in living room
+disable the warm water in garage
+off the warm water in corridor
+on the kids ac in upper corridor
+turn off the air conditioner in upper bathroom
+disable the big bulb in bathroom
+disable the high bulbs in living room
+off the standing toggle switch in kids room
+on the plug in corridor
+disable the toggle switch in living room
+enable the led outlet in kitchen
+disable the switch in backyard
+on the lights in corridor
+turn off the kids ac in office
+enable the plug in back_balcony
+turn off the kids warm water in stairs
+off the lights in entryway
+turn on the lights in corridor
+turn on the plug in office
+turn off the small toggle switch in kids room
+off the heat in upper bathroom
+deactivate the floor outlet in back_balcony
+deactivate the warm water in backyard
+turn on the switch in office
+enable the lights in upper corridor
+off the plug in front_balcony
+enable the heating in living room
+turn off the led heating in upper bathroom
+disable the toggle switch in office
+enable the small bulb in bedroom
+enable the outlet in kitchen
+enable the switch in upper bathroom
+on the wall light in upper bathroom
+deactivate the switch in backyard
+turn off the warm water in upper corridor
+activate the air conditioner in garage
+enable the kid heat in entryway
+off the toggle switch in upper corridor
+on the led air conditioning in office
+on the heater in living room
+off the plug in office
+off the socket in bathroom
+disable the outlet in entryway
+enable the floor bulb in back_balcony
+disable the kids outlet in bedroom
+on the high light in kids room
+deactivate the plug in bedroom
+enable the air conditioning in entryway
+enable the ceiling air conditioner in garage
+off the standing bulbs in office
+activate the ac in bathroom
+activate the heating in wardrobe
+turn off the hot water in bedroom
+activate the high air conditioning in back_balcony
+turn on the led bulbs in entryway
+off the plug in wardrobe
+activate the warm water in kids room
+turn on the bulbs in frontyard
+deactivate the high hot water in frontyard
+turn on the low bulbs in bedroom
+activate the heater in kids room
+activate the strip lights in stairs
+off the floor socket in office
+deactivate the air conditioning in stairs
+off the heat in living room
+enable the low switch in kitchen
+off the bulbs in wardrobe
+deactivate the heating in bathroom
+turn on the small light in kitchen
+turn on the light in stairs
+off the bulbs in office
+turn off the strip plug in front_balcony
+disable the air conditioner in upper corridor
+off the high hot water in backyard
+deactivate the socket in office
+on the big warm water in bathroom
+off the floor lights in office
+activate the bulb in kitchen
+activate the led air conditioner in kitchen
+deactivate the bulb in office
+enable the wall toggle switch in living room
+activate the ac in bathroom
+enable the outlet in front_balcony
+off the toggle switch in stairs
+turn off the big bulb in corridor
+turn off the light in kids room
+off the bulbs in kitchen
+turn off the lights in frontyard
+off the warm water in bathroom
+disable the light in corridor
+turn on the light in living room
+enable the led bulb in bedroom
+activate the strip air conditioner in office
+off the toggle switch in stairs
+on the warm water in bathroom
+on the high warm water in upper bathroom
+disable the big heat in living room
+enable the standing heater in front_balcony
+turn off the standing air conditioner in back_balcony
+deactivate the toggle switch in kids room
+deactivate the kid outlet in bathroom
+off the light in frontyard
+activate the ac in living room
+activate the low socket in garage
+deactivate the air conditioning in upper corridor
+off the standing ac in bathroom
+turn on the heater in stairs
+disable the floor warm water in corridor
+enable the small air conditioning in back_balcony
+on the big warm water in kids room
+disable the low outlet in upper corridor
+off the big ac in entryway
+activate the hot water in entryway
+deactivate the outlet in living room
+turn on the kid toggle switch in front_balcony
+off the toggle switch in back_balcony
+enable the floor socket in bathroom
+on the bulbs in front_balcony
+off the kids hot water in entryway
+enable the lights in office
+enable the led bulbs in upper corridor
+turn off the floor air conditioning in garage
+on the small light in office
+disable the wall ac in office
+deactivate the kid air conditioning in kitchen
+on the led heat in stairs
+enable the bulb in upper bathroom
+on the low toggle switch in upper bathroom
+activate the lights in front_balcony
+turn off the air conditioning in wardrobe
+turn on the ac in bathroom
+off the outlet in frontyard
+turn on the heater in stairs
+off the high lights in living room
+off the strip toggle switch in frontyard
+turn on the ac in frontyard
+turn on the ac in garage
+activate the small outlet in corridor
+disable the switch in frontyard
+turn on the warm water in upper corridor
+enable the floor heating in upper bathroom
+off the warm water in backyard
+off the high toggle switch in front_balcony
+off the bulbs in upper bathroom
+on the socket in bathroom
+disable the low bulb in upper bathroom
+disable the socket in stairs
+disable the big light in wardrobe
+deactivate the heater in entryway
+enable the hot water in kids room
+enable the heating in upper corridor
+enable the bulbs in back_balcony
+turn off the hot water in upper corridor
+turn on the bulbs in corridor
+enable the toggle switch in garage
+enable the air conditioner in backyard
+enable the floor heat in bedroom
+off the switch in living room
+disable the air conditioner in kids room
+off the wall warm water in bathroom
+on the low switch in bedroom
+deactivate the socket in kitchen
+activate the kids warm water in upper bathroom
+disable the standing toggle switch in bedroom
+activate the hot water in back_balcony
+off the ceiling air conditioner in front_balcony
+turn on the floor toggle switch in corridor
+activate the socket in office
+turn on the plug in stairs
+turn off the switch in corridor
+on the outlet in wardrobe
+deactivate the led outlet in entryway
+on the bulb in frontyard
+turn on the heater in backyard
+turn off the floor ac in backyard
+off the big lights in kids room
+off the heat in garage
+turn off the toggle switch in kids room
+activate the heat in bedroom
+on the heater in front_balcony
+turn off the bulb in wardrobe
+disable the kids light in office
+turn off the warm water in front_balcony
+deactivate the switch in back_balcony
+deactivate the outlet in office
+disable the plug in entryway
+enable the socket in stairs
+off the hot water in back_balcony
+off the led toggle switch in stairs
+turn on the standing hot water in bathroom
+off the big heat in office
+turn off the socket in bedroom
+disable the heating in kids room
+activate the switch in front_balcony
+turn off the big outlet in wardrobe
+enable the light in stairs
+off the heater in frontyard
+off the kid lights in wardrobe
+disable the heater in living room
+on the socket in bathroom
+off the wall outlet in bathroom
+off the switch in backyard
+activate the kid air conditioning in office
+enable the small ac in bedroom
+disable the small warm water in upper bathroom
+disable the kid switch in bedroom
+disable the wall light in frontyard
+disable the kids lights in wardrobe
+enable the heat in upper bathroom
+deactivate the wall switch in entryway
+deactivate the floor bulb in kitchen
+enable the floor air conditioning in office
+enable the led lights in kids room
+activate the led warm water in kitchen
+disable the floor heater in kitchen
+activate the heat in front_balcony
+deactivate the strip toggle switch in living room
+deactivate the socket in upper bathroom
+turn off the kids heater in frontyard
+enable the led toggle switch in bedroom
+turn off the warm water in wardrobe
+on the hot water in corridor
+on the heater in bathroom
+off the big bulb in office
+activate the warm water in bathroom
+disable the plug in living room
+turn on the strip switch in kitchen

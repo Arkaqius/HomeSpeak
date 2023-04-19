@@ -29,6 +29,7 @@ def main():
     udt_file_path = "./src/NER/modelTraining/rawDataSet/data.json"
     spacy_file_path = "./src/NER/modelTraining/rawDataSet/spacy_training_data.json"
 
+
     udt_data = load_udt_json(udt_file_path)
     spacy_data = convert_udt_to_spacy(udt_data['samples'])
     save_spacy_json(spacy_data, spacy_file_path)

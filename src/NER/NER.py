@@ -1,4 +1,4 @@
-
+import random
 import spacy
 
 class VH_Ner:
@@ -29,12 +29,15 @@ def main():
     model_path = "./src/NER/modelTraining/trainedModel"
     nlp = load_trained_model(model_path)
 
-    text = "Turn on the light in the living room"
-    named_entities = get_named_entities(nlp, text)
-    
-    print("Named entities:")
-    for entity, label in named_entities.items():
-        print(f"{entity}: {label}")
+    for i in range(1,25):
+        with open("./src/NER/modelTraining/rawDataSet/sentances.txt", "r") as f:
+            lines = f.readlines()
+            random_line = random.choice(lines)
+            print('\n'+random_line)
+            named_entities = get_named_entities(nlp, random_line)
+            print("Named entities:")
+            for entity, label in named_entities.items():
+                print(f"{entity}: {label}")
 
 if __name__ == '__main__':
     main()
