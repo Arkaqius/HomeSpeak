@@ -4,6 +4,7 @@ from spacy.util import minibatch, compounding
 from spacy.training import Example
 import typing as T
 import json
+import config as cfg
 
 def load_spacy_json(file_path: str) -> list:
     with open(file_path, "r", encoding="utf-8") as file:
@@ -38,8 +39,8 @@ def trainModel(nlp: spacy.Language,trainData : T.List[T.Tuple[str, T.Dict[str, T
         examples.append(example)
 
     # Split the data into training and validation sets
-    train_examples = examples[:int(len(examples) * 0.7)]
-    val_examples = examples[int(len(examples) * 0.7):]
+    train_examples = examples[:int(len(examples) * cfg.TRAIN_VAL_RATION)]
+    val_examples = examples[int(len(examples) * cfg.TRAIN_VAL_RATION):]
 
     # Get the names of the model's other pipes (to disable during training)
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
@@ -47,7 +48,7 @@ def trainModel(nlp: spacy.Language,trainData : T.List[T.Tuple[str, T.Dict[str, T
     # Train the model
     with nlp.disable_pipes(*other_pipes):
         optimizer = nlp.begin_training()
-        for itn in range(50):  # Number of iterations (epochs)
+        for itn in range(cfg.NUMBER_OF_EPOCHS):  # Number of iterations (epochs)
             random.shuffle(train_examples)
             batches = minibatch(train_examples, size=compounding(4.0, 32.0, 1.001))
             losses = {}
@@ -57,13 +58,13 @@ def trainModel(nlp: spacy.Language,trainData : T.List[T.Tuple[str, T.Dict[str, T
             
             # Evaluate the model on the validation set
             val_metrics = nlp.evaluate(val_examples)
-            print(f"Epoch: {itn + 1}, Loss: {losses['ner']}, Validation Metrics: {val_metrics}")
+            print(f"Epoch: {itn + 1},\n Loss: {losses['ner']},\n Validation Metrics: {val_metrics}\n")
 
-    nlp.to_disk("./src/NER/modelTraining/trainedModel")
+    nlp.to_disk(cfg.PATH_TRAINED_MODEL)
 
 def main():
-    spacy_file_path = "./src/NER/modelTraining/rawDataSet/spacy_training_data_generated.json"
-    TRAIN_DATA = load_spacy_json(spacy_file_path)
+    train_data_path = cfg.PATH_TRAIN_DATA
+    TRAIN_DATA = load_spacy_json(train_data_path)
 
     nlp = createModel(TRAIN_DATA)
     trainModel(nlp, TRAIN_DATA)

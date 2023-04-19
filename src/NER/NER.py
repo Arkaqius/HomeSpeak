@@ -1,14 +1,13 @@
 import random
 import spacy
+import config as cfg
 
 class VH_Ner:
 
     # constructor
     def __init__(self):
         pass
-
-
-
+    
 def load_trained_model(model_path: str) -> spacy.Language:
     nlp = spacy.load(model_path)
     return nlp
@@ -26,11 +25,11 @@ def get_named_entities(nlp: spacy.Language, text: str) -> dict:
     return entities
 
 def main():
-    model_path = "./src/NER/modelTraining/trainedModel"
+    model_path = cfg.PATH_TRAINED_MODEL
     nlp = load_trained_model(model_path)
 
     for i in range(1,25):
-        with open("./src/NER/modelTraining/rawDataSet/sentances.txt", "r") as f:
+        with open(cfg.PATH_TEST_SENTENCES, "r") as f:
             lines = f.readlines()
             random_line = random.choice(lines)
             print('\n'+random_line)
