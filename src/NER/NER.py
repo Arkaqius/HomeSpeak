@@ -28,7 +28,7 @@ def main():
     model_path = cfg.PATH_TRAINED_MODEL
     nlp = load_trained_model(model_path)
 
-    for i in range(1,25):
+    for i in range(1,100):
         with open(cfg.PATH_TEST_SENTENCES, "r") as f:
             lines = f.readlines()
             random_line = random.choice(lines)

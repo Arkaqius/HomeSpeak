@@ -18,9 +18,16 @@
   },
   "labels":{
     "ner":[
+      "actions_#adjust",
+      "actions_#decrease",
+      "actions_#increase",
       "actions_#off",
       "actions_#on",
-      "actions_#switch",
+      "actions_#toggle",
+      "attributes_#brightness",
+      "attributes_#color",
+      "attributes_#color_temperature",
+      "attributes_#temperature",
       "location_#back_balcony",
       "location_#backyard",
       "location_#bathroom",
@@ -39,11 +46,16 @@
       "location_#upper_corridor",
       "location_#wardrobe",
       "things_#air_conditioning",
+      "things_#door",
       "things_#heat",
       "things_#light",
+      "things_#lock",
       "things_#plug",
+      "things_#pressure",
       "things_#switch",
-      "things_#warm_water"
+      "things_#thermostat",
+      "things_#warm_water",
+      "things_#window"
     ]
   },
   "pipeline":[

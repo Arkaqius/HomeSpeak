@@ -1,250 +1,1000 @@
-on the heating in stairs
-disable the warm water in living room
-enable the high outlet in living room
-on the low heat in living room
-turn off the outlet in office
-turn off the light in garage
-disable the low warm water in front_balcony
-deactivate the heat in back_balcony
-activate the low ac in bedroom
-deactivate the plug in upper corridor
-enable the light in kids room
-turn off the low warm water in front_balcony
-on the kid air conditioner in corridor
-disable the outlet in garage
-turn on the floor switch in stairs
-turn off the wall air conditioner in garage
-turn on the hot water in entryway
-turn on the led bulb in stairs
-off the heat in front_balcony
-turn on the light in upper corridor
-off the floor bulb in upper bathroom
-turn on the hot water in entryway
-on the strip air conditioner in garage
-deactivate the ceiling warm water in back_balcony
-disable the plug in office
-off the kid ac in kids room
-disable the led air conditioner in upper corridor
-turn off the kid air conditioning in frontyard
-activate the bulb in frontyard
-turn off the heating in kitchen
-enable the standing toggle switch in upper bathroom
-off the warm water in office
-enable the standing light in kitchen
-deactivate the air conditioning in upper corridor
-disable the heating in backyard
-activate the heating in bathroom
-off the strip bulb in office
-activate the light in garage
-deactivate the heating in bathroom
-off the air conditioner in frontyard
-deactivate the kid heating in bathroom
-activate the low heating in back_balcony
-deactivate the kid bulb in upper corridor
-disable the wall air conditioner in frontyard
-turn off the ceiling socket in bathroom
-on the strip heating in office
-on the standing toggle switch in upper corridor
-off the bulb in front_balcony
-deactivate the led heat in kids room
-on the heater in upper corridor
-turn off the toggle switch in corridor
-deactivate the plug in kids room
-off the switch in upper bathroom
-turn off the switch in upper corridor
-on the switch in front_balcony
-enable the air conditioner in stairs
-disable the low heater in entryway
-on the strip hot water in front_balcony
-enable the standing light in corridor
-activate the warm water in front_balcony
-deactivate the bulb in living room
-deactivate the switch in back_balcony
-on the kid warm water in garage
-deactivate the high ac in kitchen
-activate the plug in bathroom
-off the strip heat in bathroom
-on the low warm water in upper bathroom
-deactivate the led heater in entryway
-disable the heat in upper bathroom
-on the hot water in office
-turn off the wall warm water in stairs
-enable the toggle switch in bedroom
-off the low air conditioning in bathroom
-turn on the air conditioning in back_balcony
-disable the switch in upper corridor
-enable the big air conditioning in upper corridor
-turn on the kid heating in corridor
-on the high toggle switch in living room
-turn on the wall heating in garage
-disable the kid heat in upper bathroom
-enable the air conditioning in bathroom
-activate the wall switch in back_balcony
-on the led warm water in bathroom
-disable the toggle switch in kids room
-activate the big air conditioner in wardrobe
-deactivate the big warm water in wardrobe
-turn off the outlet in garage
-enable the small lights in entryway
-off the warm water in garage
-off the lights in office
-turn off the hot water in upper bathroom
-turn off the warm water in back_balcony
-turn off the hot water in front_balcony
-on the toggle switch in bedroom
-activate the ceiling hot water in back_balcony
-activate the air conditioning in entryway
-deactivate the small light in entryway
-enable the toggle switch in garage
-on the led air conditioner in garage
-turn on the big plug in bathroom
+lower color of low bulb in corridor
+change brightness of wall heater in back_balcony
+lower temperature of ceiling lights
+adjust color of led padlock in garage
+power the lights in stairs
+adjust hue of high window
+decrease temperature of standing air conditioning in back_balcony
+change temperature of kid lights in corridor
+change brightness of floor heater
+down hue of ceiling lock
+raise temperature of floor plug in kids room
+adjust brightness of standing switch in kitchen
+adjust color temperature of standing thermostat
+power the small air conditioning in bedroom
+change temperature of low bulb in bedroom
+change color temperature of low switch
+adjust hue of small switch
+adjust luminosity of small lights in kitchen
+toggle the low bulbs in wardrobe
+adjust temperature of big air conditioning in backyard
+on the big socket in bedroom
+raise temperature of small thermostat in upper bathroom
+change hue of high lock in stairs
+change temperature of small padlock
+change color temperature of strip pressure in corridor
+down hue of kid pressure in kitchen
+flip the switch in bedroom
+increase temperature of standing switch
+change hue of led bulbs
+change hue of ceiling warm water in front_balcony
+adjust temperature of low switch in office
+adjust color of low window
+toggle the ac in backyard
+raise hue of wall air conditioner
+change color temperature of kids heater
+dim color temperature of strip deadbolt
+decrease temperature of floor switch in frontyard
+raise color temperature of standing heater in back_balcony
+increase color temperature of kid light
+dim color temperature of big door
+off the standing switch in bedroom
+raise hue of high thermostat
+decrease temperature of ceiling hot water in kitchen
+adjust hue of kids plug
+change temperature of small pressure in upper bathroom
+change color of kids door in stairs
+up color of ceiling air conditioning in upper bathroom
+flip the standing heater in bathroom
+deactivate the low outlet in garage
+disable the kid hot water in bathroom
+adjust color temperature of kid door
+adjust hue of big thermostat in kids room
+enable the led bulb in front_balcony
+raise brightness of small pressure
+enable the strip switch in corridor
+change hue of low switch in bedroom
+on the plug in backyard
+power the switch in back_balcony
+flip the hot water in upper bathroom
+deactivate the bulbs in entryway
+enable the ceiling ac in kitchen
+toggle the ceiling warm water in office
+down color of kid plug
+off the low lights in entryway
+power the bulbs in backyard
+change temperature of floor bulbs
+change temperature of high thermostat in entryway
+adjust temperature of strip window in upper corridor
+change color temperature of led lock
+enable the lights in stairs
+change luminosity of wall deadbolt in kids room
+toggle the heating in backyard
+adjust temperature of big outlet in garage
+adjust brightness of wall plug in living room
+dim temperature of low pressure
+adjust temperature of kid outlet in backyard
+toggle the ceiling air conditioning in front_balcony
+dim luminosity of ceiling outlet
+power the big warm water in living room
+adjust luminosity of standing window in living room
+decrease color temperature of wall heat
+down temperature of kid switch
+dim color temperature of small padlock
+adjust hue of ceiling padlock
+change brightness of wall door
+flip the led plug in kids room
+activate the switch in wardrobe
+power the switch in kitchen
+change hue of ceiling thermostat in kitchen
+turn off the outlet in frontyard
+raise color of standing door in bedroom
+lower color temperature of small switch
+adjust temperature of kids door in frontyard
+adjust brightness of wall pressure
+change color temperature of small plug
+flip the kids outlet in upper bathroom
+down luminosity of floor padlock in kitchen
+power the kid heating in upper corridor
+adjust brightness of strip ac
+adjust temperature of ceiling socket
+flip the bulbs in upper bathroom
+down color temperature of small hot water
+turn on the light in office
+adjust color of strip socket in entryway
+increase hue of floor bulbs
+adjust luminosity of ceiling window in kitchen
+down luminosity of high thermostat in backyard
+toggle the switch in upper corridor
+off the bulb in garage
+change temperature of kids warm water in kitchen
+turn on the kid switch in back_balcony
+change color temperature of big window
+on the kid warm water in bathroom
+increase color temperature of kids outlet in stairs
+change color temperature of low pressure in bedroom
+decrease color temperature of ceiling window
+change temperature of wall switch
+on the kids hot water in stairs
+disable the ac in stairs
+adjust temperature of strip bulb in backyard
+off the kid warm water in back_balcony
+increase temperature of ceiling switch
+raise color temperature of low thermostat in backyard
+toggle the big warm water in frontyard
+change hue of kid heater
+up luminosity of led switch
+change luminosity of small pressure
+adjust brightness of strip deadbolt in upper bathroom
+change temperature of standing window in office
+increase brightness of low hot water in kids room
+decrease brightness of led warm water
+up luminosity of strip bulb
+change color temperature of wall plug
+change color temperature of big pressure
+change color temperature of low pressure in front_balcony
+change color temperature of ceiling warm water in upper bathroom
+raise temperature of standing hot water in office
+change luminosity of big deadbolt in office
+raise color temperature of low switch
+flip the high heater in bathroom
+enable the heating in bathroom
+decrease color temperature of high socket
+adjust color temperature of kids hot water
+change temperature of high switch in corridor
+flip the kid switch in bathroom
+toggle the heater in living room
+adjust hue of strip thermostat
+change hue of kids light in entryway
+decrease color of standing air conditioner
+raise hue of high door in bedroom
+up luminosity of big socket
+activate the air conditioning in frontyard
+change hue of high warm water in kids room
+raise color temperature of small heat
+deactivate the small heater in back_balcony
+adjust hue of small bulb
+decrease color temperature of ceiling ac
+increase temperature of strip door
+increase color of standing warm water
+decrease color temperature of floor door in bathroom
+adjust hue of kid thermostat in kitchen
+deactivate the standing hot water in garage
+turn off the switch in backyard
+on the air conditioner in kids room
+lower temperature of low pressure in stairs
+down temperature of kids window in corridor
+change color temperature of strip door
+adjust temperature of ceiling window in office
+adjust color temperature of ceiling bulbs in back_balcony
+activate the floor lights in office
+lower luminosity of high socket in garage
+dim color temperature of strip heater
+dim temperature of floor thermostat
+change luminosity of high window in upper bathroom
+increase luminosity of high thermostat in frontyard
+change temperature of floor window in office
+change temperature of kids switch
+adjust luminosity of small deadbolt in wardrobe
+adjust temperature of kids lights
+change brightness of kids plug
+power the led air conditioning in bathroom
+down temperature of small outlet in entryway
+increase brightness of standing window in kitchen
+on the switch in corridor
+adjust luminosity of big pressure in stairs
+turn on the switch in upper bathroom
+disable the low heater in upper bathroom
+adjust luminosity of led lock
+flip the heating in kitchen
+dim brightness of big pressure
+dim temperature of big outlet
+adjust temperature of kid heater in kitchen
+off the socket in back_balcony
+change hue of small switch in office
+power the big outlet in garage
+enable the strip bulbs in bathroom
+enable the low bulbs in kids room
+adjust temperature of strip thermostat in front_balcony
+power the big switch in kids room
+enable the strip hot water in living room
+dim luminosity of standing door in front_balcony
+adjust color temperature of led door
+on the big air conditioning in wardrobe
+off the switch in corridor
+decrease hue of kids pressure in corridor
+down temperature of wall bulbs in garage
+turn on the high socket in back_balcony
+adjust hue of wall heating
+off the big switch in entryway
+turn on the wall switch in garage
+power the heat in garage
+adjust temperature of strip thermostat in backyard
+raise temperature of kids padlock
+adjust temperature of strip thermostat
+change brightness of low socket in bathroom
+toggle the outlet in entryway
+disable the lights in kitchen
+dim temperature of wall socket
+raise luminosity of floor pressure in entryway
+change temperature of floor socket
+turn on the standing outlet in bathroom
+raise color temperature of kids ac
+toggle the plug in garage
+decrease color temperature of small outlet
+toggle the warm water in backyard
+turn on the plug in back_balcony
+enable the high bulbs in upper bathroom
+decrease color of low deadbolt in wardrobe
+up hue of small light in upper bathroom
+change color temperature of floor switch in back_balcony
+adjust color temperature of standing bulb in garage
+on the air conditioner in upper bathroom
+adjust brightness of kid lock
+increase color temperature of big thermostat in entryway
+up temperature of low switch
+decrease temperature of ceiling air conditioner
+power the strip switch in front_balcony
+raise brightness of kids warm water
+flip the heater in upper corridor
+dim luminosity of big switch in kids room
+up color of floor switch
+activate the led warm water in office
+change temperature of big thermostat
+up hue of floor plug
+deactivate the heater in garage
+enable the wall hot water in backyard
+activate the switch in living room
+turn on the heat in upper corridor
+off the led warm water in office
+toggle the heating in upper corridor
+up brightness of kid door
+up color temperature of kid plug
+enable the wall air conditioner in garage
+up color temperature of low heat in kids room
+adjust color of standing bulbs
+adjust color temperature of strip pressure in living room
+change color of led air conditioning in bedroom
+enable the air conditioning in garage
+dim luminosity of strip heater in back_balcony
+turn off the outlet in bedroom
+lower luminosity of led deadbolt
+adjust luminosity of ceiling window
+down color temperature of led pressure
+toggle the kid switch in garage
+adjust temperature of strip plug in back_balcony
+on the switch in upper bathroom
+activate the big heater in bathroom
+adjust temperature of high bulb in upper bathroom
+down color of high heating
+power the warm water in stairs
+change temperature of small hot water
+adjust luminosity of kids air conditioning in entryway
+adjust temperature of high pressure
+power the low plug in entryway
+raise color temperature of ceiling air conditioner in upper corridor
+disable the light in living room
+raise color of ceiling door in backyard
+adjust temperature of kid bulb
+change brightness of standing hot water in garage
+dim luminosity of kids heating in wardrobe
+raise brightness of low heater
+raise luminosity of floor door
+adjust color of standing thermostat in backyard
+off the low light in living room
 activate the kids heat in garage
-turn off the heat in upper bathroom
-deactivate the plug in office
-disable the warm water in kids room
-deactivate the toggle switch in garage
-disable the heat in frontyard
-deactivate the kids bulb in office
-deactivate the toggle switch in kitchen
-activate the led bulb in stairs
-enable the floor outlet in kitchen
-enable the strip warm water in corridor
-activate the standing hot water in kitchen
-turn on the heating in backyard
-disable the switch in upper corridor
-deactivate the ac in stairs
-enable the floor outlet in upper corridor
-disable the big outlet in stairs
-turn on the socket in bathroom
-off the air conditioner in upper corridor
-disable the standing heating in kids room
-disable the plug in wardrobe
-activate the kid switch in upper corridor
-turn on the standing air conditioner in upper corridor
-enable the kid heat in bedroom
-activate the floor hot water in living room
-enable the switch in wardrobe
-deactivate the standing switch in stairs
-activate the air conditioning in wardrobe
-enable the led ac in bathroom
-activate the kid switch in bedroom
-disable the kids switch in upper bathroom
-disable the heating in garage
-turn off the hot water in kitchen
-disable the ceiling heating in back_balcony
-turn off the plug in back_balcony
-enable the floor hot water in bedroom
-off the wall ac in corridor
-activate the toggle switch in upper bathroom
-activate the bulbs in living room
-activate the high bulbs in upper bathroom
-activate the wall air conditioning in backyard
-disable the ceiling ac in kitchen
-turn off the hot water in living room
-deactivate the small heating in backyard
-enable the led socket in bathroom
-turn on the low bulb in stairs
-turn off the standing lights in kids room
-off the standing hot water in back_balcony
-enable the hot water in frontyard
-turn on the air conditioner in backyard
-deactivate the ceiling warm water in front_balcony
-off the switch in bathroom
-enable the led toggle switch in entryway
+change brightness of small deadbolt in kitchen
+down color temperature of floor pressure in entryway
+disable the lights in bathroom
+on the warm water in backyard
+adjust color temperature of kids padlock in wardrobe
+change color temperature of floor lock
+deactivate the big air conditioning in garage
+lower hue of standing deadbolt
+change brightness of standing bulbs
+enable the ceiling heater in back_balcony
+power the ac in upper corridor
+power the heater in entryway
+adjust brightness of floor light
+adjust color temperature of ceiling outlet
+toggle the ceiling bulb in garage
+up temperature of wall switch in stairs
+change color temperature of strip window
+decrease brightness of kid hot water in upper bathroom
+change brightness of floor heating in frontyard
+toggle the light in front_balcony
+decrease color of small window
+down hue of ceiling heat in bedroom
+change brightness of high heat in living room
+increase color temperature of wall window in front_balcony
 deactivate the air conditioning in back_balcony
-enable the warm water in kitchen
-activate the standing bulbs in back_balcony
-disable the standing heating in front_balcony
-turn on the floor light in upper corridor
-enable the socket in front_balcony
-turn on the ac in living room
-activate the floor outlet in corridor
-off the air conditioner in upper corridor
-turn off the wall light in wardrobe
-activate the floor plug in upper bathroom
-off the small plug in back_balcony
-enable the bulb in entryway
-activate the plug in frontyard
-turn on the wall heat in kids room
-deactivate the standing bulbs in frontyard
-activate the toggle switch in frontyard
-activate the air conditioning in kitchen
-on the high bulbs in back_balcony
-turn off the bulbs in living room
-disable the plug in kitchen
-turn on the standing air conditioning in upper bathroom
-deactivate the kid switch in frontyard
-activate the standing ac in stairs
-on the floor bulb in frontyard
+adjust color temperature of standing switch
+flip the wall ac in kids room
+on the high ac in office
+on the switch in corridor
+raise temperature of high switch
+turn off the socket in upper bathroom
+lower hue of high hot water in front_balcony
+lower color temperature of floor switch
+adjust temperature of standing hot water
+up luminosity of kids light
+turn off the lights in frontyard
+lower color temperature of ceiling thermostat
+activate the strip plug in back_balcony
+up temperature of kid warm water in back_balcony
+flip the kid heating in entryway
+down hue of kids switch in frontyard
+adjust temperature of low ac in living room
+change luminosity of small heat
+toggle the ac in backyard
+adjust color of high door
+up color of big window
+increase temperature of standing deadbolt
+change hue of high switch in stairs
+power the warm water in wardrobe
+adjust temperature of led thermostat
+turn on the outlet in frontyard
+dim brightness of high ac
+turn off the floor plug in back_balcony
+adjust brightness of standing hot water in backyard
+turn off the heater in bathroom
+adjust temperature of standing pressure
+turn off the high outlet in bathroom
+turn off the kid air conditioning in office
+on the air conditioner in garage
+up color of high switch
+activate the heating in corridor
+lower hue of high lock
+flip the standing hot water in corridor
+adjust color temperature of floor plug
+up hue of big lock in bathroom
+activate the standing switch in kitchen
+change luminosity of low ac
+lower brightness of wall pressure in kitchen
+dim luminosity of low thermostat in back_balcony
+turn off the bulbs in kitchen
+flip the heater in back_balcony
+flip the floor bulbs in corridor
+enable the ceiling air conditioner in stairs
+disable the light in garage
+flip the ac in bathroom
+adjust temperature of wall thermostat
+on the ac in entryway
+change temperature of floor deadbolt
+toggle the switch in bedroom
+change hue of led thermostat
+change temperature of ceiling door in entryway
+lower temperature of kid ac
+change color of kid outlet in stairs
+turn on the ceiling air conditioner in stairs
+decrease color of strip switch in garage
+activate the small outlet in corridor
+change temperature of ceiling pressure in frontyard
+change brightness of small switch
+enable the bulb in office
+raise color temperature of high heating
+change color of wall lights
+adjust color of wall air conditioner in living room
+lower color temperature of led door in kitchen
+lower color of big switch
+off the socket in front_balcony
+toggle the hot water in upper bathroom
+change luminosity of standing pressure in bathroom
+change color temperature of ceiling outlet in kitchen
+increase temperature of low heater
+adjust temperature of low pressure in upper bathroom
+power the heating in stairs
+off the switch in living room
+deactivate the kids switch in bathroom
+raise color temperature of small pressure in bedroom
+adjust color of big lock
+enable the warm water in bathroom
+adjust temperature of kid heater in stairs
+on the low warm water in upper corridor
+lower brightness of big socket
+adjust color of high switch
+turn on the switch in corridor
+change luminosity of ceiling door in frontyard
+adjust temperature of kids switch
+dim brightness of high thermostat in back_balcony
+dim color temperature of kids air conditioning
+change color temperature of kids window in entryway
+on the heating in stairs
+turn off the led heating in backyard
+power the hot water in upper corridor
+adjust color temperature of wall switch in garage
+adjust color of small heater
+increase luminosity of ceiling door in frontyard
+dim temperature of big warm water
+power the led switch in garage
+adjust brightness of standing heater in bathroom
+enable the air conditioning in upper bathroom
+dim temperature of wall window
+change color temperature of floor air conditioner in bedroom
+turn on the heater in upper corridor
+adjust color temperature of floor light
+adjust temperature of low window in kids room
+change luminosity of led door
+adjust hue of kid pressure in wardrobe
+turn off the strip heat in upper bathroom
+change temperature of small deadbolt in kids room
+on the heater in corridor
+enable the air conditioner in upper corridor
+change temperature of strip heater
+change color temperature of floor deadbolt
+on the led heating in upper bathroom
+change color temperature of high pressure in corridor
+adjust color of strip pressure in upper bathroom
+toggle the strip lights in front_balcony
+adjust luminosity of wall bulbs in backyard
+adjust luminosity of kids door in living room
+enable the lights in living room
+toggle the kids bulb in back_balcony
+power the kid plug in corridor
+up temperature of big heat
+dim color of led air conditioning
+decrease temperature of big air conditioning in garage
+change temperature of standing plug
+on the floor warm water in frontyard
+up color temperature of kids lights in garage
+on the standing heat in frontyard
+raise luminosity of standing window
+down hue of strip heat in office
+increase color temperature of strip thermostat
+flip the switch in bathroom
+adjust color temperature of small heat in bedroom
+adjust hue of ceiling window
+disable the light in stairs
+dim color temperature of strip warm water in wardrobe
+change temperature of kids socket
+increase color of high lights in front_balcony
+change hue of big air conditioning
+raise brightness of high heating
+up temperature of floor door
+change brightness of big door in upper corridor
+raise color temperature of high bulb in stairs
+enable the bulbs in front_balcony
+turn on the hot water in wardrobe
+lower temperature of ceiling air conditioning
+adjust temperature of floor warm water
+up luminosity of ceiling pressure in stairs
+decrease color of kid heat
+change temperature of wall thermostat
+disable the strip socket in wardrobe
+adjust color of floor plug in bathroom
+dim hue of ceiling deadbolt in kitchen
+down luminosity of kid switch in wardrobe
+lower hue of big switch
+disable the bulb in kids room
+adjust temperature of small pressure
+change luminosity of small outlet
+dim temperature of high thermostat
+adjust luminosity of kids pressure
+turn off the kid heater in living room
+adjust luminosity of big air conditioning in living room
+increase color of ceiling socket
+adjust color temperature of high socket in office
+change brightness of big thermostat in upper bathroom
+decrease temperature of big ac in bedroom
+change color of led ac in corridor
+disable the socket in wardrobe
+adjust temperature of standing pressure in living room
+decrease brightness of ceiling door in backyard
+activate the lights in kitchen
+raise temperature of low bulb
+lower color temperature of high padlock in backyard
+turn on the warm water in upper bathroom
+lower brightness of led deadbolt in upper corridor
+raise temperature of big warm water in stairs
+decrease temperature of strip heater
+change temperature of kids switch in frontyard
+adjust temperature of standing outlet
+dim color temperature of standing hot water
+adjust temperature of standing air conditioning
+adjust hue of high lock
+turn on the light in stairs
+change brightness of small outlet in corridor
+adjust luminosity of big outlet in wardrobe
+raise color of high heat
+change color of low window
+increase temperature of kid window
+turn on the standing ac in corridor
+disable the heat in backyard
+change hue of ceiling pressure
+dim temperature of strip bulbs
+change temperature of low lock in entryway
+turn off the warm water in office
+flip the kids switch in backyard
+dim color of high light in corridor
+decrease hue of standing warm water
+power the big outlet in entryway
+enable the warm water in corridor
+adjust color temperature of ceiling door
+enable the kids outlet in upper bathroom
+adjust luminosity of floor padlock
+lower color of standing air conditioning
+adjust color temperature of kids lock in office
+turn on the socket in living room
+dim color temperature of standing switch
+toggle the kids air conditioning in upper bathroom
+up color of kid plug
+flip the small hot water in front_balcony
+raise temperature of low thermostat in corridor
+toggle the small ac in back_balcony
+enable the outlet in wardrobe
+dim color temperature of high thermostat in kids room
+change brightness of strip lock in front_balcony
+change color of ceiling window in wardrobe
+activate the wall heat in frontyard
+turn on the heater in back_balcony
+adjust brightness of ceiling door
+lower luminosity of ceiling window
+enable the kids heater in back_balcony
+increase brightness of wall switch in stairs
+change color of wall heating
+dim color temperature of strip heating in living room
+change brightness of high air conditioner
+off the socket in back_balcony
+raise brightness of kid window
+decrease color of small switch in corridor
+change temperature of floor warm water in bedroom
+adjust temperature of kids thermostat in bathroom
+dim temperature of kid thermostat in garage
+change color temperature of wall thermostat
+adjust luminosity of ceiling door in frontyard
+dim hue of kids hot water
+change color of small padlock
+decrease color of standing air conditioner
+raise hue of led bulb in stairs
+adjust temperature of led door in upper corridor
+flip the strip hot water in office
+on the bulbs in back_balcony
+lower temperature of kid warm water in garage
+increase luminosity of strip switch in frontyard
+enable the ceiling air conditioner in entryway
+raise brightness of floor switch
+dim color temperature of led deadbolt
+power the switch in garage
+toggle the switch in garage
+toggle the outlet in backyard
+enable the hot water in upper bathroom
+adjust color of ceiling air conditioning in stairs
+increase color temperature of small door in kitchen
+activate the small air conditioning in frontyard
+toggle the low heating in frontyard
+up temperature of ceiling air conditioning in entryway
+adjust hue of ceiling warm water
+change brightness of high window
+adjust luminosity of led outlet in kids room
+turn on the heat in front_balcony
+off the big outlet in front_balcony
+raise color temperature of strip heating in wardrobe
+raise temperature of wall window in bedroom
+enable the floor light in stairs
+power the high outlet in frontyard
+change color temperature of low outlet in stairs
+up color temperature of floor hot water
+lower temperature of high window
+adjust hue of strip bulbs in office
+dim color of wall window
+adjust temperature of big pressure
+adjust temperature of led thermostat in kitchen
+turn off the standing outlet in frontyard
+toggle the heating in entryway
+change hue of small air conditioning in wardrobe
+raise color temperature of kids plug in stairs
+increase color of kid warm water in frontyard
+increase color temperature of standing door in office
+increase temperature of wall socket in kids room
+change luminosity of small warm water
+change color temperature of low socket
+up brightness of strip heat
+disable the warm water in kitchen
+adjust brightness of kids outlet in front_balcony
+power the switch in kids room
+adjust luminosity of low pressure
+change color of led window
+adjust color temperature of floor window in entryway
+deactivate the small air conditioning in backyard
+lower luminosity of wall lock in wardrobe
+flip the kid hot water in upper corridor
+decrease color temperature of low thermostat
+adjust color temperature of big outlet in office
+change luminosity of floor deadbolt in garage
+power the hot water in living room
+flip the bulbs in kitchen
+up color of ceiling thermostat
+activate the big socket in wardrobe
+dim hue of small pressure
+deactivate the high plug in bathroom
+lower luminosity of high air conditioner in kitchen
+up temperature of high hot water in living room
+adjust luminosity of wall warm water in frontyard
+change color of standing padlock
+change color temperature of kid window
+up hue of kid switch
+deactivate the strip outlet in kitchen
+increase color of kid pressure
+decrease brightness of led heater in stairs
+power the kids outlet in kids room
+adjust color of high door in garage
+activate the light in corridor
+lower color temperature of ceiling heating in stairs
+toggle the strip light in stairs
+deactivate the outlet in living room
+flip the heating in office
+adjust temperature of kid outlet in living room
+on the lights in backyard
+dim temperature of low switch
+on the kids lights in upper bathroom
+adjust color temperature of small thermostat
+adjust color of high door in entryway
+adjust temperature of floor heater in back_balcony
+power the switch in bathroom
+increase temperature of high switch in corridor
+change brightness of floor padlock
+turn on the low bulb in entryway
+lower luminosity of small pressure in bedroom
+decrease color of floor window
+dim color temperature of small lock
+lower brightness of strip switch in wardrobe
+down temperature of big padlock in wardrobe
+flip the high heat in upper bathroom
+deactivate the bulbs in kitchen
+adjust color temperature of floor door
+flip the hot water in upper bathroom
+up color temperature of led thermostat in wardrobe
+down color of low window
+disable the low outlet in back_balcony
+toggle the kids lights in kitchen
+lower luminosity of high pressure in backyard
+increase color of big pressure in frontyard
+raise color of ceiling thermostat in kids room
+decrease color temperature of wall thermostat in corridor
+enable the air conditioning in wardrobe
+toggle the kids air conditioning in corridor
+dim temperature of ceiling air conditioner in entryway
+change color of big switch
+adjust color temperature of high switch
+on the floor bulb in upper corridor
+increase hue of kids air conditioner in upper bathroom
+change temperature of high hot water
+adjust color temperature of ceiling door
+turn off the heater in upper bathroom
+turn on the hot water in front_balcony
+enable the plug in kitchen
+change temperature of standing padlock
+up brightness of low pressure
+adjust hue of ceiling pressure
+flip the ceiling switch in back_balcony
+adjust temperature of big thermostat in upper corridor
+lower temperature of ceiling air conditioning
+change color temperature of standing switch
+down color temperature of standing lock in upper bathroom
+toggle the hot water in entryway
+enable the switch in living room
+up color temperature of small hot water in upper corridor
+lower color of floor outlet
+on the switch in stairs
+adjust color of kids door
+power the outlet in living room
+enable the light in backyard
+adjust temperature of big deadbolt
+decrease color of low window
+adjust temperature of low door
+toggle the small heat in living room
+decrease color temperature of kids air conditioning
+change color temperature of small bulbs
+power the kids socket in back_balcony
+adjust hue of low bulb in entryway
+dim color of low window in bedroom
+change temperature of high warm water
+up color of ceiling window in bathroom
+power the high switch in upper corridor
+change temperature of big pressure in kitchen
+raise temperature of high padlock in backyard
+change hue of high window
+power the hot water in bedroom
+change temperature of strip switch
+adjust color temperature of strip pressure in stairs
+decrease color temperature of high hot water
+toggle the small heat in upper bathroom
+dim brightness of low heat in upper bathroom
+dim temperature of floor door
+adjust luminosity of ceiling padlock
+adjust color temperature of kids ac
+up color of small door
+change color of big window
+enable the outlet in entryway
+power the strip heat in living room
+enable the low outlet in frontyard
+change color of ceiling air conditioner
+power the kid hot water in kids room
+flip the small hot water in living room
+adjust color temperature of small padlock
+adjust color temperature of strip light in bedroom
+change temperature of big socket in bedroom
+decrease temperature of high door
+power the light in upper corridor
+adjust temperature of low hot water in frontyard
+toggle the strip warm water in kids room
+lower color temperature of ceiling thermostat
+enable the bulb in office
+activate the led switch in frontyard
+on the wall heat in bathroom
+decrease brightness of small outlet
+change color temperature of big socket in wardrobe
+up temperature of kids pressure
+change temperature of strip window in stairs
+change hue of kids switch in stairs
+change brightness of kids bulb in front_balcony
+increase color of strip heating in frontyard
+raise temperature of kid lock
+enable the ceiling heat in front_balcony
+enable the strip heater in back_balcony
+off the warm water in upper bathroom
+deactivate the wall hot water in kitchen
+change luminosity of wall heat in bedroom
+change color temperature of low pressure
+up color temperature of kids door
+turn on the wall lights in back_balcony
+change temperature of low pressure
+activate the outlet in kids room
+enable the strip heater in upper bathroom
+flip the standing warm water in stairs
+activate the socket in bedroom
+change color of low door in back_balcony
+deactivate the led bulb in upper bathroom
+enable the switch in garage
+enable the big heating in bedroom
+adjust color temperature of high light in upper bathroom
+flip the switch in bathroom
+toggle the switch in back_balcony
+raise color of kid socket in frontyard
+dim temperature of standing pressure in upper corridor
+turn on the lights in stairs
+decrease color temperature of led bulbs in entryway
+change color temperature of floor thermostat in living room
+down color of low door
+flip the floor air conditioner in wardrobe
+change brightness of standing hot water in stairs
+decrease color of big hot water
+dim temperature of standing bulb in bedroom
+change temperature of big window
+decrease temperature of standing light
+toggle the standing ac in corridor
+change temperature of wall socket in office
+toggle the switch in garage
+enable the air conditioning in stairs
+decrease color temperature of high window in bathroom
+change temperature of strip heating in front_balcony
+up temperature of wall heater
+change color temperature of ceiling thermostat in bedroom
+adjust temperature of standing padlock in backyard
+change color of kid hot water in garage
+raise color of led lock
+power the strip hot water in office
+toggle the socket in bedroom
+adjust hue of led pressure
+change color temperature of wall thermostat in kids room
+decrease luminosity of led outlet
+change temperature of led window
+adjust temperature of small thermostat in office
+power the wall lights in office
+enable the standing lights in stairs
+flip the warm water in front_balcony
+down color temperature of kid heater in stairs
+change brightness of standing pressure in garage
+lower color temperature of standing pressure in back_balcony
+up color of kids thermostat
+power the kid bulbs in upper corridor
+activate the socket in wardrobe
+change brightness of led padlock
+up hue of kid hot water in office
+deactivate the hot water in kitchen
+adjust brightness of strip door
+on the air conditioner in entryway
+adjust temperature of led air conditioning
+adjust color of kids window
+change temperature of ceiling padlock
+adjust hue of wall switch
+increase brightness of kids warm water in back_balcony
+deactivate the heating in bedroom
+change hue of floor hot water
+change temperature of led outlet
+change temperature of high thermostat
+off the low bulbs in upper bathroom
+change luminosity of low bulb
+up luminosity of kid socket
+change temperature of high light
+lower luminosity of big warm water
+up color temperature of wall outlet in garage
+dim temperature of kids air conditioner
+change temperature of high thermostat in frontyard
+on the lights in office
+turn on the heat in living room
+flip the high lights in garage
+up color temperature of ceiling door in kids room
+toggle the air conditioner in living room
+raise color temperature of led hot water in bedroom
+toggle the big air conditioner in garage
+down temperature of high thermostat
+change color temperature of kid door
+increase color of led window
+change temperature of high warm water in bedroom
+toggle the air conditioning in backyard
+down hue of wall door
+turn on the strip switch in stairs
+on the heating in entryway
+change temperature of led switch in stairs
+toggle the warm water in garage
+power the heating in living room
+flip the small air conditioning in kitchen
+change temperature of big switch in backyard
+toggle the led lights in bedroom
+change luminosity of floor ac in bedroom
+raise brightness of low outlet in back_balcony
+change temperature of small switch
+change hue of low light
+deactivate the led light in stairs
+lower brightness of floor door
+down color of kid window in upper bathroom
+dim brightness of big pressure
+lower hue of kid window
+turn off the lights in wardrobe
+activate the wall switch in backyard
+change hue of led socket
+flip the heating in living room
+up color of strip heat
+deactivate the switch in upper bathroom
+power the high plug in back_balcony
+flip the high outlet in bathroom
+change temperature of kid padlock in bedroom
+adjust temperature of low bulb in backyard
+adjust temperature of kid air conditioner
+power the hot water in backyard
+toggle the floor socket in upper bathroom
+dim brightness of floor door in bedroom
+on the wall light in front_balcony
+toggle the ceiling bulb in upper corridor
+turn on the switch in kids room
+activate the air conditioner in stairs
+deactivate the hot water in bedroom
+toggle the heating in bedroom
+toggle the floor hot water in frontyard
+up brightness of low door
+adjust color temperature of big thermostat
+change temperature of ceiling door
+off the hot water in wardrobe
+change temperature of kid door in kids room
+dim temperature of wall door
+lower color temperature of small socket
+increase color of kids window
+deactivate the ac in upper corridor
+decrease brightness of floor switch in upper corridor
+adjust temperature of low switch
+change temperature of led lights
+raise temperature of wall door
+adjust luminosity of standing ac
+dim luminosity of high socket in stairs
+change color of standing door
+lower hue of standing padlock
+turn off the high ac in office
+disable the big air conditioning in frontyard
+adjust color of wall padlock in office
+up color temperature of led thermostat in frontyard
+dim hue of standing window in upper corridor
+increase color temperature of standing air conditioning in backyard
+up brightness of ceiling pressure in upper bathroom
+change color of wall switch in upper bathroom
+activate the switch in upper bathroom
+change luminosity of wall ac
+change temperature of strip socket
+power the bulb in bedroom
+up hue of floor air conditioner in back_balcony
+power the ceiling switch in backyard
+dim hue of wall door
+off the hot water in kids room
+turn off the high warm water in bedroom
+up brightness of led air conditioning
+up temperature of led warm water
+decrease temperature of strip pressure in upper bathroom
+decrease brightness of big padlock
+adjust color of strip thermostat in frontyard
+on the kid socket in backyard
+disable the heat in corridor
+increase luminosity of strip door in upper corridor
+on the outlet in garage
+lower temperature of small warm water
+down luminosity of small socket in corridor
+turn on the heater in bedroom
+up color temperature of kids door
+adjust color temperature of small thermostat
+adjust color temperature of wall plug
+disable the warm water in upper bathroom
+increase color temperature of low switch in wardrobe
+increase brightness of ceiling hot water in living room
+raise temperature of standing lights in entryway
+dim color temperature of floor bulb in upper bathroom
+activate the strip heat in kids room
+adjust temperature of ceiling outlet
+power the socket in kids room
+toggle the floor lights in bedroom
+enable the heater in living room
+raise color temperature of strip thermostat in bedroom
+disable the low air conditioning in frontyard
+down temperature of wall heater
+change color temperature of strip light in frontyard
+change color temperature of kid air conditioner
+on the wall heat in kitchen
+flip the ceiling socket in bedroom
+deactivate the heater in bedroom
+turn on the heating in wardrobe
+toggle the heating in entryway
+change brightness of high hot water
+increase color temperature of kid thermostat in garage
+turn on the low hot water in living room
+lower color of ceiling deadbolt in garage
+adjust luminosity of big window
+adjust color temperature of led heating
+change color of small switch in office
+change color of low heating
+dim temperature of floor thermostat
+adjust hue of strip hot water
+raise color temperature of floor socket in entryway
+change color temperature of small warm water in back_balcony
 deactivate the air conditioner in living room
-on the strip outlet in kids room
-turn off the big light in garage
-deactivate the bulb in back_balcony
-on the led plug in garage
-disable the big outlet in entryway
-on the outlet in wardrobe
-deactivate the high socket in back_balcony
-deactivate the low plug in kitchen
-on the big heating in office
-turn off the ceiling heater in kitchen
-disable the bulbs in bedroom
-activate the switch in corridor
-activate the kids outlet in bathroom
-activate the lights in stairs
-turn off the bulb in kitchen
-turn on the wall lights in stairs
-turn on the led warm water in front_balcony
-on the floor toggle switch in office
-on the led outlet in bedroom
-disable the toggle switch in back_balcony
-disable the switch in bedroom
-activate the bulbs in kitchen
-enable the hot water in front_balcony
-deactivate the heater in kids room
-activate the floor bulb in back_balcony
-enable the led ac in wardrobe
-on the light in backyard
-off the switch in upper bathroom
-turn off the air conditioning in backyard
-enable the air conditioning in bedroom
-disable the led lights in kitchen
-activate the wall heating in back_balcony
-turn on the toggle switch in frontyard
-disable the kid heating in stairs
-off the ac in living room
-deactivate the heating in front_balcony
-on the bulbs in office
-turn off the high heat in bathroom
-disable the light in wardrobe
-activate the kids warm water in living room
-turn on the strip warm water in entryway
-turn off the wall warm water in back_balcony
-deactivate the heat in upper bathroom
-on the kids ac in backyard
-on the hot water in wardrobe
-turn on the air conditioner in front_balcony
-deactivate the hot water in frontyard
-activate the big heat in kids room
-turn off the led lights in entryway
-deactivate the ceiling bulbs in front_balcony
-turn off the wall hot water in backyard
-turn off the toggle switch in backyard
-enable the low heating in entryway
-activate the heater in upper corridor
-off the socket in wardrobe
-deactivate the kids outlet in back_balcony
-off the strip bulb in bedroom
-disable the led toggle switch in bathroom
-disable the socket in front_balcony
-deactivate the outlet in kids room
-turn off the ac in bathroom
-turn on the led toggle switch in upper corridor
-deactivate the bulb in garage
-enable the outlet in garage
-activate the kid switch in kids room
-turn off the big heating in wardrobe
-enable the big switch in kitchen
-on the kids switch in kitchen
-turn off the ac in upper bathroom
-turn on the hot water in frontyard
-turn off the hot water in wardrobe
+change hue of high hot water
+activate the small plug in back_balcony
+down color temperature of high padlock in stairs
+decrease color of wall switch in corridor
+adjust color of kid window in frontyard
+power the big hot water in upper bathroom
+down color temperature of high window in backyard
+change temperature of low thermostat
+turn on the ceiling switch in wardrobe
+off the small hot water in stairs
+up color of standing thermostat
+adjust temperature of kid hot water
+decrease luminosity of wall padlock in back_balcony
+adjust color of small thermostat in kids room
+adjust color temperature of low door
+dim color temperature of wall hot water
+increase luminosity of kids lock in wardrobe
+turn on the hot water in living room
+up luminosity of strip plug
+off the air conditioner in living room
+flip the ceiling heater in back_balcony
+turn off the kids ac in wardrobe
+flip the socket in garage
+change color of standing thermostat
+change temperature of floor socket in kids room
+adjust color temperature of wall bulbs
+adjust hue of big deadbolt in back_balcony
+decrease temperature of strip pressure
+change luminosity of floor air conditioning
+change color temperature of big heat in frontyard
+adjust color temperature of small thermostat
+change temperature of wall lock
+adjust temperature of kids pressure
+down color temperature of kids door
+flip the air conditioner in back_balcony
+dim brightness of high padlock in back_balcony
+toggle the switch in kids room
+off the heating in bedroom
+power the air conditioner in living room
+decrease color of kid thermostat in wardrobe
+down luminosity of low switch
+change brightness of small switch in kitchen
+increase luminosity of low warm water in frontyard
+deactivate the heater in front_balcony
+dim color of ceiling air conditioning
+adjust luminosity of big thermostat in bedroom
+raise color of kid hot water
+change brightness of low thermostat in stairs
+change temperature of low plug
+increase color temperature of wall door in kitchen
+change color temperature of floor padlock
+raise temperature of led pressure
+change color of strip ac in garage
+disable the kids heater in kids room

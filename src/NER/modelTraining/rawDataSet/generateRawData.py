@@ -6,6 +6,7 @@ from Vocab import Vocab
 import typing
 import config as cfg
 
+
 class TrainingDataGenerator:
     @staticmethod
     def find_substring(substring: str, string: str) -> list:
@@ -55,75 +56,117 @@ class TrainingDataGenerator:
     def getRandomHelper(self, helperName: str) -> str:
         return self.getRandomSynonym(random.choice(self.helper[helperName]))
 
-    def generate_sentence(self) -> typing.Tuple[str,dict]:
+    def generate_sentence(self, sentence_type=0) -> typing.Tuple[str, dict]:
         """
-        1. ON the {switchableThing} in {location}
-        2. OFF the {switchableThing} in {location}
-        3. ON the {descriptor} {switchableThing} in {location}
-        4. OFF the {descriptor} {switchableThing} in {location}
-        """
+        1. ON/OFF/TOGGLE the {switchableThing} in {location}
+        2. ON/OFF/TOGGLE the {descriptor} {switchableThing} in {location}
 
-        sentence_type = random.randint(1, 4)
-        entitiesList = []
+        3. ADJUST {attribute} of {descriptor} {thing} in {location}
+        4. ADJUST {attribute} of {descriptor} {thing}
+
+        5. Decrease/Increase {attribute} of {descriptor} {thing} in {location}
+        6. Decrease/Increase {attribute} of {descriptor} {thing}
+        """
+        if sentence_type == 0:
+            sentence_type = random.randint(1, 6)
+        entitiesList = {}
 
         if sentence_type == 1:
             switchableThing = self.getRandomHelper('switchableThing')
-            action = self.getRandomSynonym('on')
+            action = random.choice([self.getRandomSynonym(
+                'on'), self.getRandomSynonym('off'), self.getRandomSynonym('toggle')])
             location = self.getRandomEntities('location')
 
-            entitiesList.extend([switchableThing, action, location])
+            entitiesList['actions'], entitiesList['things'], entitiesList['location'] = action, switchableThing, location
             sentence = f"{action} the {switchableThing} in {location}"
+
         elif sentence_type == 2:
             switchableThing = self.getRandomHelper('switchableThing')
-            action = self.getRandomSynonym('off')
+            action = random.choice([self.getRandomSynonym(
+                'on'), self.getRandomSynonym('off'), self.getRandomSynonym('toggle')])
             location = self.getRandomEntities('location')
+            desc = self.getRandomHelper('descriptor')
 
-            entitiesList.extend([switchableThing, action, location])
-            sentence = f"{action} the {switchableThing} in {location}"
+            entitiesList['actions'], entitiesList['things'], entitiesList['location'] = action, switchableThing, location
+            sentence = f"{action} the {desc} {switchableThing} in {location}"
+
         elif sentence_type == 3:
-            switchableThing = self.getRandomHelper('switchableThing')
-            action = self.getRandomSynonym('on')
+            thing = self.getRandomEntities('things')
+            adjust = self.getRandomSynonym('adjust')
             location = self.getRandomEntities('location')
+            attribute = self.getRandomEntities('attributes')
             desc = self.getRandomHelper('descriptor')
 
-            entitiesList.extend([switchableThing, action, location])
-            sentence = f"{action} the {desc} {switchableThing} in {location}"
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = adjust, attribute, thing, location
+            sentence = f"{adjust} {attribute} of {desc} {thing} in {location}"
+
         elif sentence_type == 4:
-            switchableThing = self.getRandomHelper('switchableThing')
-            action = self.getRandomSynonym('off')
-            location = self.getRandomEntities('location')
+            thing = self.getRandomEntities('things')
+            adjust = self.getRandomSynonym('adjust')
+            attribute = self.getRandomEntities('attributes')
             desc = self.getRandomHelper('descriptor')
 
-            entitiesList.extend([switchableThing, action, location])
-            sentence = f"{action} the {desc} {switchableThing} in {location}"
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'] = adjust, attribute, thing
+            sentence = f"{adjust} {attribute} of {desc} {thing}"
+
+        elif sentence_type == 5:
+            action = random.choice([self.getRandomSynonym('increase'), self.getRandomSynonym('decrease')])
+            thing = self.getRandomEntities('things')
+            location = self.getRandomEntities('location')
+            attribute = self.getRandomEntities('attributes')
+            desc = self.getRandomHelper('descriptor')
+
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = action, attribute, thing, location
+            sentence = f"{action} {attribute} of {desc} {thing} in {location}"
+
+        elif sentence_type == 6:
+            action = random.choice([self.getRandomSynonym('increase'), self.getRandomSynonym('decrease')])
+            thing = self.getRandomEntities('things')
+            attribute = self.getRandomEntities('attributes')
+            desc = self.getRandomHelper('descriptor')
+
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'] = action, attribute, thing
+            sentence = f"{action} {attribute} of {desc} {thing}"
+
+        # Switch the switch case
+        elif sentence_type == 101:
+            thing = 'switch'
+            action = 'switch'
+            location = self.getRandomEntities('location')
+
+            entitiesList['actions'], entitiesList['things'], entitiesList['location'] = action, thing, location
+            sentence = f"{action} the {thing} in {location}"
 
         sentence = sentence.lower()
         entities = []
-        for ent in entitiesList:
-            entities.extend(
-                TrainingDataGenerator.find_substring(ent, sentence))
+        for key, value in entitiesList.items():
+            slice = TrainingDataGenerator.find_substring(value, sentence)
+            if (len(slice) > 1):
+                print(sentence)
+            entities.extend(slice)
 
         entity_data = []
         for entity in entities:
             start, end = entity
             entity_text = sentence[start:end]
-            entity_label = [key for key, value in self.predefined_entities.items(
-            ) if entity_text in sum(self.getAllSynonyms(value), [])][0]
+            entity_label = [
+                key for key, value in entitiesList.items() if entity_text == value][0]
             entity_name = [
                 key for key, value in self.synonyms.items() if entity_text in value][0]
             entity_data.append((start, end, f'{entity_label}_#{entity_name}'))
 
         return sentence, {"entities": entity_data}
 
-    def generate_training_data(self, n = cfg.SIZE_OF_TRAIN_DATA) -> typing.Tuple[list,list]:
+    def generate_training_data(self, n=cfg.SIZE_OF_TRAIN_DATA, sentence_type = 0) -> typing.Tuple[list, list]:
         training_data = []
         sentences_data = []
         for _ in range(n):
-            sentence, entities = self.generate_sentence()
+            sentence, entities = self.generate_sentence(sentence_type = sentence_type)
             training_data.append((sentence, entities))
             sentences_data.append(sentence)
         return sentences_data, training_data
-    
+
+
 def main() -> None:
     vocab = Vocab()
     vocab.readData()
@@ -133,6 +176,7 @@ def main() -> None:
     ))), vocab.synonyms_dict['descriptor'], vocab.synonyms_dict['switchable_thing'])
 
     sentences_data, generated_data = generator.generate_training_data()
+
     geneareted_file_path = cfg.PATH_TRAIN_DATA
     sentances_file_path = cfg.PATH_TEST_SENTENCES
 
