@@ -55,6 +55,20 @@ class TrainingDataGenerator:
 
     def getRandomHelper(self, helperName: str) -> str:
         return self.getRandomSynonym(random.choice(self.helper[helperName]))
+    
+    def get_random_value_string(self):
+
+        value_strings = [
+            "50 percent", "half", "full", "minimum", "maximum", "economy", "comfort", "bath"
+        ]
+        
+        # Add random percent values
+        value_strings.extend([f"{random.randint(1, 100)} percent" for _ in range(10)])
+        
+        # Add temperature values in Celsius
+        value_strings.extend([f"{random.uniform(15, 30):.1f} Celsius degree" for _ in range(10)])
+
+        return random.choice(value_strings)
 
     def generate_sentence(self, sentence_type=0) -> typing.Tuple[str, dict]:
         """
@@ -66,9 +80,17 @@ class TrainingDataGenerator:
 
         5. Decrease/Increase {attribute} of {descriptor} {thing} in {location}
         6. Decrease/Increase {attribute} of {descriptor} {thing}
+
+        7. IS {thing} in {location} {state} 
+        8. IS {desc} {thing} in {location} {state} 
+
+        9. What is {attribute} of {desc} {thing} in {location}
+
+        10. SET {atribute} of {thing} in {location} to {value}
+
         """
         if sentence_type == 0:
-            sentence_type = random.randint(1, 6)
+            sentence_type = random.randint(1, 10)
         entitiesList = {}
 
         if sentence_type == 1:
@@ -97,7 +119,8 @@ class TrainingDataGenerator:
             attribute = self.getRandomEntities('attributes')
             desc = self.getRandomHelper('descriptor')
 
-            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = adjust, attribute, thing, location
+            entitiesList['actions'], entitiesList['attributes'], entitiesList[
+                'things'], entitiesList['location'] = adjust, attribute, thing, location
             sentence = f"{adjust} {attribute} of {desc} {thing} in {location}"
 
         elif sentence_type == 4:
@@ -110,23 +133,66 @@ class TrainingDataGenerator:
             sentence = f"{adjust} {attribute} of {desc} {thing}"
 
         elif sentence_type == 5:
-            action = random.choice([self.getRandomSynonym('increase'), self.getRandomSynonym('decrease')])
+            action = random.choice([self.getRandomSynonym(
+                'increase'), self.getRandomSynonym('decrease')])
             thing = self.getRandomEntities('things')
             location = self.getRandomEntities('location')
             attribute = self.getRandomEntities('attributes')
             desc = self.getRandomHelper('descriptor')
 
-            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = action, attribute, thing, location
+            entitiesList['actions'], entitiesList['attributes'], entitiesList[
+                'things'], entitiesList['location'] = action, attribute, thing, location
             sentence = f"{action} {attribute} of {desc} {thing} in {location}"
 
         elif sentence_type == 6:
-            action = random.choice([self.getRandomSynonym('increase'), self.getRandomSynonym('decrease')])
+            action = random.choice([self.getRandomSynonym(
+                'increase'), self.getRandomSynonym('decrease')])
             thing = self.getRandomEntities('things')
             attribute = self.getRandomEntities('attributes')
             desc = self.getRandomHelper('descriptor')
 
             entitiesList['actions'], entitiesList['attributes'], entitiesList['things'] = action, attribute, thing
             sentence = f"{action} {attribute} of {desc} {thing}"
+
+        elif sentence_type == 7:
+            action = self.getRandomSynonym('binary_query')
+            thing = self.getRandomEntities('things')
+            state = self.getRandomEntities('states')
+            location = self.getRandomEntities('location')
+
+            entitiesList['actions'], entitiesList['things'], entitiesList['location'], entitiesList['state'] = action, thing, location, state
+            sentence = f"{action} {thing} in {location} {state}"
+
+        elif sentence_type == 8:
+            action = self.getRandomSynonym('binary_query')
+            thing = self.getRandomEntities('things')
+            state = self.getRandomEntities('states')
+            location = self.getRandomEntities('location')
+            desc = self.getRandomHelper('descriptor')
+
+            entitiesList['actions'], entitiesList['things'], entitiesList['location'], entitiesList['state'] = action, thing, location, state
+            sentence = f"{action} {desc} {thing} in {location} {state}"
+
+        elif sentence_type == 9:
+            action = self.getRandomSynonym('information_query')
+            attribute = self.getRandomEntities('attributes')
+            desc = self.getRandomHelper('descriptor')
+            thing = self.getRandomEntities('things')
+            location = self.getRandomEntities('location')
+
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = action, attribute, thing, location,
+            sentence = f"{action} {attribute} of {desc} {thing} in {location}"
+
+        elif sentence_type == 10:
+            action = self.getRandomSynonym('set')
+            attribute = self.getRandomEntities('attributes')
+            desc = self.getRandomHelper('descriptor')
+            thing = self.getRandomEntities('things')
+            location = self.getRandomEntities('location')
+            value = self.get_random_value_string()
+
+            entitiesList['actions'], entitiesList['attributes'], entitiesList['things'], entitiesList['location'] = action, attribute, thing, location,
+            sentence = f"{action} {attribute} of {desc} {thing} in {location} to {value}"
 
         # Switch the switch case
         elif sentence_type == 101:
@@ -157,11 +223,12 @@ class TrainingDataGenerator:
 
         return sentence, {"entities": entity_data}
 
-    def generate_training_data(self, n=cfg.SIZE_OF_TRAIN_DATA, sentence_type = 0) -> typing.Tuple[list, list]:
+    def generate_training_data(self, n=cfg.SIZE_OF_TRAIN_DATA, sentence_type=0) -> typing.Tuple[list, list]:
         training_data = []
         sentences_data = []
         for _ in range(n):
-            sentence, entities = self.generate_sentence(sentence_type = sentence_type)
+            sentence, entities = self.generate_sentence(
+                sentence_type=sentence_type)
             training_data.append((sentence, entities))
             sentences_data.append(sentence)
         return sentences_data, training_data

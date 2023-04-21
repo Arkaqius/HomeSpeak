@@ -27,6 +27,7 @@ def get_named_entities(nlp: spacy.Language, text: str) -> dict:
 def main():
     model_path = cfg.PATH_TRAINED_MODEL
     nlp = load_trained_model(model_path)
+    preTrained = spacy.load("en_core_web_sm")
 
     for i in range(1,100):
         with open(cfg.PATH_TEST_SENTENCES, "r") as f:
@@ -37,6 +38,10 @@ def main():
             print("Named entities:")
             for entity, label in named_entities.items():
                 print(f"{entity}: {label}")
+
+            pretrained_doc = preTrained(random_line)
+            for ent in pretrained_doc.ents:
+                    print(ent.text, ent.label_)
 
 if __name__ == '__main__':
     main()
