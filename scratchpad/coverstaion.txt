@@ -1,0 +1,7 @@
+We discussed creating a natural language processing (NLP) component for Home Assistant that would recognize voice commands to control various devices. The component would use Named Entity Recognition (NER) to identify and extract relevant information from the commands, such as device types, attributes, locations, and states.
+
+We explored using both the NLTK and spaCy libraries for NER. We decided to use spaCy due to its advanced NER capabilities and performance. You shared your script to create and train a custom NER model using spaCy, and we discussed the challenges of generating training data.
+
+I helped you generate training data with labels and sublabels for entity recognition, and we adjusted the script to accommodate the unique requirements of the project, such as handling synonyms and filtering attributes based on the device type.
+
+You successfully trained the NER model and tested it on various voice commands, obtaining good results. The conversation then shifted to handling questions and information queries in the voice commands, such as identifying when the command is asking for information rather than issuing a direct action.
