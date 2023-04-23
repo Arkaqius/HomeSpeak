@@ -1,3 +1,6 @@
 [submodule "src/HomeAssistantAPI"]
 	path = src/HomeAssistantAPI
 	url = https://github.com/Arkaqius/HomeAssistantAPI.git
+[submodule "HomeAssistantAPI"]
+	path = HomeAssistantAPI
+	url = https://github.com/Arkaqius/HomeAssistantAPI
