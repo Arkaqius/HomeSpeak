@@ -11,10 +11,8 @@ class HA_UtHan:
         self.HA_entity_group_ligts  = self.allEntities['light']
 
     def run_request(self, request: VH_request):
-        if(VH_Enums.Things.LIGHT == request.thing):
+        if(VH_Enums.Things.LIGHT.name.lower() == request.thing):
             print("Light request!")
 
-
-obj = HA_UtHan()
 
 

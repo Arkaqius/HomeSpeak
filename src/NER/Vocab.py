@@ -4,12 +4,21 @@ import json
 import config as cfg
 
 class Vocab:
-
+    """
+    A class representing the vocabulary and synonyms for labels and entities.
+    It reads data from the vocabulary files and populates dictionaries for label-entity
+    relationships and synonyms.
+    """
     def __init__(self):
+        """Initialize the Vocab class with empty dictionaries for label-entity and synonyms."""
         self.label_entity_dict = {}
         self.synonyms_dict = {}
     
-    def readData(self):
+    def read_data(self):
+        """
+        Read data from the vocabulary files and populate the label_entity_dict and
+        synonyms_dict with the appropriate information.
+        """
         for label_dir in glob.glob(os.path.join(cfg.PATH_VOCAB, '*')):
             label = os.path.basename(label_dir)
             label = label.lower()
@@ -29,5 +38,11 @@ class Vocab:
         del self.label_entity_dict['helpers']
         
     def __str__(self) -> str:
+        """
+        Returns a string representation of the label_entity_dict in JSON format.
+        
+        Returns:
+            str: A JSON-formatted string representation of the label_entity_dict.
+        """
         return json.dumps(self.label_entity_dict)
         

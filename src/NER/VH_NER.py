@@ -3,18 +3,72 @@ import random
 import config as cfg
 
 class VH_NER:
+
+    """
+    A class for performing named entity recognition (NER) and numerical value extraction
+    on text using Spacy.
+
+    Attributes:
+        nlp (spacy.language.Language): A Spacy NLP pipeline for performing NER.
+        pretrained_nlp (spacy.language.Language): A Spacy NLP pipeline for extracting
+            numerical values and fractions from text.
+
+    Methods:
+        get_named_entities(text: str) -> dict:
+            Extracts named entities and their attributes from the given text using the
+            Spacy NER model.
+
+        extract_numerical_values(text: str) -> list:
+            Extracts numerical values and fractions from the given text using a pretrained
+            Spacy NLP pipeline.
+
+        process_text(text: str) -> tuple:
+            Processes the given text and returns a tuple containing the extracted named
+            entities and numerical values as dictionaries. Returns (None, None) if no
+            named entities or numerical values are found.
+    """
+
     def __init__(self, model_path: str):
+        """
+        Initializes a new instance of the VH_NER class.
+
+        Args:
+            model_path (str): The path to the Spacy NER model to use for entity extraction.
+        """
         self.nlp = spacy.load(model_path)
         self.pretrained_nlp = spacy.load("en_core_web_sm")
 
     def get_named_entities(self, text: str) -> dict:
+        """
+        Extracts named entities and their attributes from the given text using the Spacy
+        NER model.
+
+        Args:
+            text (str): The text to process.
+
+        Returns:
+            dict: A dictionary containing the extracted named entities as keys and their
+            attribute
+        """
         doc = self.nlp(text)
         entities = {}
         for ent in doc.ents:
-            entities[ent.text] = ent.label_
-        return entities
+            entity_type, attribute = ent.label_.rsplit("_", maxsplit=1)
+            entities[entity_type.rstrip("s")] = (attribute.replace("#", ""), ent.text)
+        return entities if entities else None
 
     def extract_numerical_values(self, text: str):
+        """
+        Extracts numerical values and fractions from the given text using a pretrained
+        Spacy NLP pipeline.
+
+        Args:
+            text (str): The text to process.
+
+        Returns:
+            list: A list of extracted numerical values and fractions. Returns None if no
+            numerical values are found.
+        """
         doc = self.pretrained_nlp(text)
         numerical_values = []
         fraction_mapping = {
@@ -23,6 +77,13 @@ class VH_NER:
             "fourth": 0.25,
             "fifth": 0.2,
             "quarter": 0.25,
+        }
+        preset_mapping = {
+            "eco": 0.3,
+            "comfort": 0.7,
+            "warm": 0.9,
+            "bright": 0.8,
+            "dark": 0.2,
         }
 
         for i, token in enumerate(doc):
@@ -43,10 +104,27 @@ class VH_NER:
                     pass
             elif token.lower_ in fraction_mapping:
                 numerical_values.append(fraction_mapping[token.lower_])
+            elif token.lower_ in preset_mapping:
+                numerical_values.append(preset_mapping[token.lower_])
 
-        return numerical_values
+        return numerical_values if numerical_values else None
+    
 
     def process_text(self, text: str):
+        """
+        Processes the given text and returns a tuple containing the extracted named
+        entities and numerical values as dictionaries. Returns (None, None) if no named
+        entities or numerical values are found.
+
+        Args:
+            text (str): The text to process.
+
+        Returns:
+            tuple: A tuple containing two dictionaries. The first dictionary contains
+            the extracted named entities as keys and their attributes and text as values.
+            The second dictionary contains the extracted numerical values as keys and
+            their units (if any) as values.
+        """
         named_entities = self.get_named_entities(text)
         numerical_values = self.extract_numerical_values(text)
         return named_entities, numerical_values
