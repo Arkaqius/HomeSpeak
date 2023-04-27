@@ -2,6 +2,7 @@ from homeassistant_api import Client
 import SECRETS
 from VH_Request import VH_request 
 import VH_Enums
+import UtterenceHandler.HMI_Lights as HMI_Lights
 
 class HA_UtHan:
     def __init__(self):
@@ -12,7 +13,7 @@ class HA_UtHan:
 
     def run_request(self, request: VH_request):
         if(VH_Enums.Things.LIGHT.name.lower() == request.thing):
-            print("Light request!")
+            HMI_Lights.handle_request(request,self)
 
 
 

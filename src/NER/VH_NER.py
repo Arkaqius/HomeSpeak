@@ -1,7 +1,7 @@
 import spacy
 import random
 import config as cfg
-
+import typing as T
 class VH_NER:
 
     """
@@ -28,7 +28,7 @@ class VH_NER:
             named entities or numerical values are found.
     """
 
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: str) -> None:
         """
         Initializes a new instance of the VH_NER class.
 
@@ -110,7 +110,7 @@ class VH_NER:
         return numerical_values if numerical_values else None
     
 
-    def process_text(self, text: str):
+    def process_text(self, text: str) -> T.Tuple[dict,list]:
         """
         Processes the given text and returns a tuple containing the extracted named
         entities and numerical values as dictionaries. Returns (None, None) if no named
