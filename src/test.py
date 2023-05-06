@@ -2,13 +2,13 @@ import config as cfg
 import typing as T
 
 from NER.VH_NER import VH_NER
-from UtterenceHandler.VH_Request import VH_request
-from UtterenceHandler.HA_UtHan import HA_UtHan
+from VHCommon.VH_Request import VH_Request
+from ha_direct.HA_Direct import HA_Direct
 
 def main():
     ner : VH_NER = VH_NER(cfg.PATH_TRAINED_MODEL)
-    utterenceHandler : HA_UtHan = HA_UtHan()  # Replace this with the initialization of your Home Assistant module
-
+    hass_instace : HA_Direct = HA_Direct()
+    
     while True:
         user_input : str = input("Enter an utterance or type 'quit' to exit: ")
 
@@ -34,9 +34,10 @@ def main():
             for val in numerical_values:
                 print(f"{val}")
 
-        req = VH_request(user_input, named_entities, numerical_values)
+        req = VH_Request(user_input, named_entities, numerical_values)
         # Call your Home Assistant module with the extracted named entities
-        utterenceHandler.run_request(req)
+        
+        hass_instace.run_request(req)
 
 if __name__ == '__main__':
     main()

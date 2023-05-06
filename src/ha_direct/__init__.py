@@ -1,3 +1,5 @@
+import HMI
+
 # About module
 __name__ = "VoiceHAC - Home assistant utterence handler"
 __doc__ = "todo"
