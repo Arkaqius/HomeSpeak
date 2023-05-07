@@ -1,7 +1,11 @@
 from VHCommon import VH_Enums
 from typing import Any, Dict, Optional
+import itertools
 
 class VH_Request:
+
+    PREPOSITIONS = ['in','on','at']
+
     def __init__(self, text: str, NER_Dict: Dict[str, Any], values_dict: Dict[str, Any]) -> None:
         """
         Initialize a VH_request instance with attributes based on the NER_Dict.
@@ -21,7 +25,6 @@ class VH_Request:
         for key in ner_keys:
             setattr(self, key, NER_Dict.get(key, [None])[0])
 
-        self.input = text
         if(values_dict):
             self.value = values_dict.get(0,None) #TODO
             self.value_type  = values_dict.get(1,None)
@@ -32,14 +35,20 @@ class VH_Request:
         # Tokenize the input text using split
         tokens = text.split(' ')
 
-        fields = [attr for attr in dir(VH_Request) if not callable(getattr(VH_Request, attr)) and not attr.startswith("__")]
+        # self.text is not yet initialized, otherwise whole utterances will be ommited
+        fields = list(self.__dict__.values())
+        found_literals = [t[1] for t in NER_Dict.values() if t[0] in fields]
+        found_literals = list(itertools.chain(*[a.split(' ') for a in found_literals]))
         # Check if each token is not in the NER entities, value, or value type
         for token in tokens:
-            if (token not in fields):
+            if (token not in found_literals and token not in self.PREPOSITIONS):
                 self.description += token + " "
 
         # Remove the trailing whitespace
         self.description = self.description.strip()
+
+        # Add whole utterance at end
+        self.input = text
 
     def __str__(self) -> str:
         """

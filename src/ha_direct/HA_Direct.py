@@ -10,7 +10,7 @@ class HA_Direct():
         self.hass_instace= Client(URL, TOKEN)
         self.allEntities = self.hass_instace.get_entities()
         self.HA_entity_group_ligts  = self.allEntities['light']
-
+        
     def run_request(self, request: VH_Request):
         handler: Type[HMI_ActionBase]  = HMI_ActionBase._find_handler(request)
         if(handler is not None):

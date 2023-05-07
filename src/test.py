@@ -17,7 +17,7 @@ def main():
         
         # Check if the user input matches any predefined inputs and set user_input to the corresponding sentence
         predefined_inputs = {
-            "1": "turn on office light",
+            "1": "turn on lights in office",
             "2": "turn off kitchen light",
             "3": "set warm water to eco"
         }

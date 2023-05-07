@@ -28,12 +28,12 @@ class HMI_Lights(HMI_ActionBase):
         dlg_result = HMI_dlg_rtn.UNKNOWN
         # Create queary and find matchign candidates
         candidates = HMI_Find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
-                                              HAS_inst.HA_entity_group_ligts)
+                                              HAS_inst.HA_entity_group_ligts.entities)
         # Choose one or ask for more specific information
         w_en = HMI_Lights.choose_winner(candidates)
         # Determinate which action shall be run
         # Simple ON/OFF
-        if (request.action.name == 'ON' or request.action.name == 'OFF'):
+        if (request.action == 'on' or request.action == 'off'):
             dlg_result = self.handle_request_turn_onoff(request, w_en, HAS_inst)
 
     def handle_req_bq(request, w_en, HAS_inst):
@@ -54,10 +54,10 @@ class HMI_Lights(HMI_ActionBase):
                                })
         return HMI_dlg_rtn.NO_RESPONSE
 
-    def handle_request_turn_onoff(request, w_en, HAS_inst):
-        entity_id = w_en.entity['entity_id']
-        HAS_inst.HA.execute_service(
-            'light', 'turn_'+str.lower(request.action.name), {'entity_id': f'{entity_id}'})
+    def handle_request_turn_onoff(self,request, w_en, HAS_inst : 'HA_Direct'):
+        entity_id = w_en['entity'].entity_id
+        HAS_inst.hass_instace.trigger_service(
+            'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
         return HMI_dlg_rtn.SUCCESS
 
     def handle_request_change_brightness(request, w_en, HAS_inst):
@@ -93,7 +93,7 @@ class HMI_Lights(HMI_ActionBase):
 
     @staticmethod
     def choose_winner(candidates):
-        return max(candidates, key=lambda x: x.ratio)
+        return max(candidates, key=lambda x: x['similarity'])
 
     @staticmethod
     def build_suggest_entity_name(request: VH_Request):
@@ -102,8 +102,11 @@ class HMI_Lights(HMI_ActionBase):
         if request.description:
             description = '_'.join(list(request.description))
         if request.location:
-            location = request.location.name
+            location = request.location
+        
+        if(description):
+            description = '_'+description
         # Common pattern: light.<location>_<description>_light
-        query = 'light.' + location.lower() + '_' + description + '_light'
+        query = 'light.' + location.lower() + description + '_light'
 
         return query

@@ -4,6 +4,8 @@ from fuzzywuzzy import fuzz
 from typing import List, Dict, Any, Type
 from abc import ABC, abstractmethod
 from VHCommon import VH_Request
+from homeassistant_api import Entity
+
 
 class HMI_Find:
     @staticmethod
@@ -38,7 +40,7 @@ class HMI_Find:
     }
 
     @staticmethod
-    def find_candidates(query: str, list_of_entities, **kwargs) -> None:
+    def find_candidates(query: str, list_of_entities:Dict[str,Entity], **kwargs) -> None:
         """Populate the candidates list with optional filters.
 
         Args:
@@ -47,12 +49,12 @@ class HMI_Find:
         """
         candidates: List[Dict[str, Any]] = []
 
-        for entity in list_of_entities:
+        for _,entity in list_of_entities.items():
             
             if not all(HMI_Find.filters[key](entity, value) for key, value in kwargs.items() if key in HMI_Find.filters):
                 continue
 
-            ratio = fuzz.ratio(query, entity["entity_id"])
+            ratio = fuzz.ratio(query, entity.entity_id)
             if ratio > 50:
                 candidates.append({"entity": entity, "similarity": ratio})
 
