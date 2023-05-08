@@ -60,13 +60,24 @@ class HMI_Find:
 
         return candidates
     
-class HMI_dlg_rtn(Enum):
-    UNKNOWN = auto()
-    SUCCESS = auto()
-    NO_RESPONSE = auto()
-    # Lights returns
-    UF_BRIGHTNESS = auto()
+class HARequestStatus(Enum):
+    UNKNOWN = "unknown"
+    SUCCESS = "success"
+    FAILURE = "failure"
+    NOT_FOUND = "not_found"
+    NO_RESPONSE = "no_response"
 
+class HAResult:
+    def __init__(self, status: HARequestStatus, message: str, data: dict = None):
+        self.status = status
+        self.data = data if data is not None else {}
+
+    def is_successful(self) -> bool:
+        return self.status == HARequestStatus.SUCCESS
+
+    def __str__(self) -> str:
+        return f"Status: {self.status.value}, Message: {self.message}, Data: {self.data}"
+    
 class HMI_ActionBase(ABC):
     @abstractmethod
     def handle_utterance(self,request: VH_Request, HAS_inst : 'HA_Direct'):
