@@ -24,22 +24,30 @@ class HMI_Lights(HMI_ActionBase):
         else:
             return False
 
-    def handle_utterance(self, request: VH_Request, HAS_inst : 'HA_Direct'):
-        dlg_result = HMI_dlg_rtn.UNKNOWN
+    def handle_utterance(self, request: VH_Request, HAS_inst : 'HA_Direct') -> HAResult:
+        dlg_result = HAResult(HARequestStatus.UNKNOWN)
         # Create queary and find matchign candidates
         candidates = HMI_Find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
                                               HAS_inst.HA_entity_group_ligts.entities)
         # Choose one or ask for more specific information
         w_en = HMI_Lights.choose_winner(candidates)
-        # Determinate which action shall be run
-        # Simple ON/OFF
-        if (request.action == 'on' or request.action == 'off'):
-            dlg_result = self.handle_request_turn_onoff(request, w_en, HAS_inst)
+        if w_en is None:
+           dlg_result.set_state(HARequestStatus.UNKNOWN_ENTITY)
+        else:
+            # Determinate which action shall be run
+            # Simple ON/OFF
+            if (request.action == VH_Enums.Actions.ON.name.lower() or 
+                request.action == VH_Enums.Actions.OFF.name.lower()):
+                dlg_result = self.handle_request_turn_onoff(request, w_en, HAS_inst)
+            else:
+                dlg_result.set_state(HARequestStatus.UNKNOWN_ACTION)
+
+        return dlg_result
 
     def handle_req_bq(request, w_en, HAS_inst):
         entity_id = w_en.entity['entity_id']
         state = HAS_inst.HA._get_state(entity_id)
-        HAS_inst.speak_dialog('General_BQ',
+        ret = HAS_inst.speak_dialog('General_BQ',
                               {'entity_id':   entity_id,
                                'state':   state["state"]
                                })
@@ -54,11 +62,16 @@ class HMI_Lights(HMI_ActionBase):
                                })
         return HMI_dlg_rtn.NO_RESPONSE
 
-    def handle_request_turn_onoff(self,request, w_en, HAS_inst : 'HA_Direct'):
+    def handle_request_turn_onoff(self,request, w_en, HAS_inst : 'HA_Direct') -> HAResult:
         entity_id = w_en['entity'].entity_id
-        HAS_inst.hass_instace.trigger_service(
-            'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
-        return HMI_dlg_rtn.SUCCESS
+        dlg_result = HAResult(HARequestStatus.SUCCESS)
+        try:
+            ret = HAS_inst.hass_instace.trigger_service(
+                'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
+        except:
+            dlg_result.set_state(HARequestStatus.FAILURE)
+
+        return dlg_result
 
     def handle_request_change_brightness(request, w_en, HAS_inst):
         ''' Handle changing brigtness to exact value'''

@@ -14,7 +14,9 @@ class HA_Direct():
     def run_request(self, request: VH_Request):
         handler: Type[HMI_ActionBase]  = HMI_ActionBase._find_handler(request)
         if(handler is not None):
-            handler().handle_utterance(request,self)
+            result = handler().handle_utterance(request,self)
+        
+        print(result) # TODO Debug
 
 
 
