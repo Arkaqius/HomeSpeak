@@ -2,8 +2,8 @@ import config as cfg
 import typing as T
 
 from NER.VH_NER import VH_NER
-from VHCommon.VH_Request import VH_Request
-from ha_direct.HA_Direct import HA_Direct
+from tokenSkills.common.VH_Request import VH_Request
+from tokenSkills.HA_direct.HA_Direct import HA_Direct
 
 def main():
     ner : VH_NER = VH_NER(cfg.PATH_TRAINED_MODEL)

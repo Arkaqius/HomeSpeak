@@ -1,8 +1,9 @@
 from homeassistant_api import Client
-from ha_direct.SECRETS import *
-from VHCommon import VH_Request 
+# TODO
+from tokenSkills.HA_direct.SECRETS import *
+from tokenSkills.common.VH_Request import VH_Request 
+from tokenSkills.HA_direct.HMI.HMI_Common import HMI_ActionBase
 from typing import Type
-from ha_direct.HMI.HMI_Common import HMI_ActionBase
 
 class HA_Direct():
 

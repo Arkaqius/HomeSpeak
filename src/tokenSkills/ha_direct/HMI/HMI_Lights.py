@@ -1,7 +1,7 @@
 from __future__ import annotations
-import tokenSkills.VH_Enums as VH_Enums
+import tokenSkills.common.VH_Enums as VH_Enums
 from typing import List, Dict, Any
-from VHCommon import VH_Request
+from ...common.VH_Request import VH_Request
 from .HMI_Common import *
 
 

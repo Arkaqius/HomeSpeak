@@ -3,7 +3,7 @@ from enum import Enum, auto
 from fuzzywuzzy import fuzz
 from typing import List, Dict, Any, Type
 from abc import ABC, abstractmethod
-from VHCommon import VH_Request
+from ...common.VH_Request import VH_Request
 from homeassistant_api import Entity
 
 
