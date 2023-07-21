@@ -1,4 +1,4 @@
-from VHCommon import VH_Enums
+from tokenSkills import VH_Enums
 from typing import Any, Dict, Optional
 import itertools
 

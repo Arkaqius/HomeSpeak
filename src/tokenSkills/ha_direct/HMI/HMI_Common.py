@@ -80,6 +80,9 @@ class HAResult:
     def set_state(self, status: HARequestStatus) -> None:
         self.status = status
 
+    def set_entitiy_state(self,state):
+        self.data['state'] = state
+
     def __str__(self) -> str:
         return f"Status: {self.status.value}, Data: {self.data}"
     

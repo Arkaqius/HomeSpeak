@@ -1,5 +1,5 @@
 from __future__ import annotations
-import VH_Enums
+import tokenSkills.VH_Enums as VH_Enums
 from typing import List, Dict, Any
 from VHCommon import VH_Request
 from .HMI_Common import *
@@ -36,22 +36,33 @@ class HMI_Lights(HMI_ActionBase):
         else:
             # Determinate which action shall be run
             # Simple ON/OFF
-            if (request.action == VH_Enums.Actions.ON.name.lower() or 
-                request.action == VH_Enums.Actions.OFF.name.lower()):
+            if (request.action == VH_Enums.Actions.ON.name.lower() or request.action == VH_Enums.Actions.OFF.name.lower()):
                 dlg_result = self.handle_request_turn_onoff(request, w_en, HAS_inst)
+            #Change brightness to exact value
+            elif(request.action == VH_Enums.Actions.ADJUST.name.lower() and request.attribute == VH_Enums.Attributes.BRIGTHNESS.name.lower()):
+                dlg_result = self.handle_request_change_brightness(request,w_en,HAS_inst)
+            #Increase brightness
+            elif((request.action == VH_Enums.Actions.INCREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+                dlg_result = self.handle_request_increase_brightness(request,w_en,HAS_inst)
+            #Decrease brightness
+            elif((request.action == VH_Enums.Actions.DECREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+                dlg_result = self.handle_request_decrease_brightness(request,w_en,HAS_inst)
+            #Binary queary
+            elif((request.action == VH_Enums.Actions.BINARY_QUERY.name.lower() and request.state == VH_Enums.States.POWERED.name.lower())):
+                dlg_result =self. handle_req_bq(request,w_en,HAS_inst)
+            #Information queary - brightness
+            elif((request.action == VH_Enums.Actions.INFORMATION_QUERY.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+                dlg_result = self.handle_req_iq_brgth(request,w_en,HAS_inst)
             else:
                 dlg_result.set_state(HARequestStatus.UNKNOWN_ACTION)
 
         return dlg_result
 
-    def handle_req_bq(request, w_en, HAS_inst):
-        entity_id = w_en.entity['entity_id']
-        state = HAS_inst.HA._get_state(entity_id)
-        ret = HAS_inst.speak_dialog('General_BQ',
-                              {'entity_id':   entity_id,
-                               'state':   state["state"]
-                               })
-        return HMI_dlg_rtn.NO_RESPONSE
+    def handle_req_bq(request, w_en, HAS_inst : 'HA_Direct'):
+        dlg_result = HAResult(HARequestStatus.SUCCESS)
+        w_en['entity'].get_state()
+        dlg_result.set_entitiy_state(w_en['entity'].state.state)
+        return dlg_result
 
     def handle_req_iq_brgth(request, w_en, HAS_inst):
         entity_id = w_en.entity['entity_id']
@@ -66,7 +77,7 @@ class HMI_Lights(HMI_ActionBase):
         entity_id = w_en['entity'].entity_id
         dlg_result = HAResult(HARequestStatus.SUCCESS)
         try:
-            ret = HAS_inst.hass_instace.trigger_service(
+            HAS_inst.hass_instace.trigger_service(
                 'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
         except:
             dlg_result.set_state(HARequestStatus.FAILURE)

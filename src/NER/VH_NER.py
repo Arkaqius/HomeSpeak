@@ -1,7 +1,6 @@
 import spacy
-import random
-import config as cfg
 import typing as T
+
 class VH_NER:
 
     """
@@ -38,7 +37,7 @@ class VH_NER:
         self.nlp = spacy.load(model_path)
         self.pretrained_nlp = spacy.load("en_core_web_sm")
 
-    def get_named_entities(self, text: str) -> dict:
+    def _get_named_entities(self, text: str) -> dict:
         """
         Extracts named entities and their attributes from the given text using the Spacy
         NER model.
@@ -53,11 +52,11 @@ class VH_NER:
         doc = self.nlp(text)
         entities = {}
         for ent in doc.ents:
-            entity_type, attribute = ent.label_.rsplit("_", maxsplit=1)
+            entity_type, attribute = ent.label_.split("_", maxsplit=1)
             entities[entity_type.rstrip("s")] = (attribute.replace("#", ""), ent.text)
         return entities if entities else None
 
-    def extract_numerical_values(self, text: str):
+    def _extract_numerical_values(self, text: str):
         """
         Extracts numerical values and fractions from the given text using a pretrained
         Spacy NLP pipeline.
@@ -125,6 +124,6 @@ class VH_NER:
             The second dictionary contains the extracted numerical values as keys and
             their units (if any) as values.
         """
-        named_entities = self.get_named_entities(text)
-        numerical_values = self.extract_numerical_values(text)
+        named_entities = self._get_named_entities(text)
+        numerical_values = self._extract_numerical_values(text)
         return named_entities, numerical_values

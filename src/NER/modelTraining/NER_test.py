@@ -1,7 +1,7 @@
 import random
-import spacy
-import config as cfg
-from VH_NER import VH_NER
+
+from NER.VH_NER import VH_NER
+import NER.config as cfg
 
 def main():
     ner = VH_NER(cfg.PATH_TRAINED_MODEL)
