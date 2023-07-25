@@ -1,7 +1,6 @@
+from ..VH_NER import VH_NER
+from .. import config as cfg
 import random
-
-from NER.VH_NER import VH_NER
-import NER.config as cfg
 
 def main():
     ner = VH_NER(cfg.PATH_TRAINED_MODEL)

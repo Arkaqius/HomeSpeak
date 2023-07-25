@@ -1,9 +1,9 @@
+from .. import config as cfg
+from typing import Dict, List, Tuple, Union
+from .Vocab import Vocab
+import typing
 import random
 import json
-from Vocab import Vocab
-import typing
-import config as cfg
-from typing import Dict, List, Tuple, Union
 
 class TrainingDataGenerator:
     @staticmethod

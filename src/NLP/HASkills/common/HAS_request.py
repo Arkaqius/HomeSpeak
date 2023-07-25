@@ -1,13 +1,13 @@
 from typing import Any, Dict
 import itertools
 
-class VH_Request:
+class HAS_request:
 
     PREPOSITIONS = ['in','on','at']
 
     def __init__(self, text: str, NER_Dict: Dict[str, Any], values_dict: Dict[str, Any]) -> None:
         """
-        Initialize a VH_request instance with attributes based on the NER_Dict.
+        Initialize a HAS_Request instance with attributes based on the NER_Dict.
 
         Args:
             text (str): The text input (not used in the current implementation).

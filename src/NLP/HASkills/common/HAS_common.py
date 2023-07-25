@@ -3,11 +3,11 @@ from enum import Enum, auto
 from fuzzywuzzy import fuzz
 from typing import List, Dict, Any, Type
 from abc import ABC, abstractmethod
-from ...common.VH_Request import VH_Request
+from .HAS_request import HAS_Request
 from homeassistant_api import Entity
 
 
-class HMI_Find:
+class HAS_Find:
     @staticmethod
     def _filter_by_entity_type(entity: Dict[str, Any], entity_type: str) -> bool:
         """Filter by entity type.
@@ -51,7 +51,7 @@ class HMI_Find:
 
         for _,entity in list_of_entities.items():
             
-            if not all(HMI_Find.filters[key](entity, value) for key, value in kwargs.items() if key in HMI_Find.filters):
+            if not all(HAS_Find.filters[key](entity, value) for key, value in kwargs.items() if key in HAS_Find.filters):
                 continue
 
             ratio = fuzz.ratio(query, entity.entity_id)
@@ -60,7 +60,7 @@ class HMI_Find:
 
         return candidates
     
-class HARequestStatus(Enum):
+class HAS_requestStatus(Enum):
     UNKNOWN = "unknown"
     SUCCESS = "success"
     FAILURE = "failure"
@@ -69,15 +69,15 @@ class HARequestStatus(Enum):
     UNKNOWN_ENTITY = "entity_not_found"
     UNKNOWN_ACTION = "entity_not_support_action"
 
-class HAResult:
-    def __init__(self, status: HARequestStatus, data: dict = None):
+class HAS_Result:
+    def __init__(self, status: HAS_requestStatus, data: dict = None):
         self.status = status
         self.data = data if data is not None else {}
 
     def is_successful(self) -> bool:
-        return self.status == HARequestStatus.SUCCESS
+        return self.status == HAS_requestStatus.SUCCESS
     
-    def set_state(self, status: HARequestStatus) -> None:
+    def set_state(self, status: HAS_requestStatus) -> None:
         self.status = status
 
     def set_entitiy_state(self,state):
@@ -86,18 +86,3 @@ class HAResult:
     def __str__(self) -> str:
         return f"Status: {self.status.value}, Data: {self.data}"
     
-class HMI_ActionBase(ABC):
-    @abstractmethod
-    def handle_utterance(self,request: VH_Request, HAS_inst : 'HA_Direct') -> HAResult:
-        pass
-
-    @abstractmethod
-    def can_handle(self,request) -> bool:
-        return False
-    
-    @staticmethod
-    def _find_handler(request: VH_Request):
-        for subclass in HMI_ActionBase.__subclasses__():
-            if subclass().can_handle(request):
-                return subclass
-        return None

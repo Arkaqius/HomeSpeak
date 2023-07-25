@@ -1,11 +1,12 @@
 from __future__ import annotations
-import tokenSkills.common.VH_Enums as VH_Enums
+from .common import HAS_enums
 from typing import List, Dict, Any
-from ...common.VH_Request import VH_Request
-from .HMI_Common import *
+from .common.HAS_request import HAS_request
+from .common.HAS_common import *
+from .HAS_Base import HAS_Base
 
 
-class HMI_Lights(HMI_ActionBase):
+class HMI_Lights(HAS_Base):
     '''
     HA supported features bit
     '''
@@ -19,54 +20,54 @@ class HMI_Lights(HMI_ActionBase):
     BRIGHNTESS_STEP = 25  # in %
 
     def can_handle(self, request):
-        if (VH_Enums.Things.LIGHT.name.lower() == request.thing):
+        if (HAS_enums.Things.LIGHT.name.lower() == request.thing):
             return True
         else:
             return False
 
-    def handle_utterance(self, request: VH_Request, VH_Orch : 'VHOrchestator') -> HAResult:
-        dlg_result = HAResult(HARequestStatus.UNKNOWN)
+    def handle_utterance(self, request: HAS_request, VH_Orch : 'VHOrchestator') -> HAS_result:
+        dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)
         # Create queary and find matchign candidates
-        candidates = HMI_Find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
+        candidates = HAS_find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
                                               VH_Orch.HA_entity_group_lights.entities)
         # Choose one or ask for more specific information
         w_en = HMI_Lights.choose_winner(candidates)
         if w_en is None:
-           dlg_result.set_state(HARequestStatus.UNKNOWN_ENTITY)
+           dlg_result.set_state(HAS_requestStatus.UNKNOWN_ENTITY)
         else:
             # Determinate which action shall be run
             # Simple ON/OFF
-            if (request.action == VH_Enums.Actions.ON.name.lower() or request.action == VH_Enums.Actions.OFF.name.lower()):
+            if (request.action == HAS_enums.Actions.ON.name.lower() or request.action == HAS_enums.Actions.OFF.name.lower()):
                 dlg_result = self.handle_request_turn_onoff(request, w_en, VH_Orch)
             #Change brightness to exact value
-            elif(request.action == VH_Enums.Actions.ADJUST.name.lower() and request.attribute == VH_Enums.Attributes.BRIGTHNESS.name.lower()):
+            elif(request.action == HAS_enums.Actions.ADJUST.name.lower() and request.attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()):
                 dlg_result = self.handle_request_change_brightness(request,w_en,VH_Orch)
             #Increase brightness
-            elif((request.action == VH_Enums.Actions.INCREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+            elif((request.action == HAS_enums.Actions.INCREASE.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
                 dlg_result = self.handle_request_increase_brightness(request,w_en,VH_Orch)
             #Decrease brightness
-            elif((request.action == VH_Enums.Actions.DECREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+            elif((request.action == HAS_enums.Actions.DECREASE.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
                 dlg_result = self.handle_request_decrease_brightness(request,w_en,VH_Orch)
             #Binary queary
-            elif((request.action == VH_Enums.Actions.BINARY_QUERY.name.lower() and request.state == VH_Enums.States.POWERED.name.lower())):
+            elif((request.action == HAS_enums.Actions.BINARY_QUERY.name.lower() and request.state == HAS_enums.States.POWERED.name.lower())):
                 dlg_result =self. handle_req_bq(request,w_en,VH_Orch)
             #Information queary - brightness
-            elif((request.action == VH_Enums.Actions.INFORMATION_QUERY.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
+            elif((request.action == HAS_enums.Actions.INFORMATION_QUERY.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
                 dlg_result = self.handle_req_iq_brgth(request,w_en,VH_Orch)
             else:
-                dlg_result.set_state(HARequestStatus.UNKNOWN_ACTION)
+                dlg_result.set_state(HAS_requestStatus.UNKNOWN_ACTION)
 
         return dlg_result
     
-    def handle_request_turn_onoff(self,request, w_en, VH_Orch : 'VHOrchestator') -> HAResult:
+    def handle_request_turn_onoff(self,request, w_en, VH_Orch : 'VHOrchestator') -> HAS_result:
         entity_id = w_en['entity'].entity_id
-        dlg_result = HAResult(HARequestStatus.SUCCESS)
+        dlg_result = HAS_result(HAS_requestStatus.SUCCESS)
         try:
             VH_Orch.hass_instance.trigger_service(
                 'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
         except Exception as e:
             print(str(e))
-            dlg_result.set_state(HARequestStatus.FAILURE)
+            dlg_result.set_state(HAS_requestStatus.FAILURE)
 
         return dlg_result
 
@@ -121,7 +122,7 @@ class HMI_Lights(HMI_ActionBase):
         return max(candidates, key=lambda x: x['similarity'])
 
     @staticmethod
-    def build_suggest_entity_name(request: VH_Request):
+    def build_suggest_entity_name(request: HAS_request):
         description = ''
         location = ''
         if request.description:

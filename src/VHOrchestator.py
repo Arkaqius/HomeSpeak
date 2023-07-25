@@ -1,12 +1,10 @@
-import config as cfg
-import typing as T
-
-from NER.VH_NER import VH_NER
-from tokenSkills.common.VH_Request import VH_Request
+from NLP.NER import config as cfg
+from NLP.NER.VH_NER import VH_NER
+from NLP.HASkills.common.HAS_request import HAS_request
 from homeassistant_api import Client
-from tokenSkills.HA_direct.HMI.HMI_Common import HMI_ActionBase
-from typing import Type
-from tokenSkills.HA_direct.SECRETS import *
+from NLP.HASkills.HAS_Base import HAS_Base
+from typing import Type,AnyStr
+import SECRETS as sec
 
 
 class VHOrchestator():
@@ -18,11 +16,30 @@ class VHOrchestator():
     def __init__(self) -> None:
         """Initializes the VHOrchestrator."""
         self.ner: VH_NER = VH_NER(cfg.PATH_TRAINED_MODEL)  # Instance of VH_NER for Named Entity Recognition
-        self.hass_instance: Client = Client(URL, TOKEN)    # Instance of Home Assistant Client
+        self.hass_instance: Client = Client(sec.URL, sec.TOKEN)    # Instance of Home Assistant Client
         self.allEntities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
         self.HA_entity_group_lights: dict = self.allEntities['light']  # Dictionary containing all light entities
 
-    def run_request(self, request: VH_Request) -> None:
+    
+    def _find_skill(utterence: AnyStr):
+        """
+        PlaceHolder
+        """
+        pass
+
+    def _execute_results(utterence: AnyStr):
+        """
+        PlaceHolder
+        """
+        pass
+
+    def _send_response():
+        """
+        PlaceHolder
+        """
+        pass
+
+    def _run_requestTODO(self, request: HAS_request) -> None:
         """
         Processes the provided request, finds the appropriate handler for it and handles the utterance.
 
@@ -31,7 +48,7 @@ class VHOrchestator():
 
         """
         # Find a handler for the request and handle the utterance
-        handler: Type[HMI_ActionBase] = HMI_ActionBase._find_handler(request)
+        handler: Type[HAS_Base] = HAS_Base._find_handler(request)
         if handler is not None:
             result = handler().handle_utterance(request, self)
             print(result)  # TODO Debug
@@ -69,6 +86,6 @@ class VHOrchestator():
                     print(f"{val}")
 
             # Create a VH_Request object with the extracted named entities and numerical values
-            req = VH_Request(user_input, named_entities, numerical_values)
+            req = HAS_request(user_input, named_entities, numerical_values)
             # Call the run_request method to handle the VH_Request using Home Assistant module
-            self.run_request(req)
+            self._run_requestTODO(req)

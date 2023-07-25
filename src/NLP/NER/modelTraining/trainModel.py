@@ -1,10 +1,10 @@
-import spacy
-import random
 from spacy.util import minibatch, compounding
 from spacy.training import Example
+from .. import config as cfg
+import spacy
+import random
 import typing as T
 import json
-import config as cfg
 
 
 def load_spacy_json(file_path: str) -> list:

@@ -1,7 +1,7 @@
+from .. import config as cfg
 import os
 import glob
 import json
-import config as cfg
 
 class Vocab:
     """
