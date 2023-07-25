@@ -24,11 +24,11 @@ class HMI_Lights(HMI_ActionBase):
         else:
             return False
 
-    def handle_utterance(self, request: VH_Request, HAS_inst : 'HA_Direct') -> HAResult:
+    def handle_utterance(self, request: VH_Request, VH_Orch : 'VHOrchestator') -> HAResult:
         dlg_result = HAResult(HARequestStatus.UNKNOWN)
         # Create queary and find matchign candidates
         candidates = HMI_Find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
-                                              HAS_inst.HA_entity_group_ligts.entities)
+                                              VH_Orch.HA_entity_group_lights.entities)
         # Choose one or ask for more specific information
         w_en = HMI_Lights.choose_winner(candidates)
         if w_en is None:
@@ -37,83 +37,84 @@ class HMI_Lights(HMI_ActionBase):
             # Determinate which action shall be run
             # Simple ON/OFF
             if (request.action == VH_Enums.Actions.ON.name.lower() or request.action == VH_Enums.Actions.OFF.name.lower()):
-                dlg_result = self.handle_request_turn_onoff(request, w_en, HAS_inst)
+                dlg_result = self.handle_request_turn_onoff(request, w_en, VH_Orch)
             #Change brightness to exact value
             elif(request.action == VH_Enums.Actions.ADJUST.name.lower() and request.attribute == VH_Enums.Attributes.BRIGTHNESS.name.lower()):
-                dlg_result = self.handle_request_change_brightness(request,w_en,HAS_inst)
+                dlg_result = self.handle_request_change_brightness(request,w_en,VH_Orch)
             #Increase brightness
             elif((request.action == VH_Enums.Actions.INCREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_request_increase_brightness(request,w_en,HAS_inst)
+                dlg_result = self.handle_request_increase_brightness(request,w_en,VH_Orch)
             #Decrease brightness
             elif((request.action == VH_Enums.Actions.DECREASE.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_request_decrease_brightness(request,w_en,HAS_inst)
+                dlg_result = self.handle_request_decrease_brightness(request,w_en,VH_Orch)
             #Binary queary
             elif((request.action == VH_Enums.Actions.BINARY_QUERY.name.lower() and request.state == VH_Enums.States.POWERED.name.lower())):
-                dlg_result =self. handle_req_bq(request,w_en,HAS_inst)
+                dlg_result =self. handle_req_bq(request,w_en,VH_Orch)
             #Information queary - brightness
             elif((request.action == VH_Enums.Actions.INFORMATION_QUERY.name.lower() and VH_Enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_req_iq_brgth(request,w_en,HAS_inst)
+                dlg_result = self.handle_req_iq_brgth(request,w_en,VH_Orch)
             else:
                 dlg_result.set_state(HARequestStatus.UNKNOWN_ACTION)
 
         return dlg_result
-
-    def handle_req_bq(request, w_en, HAS_inst : 'HA_Direct'):
-        dlg_result = HAResult(HARequestStatus.SUCCESS)
-        w_en['entity'].get_state()
-        dlg_result.set_entitiy_state(w_en['entity'].state.state)
-        return dlg_result
-
-    def handle_req_iq_brgth(request, w_en, HAS_inst):
-        entity_id = w_en.entity['entity_id']
-        state = HAS_inst.HA._get_state(entity_id)
-        HAS_inst.speak_dialog('LIGHT_IQ_BRIGHTNESS',
-                              {'friendly_name':   entity_id,
-                               'brg_level':   (float(state['attributes']['brightness']) * 100/256)
-                               })
-        return HMI_dlg_rtn.NO_RESPONSE
-
-    def handle_request_turn_onoff(self,request, w_en, HAS_inst : 'HA_Direct') -> HAResult:
+    
+    def handle_request_turn_onoff(self,request, w_en, VH_Orch : 'VHOrchestator') -> HAResult:
         entity_id = w_en['entity'].entity_id
         dlg_result = HAResult(HARequestStatus.SUCCESS)
         try:
-            HAS_inst.hass_instace.trigger_service(
+            VH_Orch.hass_instance.trigger_service(
                 'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
-        except:
+        except Exception as e:
+            print(str(e))
             dlg_result.set_state(HARequestStatus.FAILURE)
 
         return dlg_result
 
-    def handle_request_change_brightness(request, w_en, HAS_inst):
-        ''' Handle changing brigtness to exact value'''
-        # Check if found light support brightness
-        if w_en.entity['attributes']['supported_features'] & self.SUPPORT_BRIGHTNESS:
-            entity_id = w_en.entity['entity_id']
-            HAS_inst.HA.execute_service('light',
-                                        'turn_on',
-                                        {'entity_id': f'{entity_id}',
-                                         'brightness_pct': f'{request.value * 100}'})
-            dialog_rtn = HMI_dlg_rtn.SUCCESS
-        else:
-            dialog_rtn = HMI_dlg_rtn.UF_BRIGHTNESS
+    # def handle_req_bq(request, w_en, VH_Orch : 'VHOrchestator'):
+    #     dlg_result = HAResult(HARequestStatus.SUCCESS)
+    #     w_en['entity'].get_state()
+    #     dlg_result.set_entitiy_state(w_en['entity'].state.state)
+    #     return dlg_result
 
-        return dialog_rtn
+    # def handle_req_iq_brgth(request, w_en, HAS_inst):
+    #     entity_id = w_en.entity['entity_id']
+    #     state = HAS_inst.HA._get_state(entity_id)
+    #     HAS_inst.speak_dialog('LIGHT_IQ_BRIGHTNESS',
+    #                           {'friendly_name':   entity_id,
+    #                            'brg_level':   (float(state['attributes']['brightness']) * 100/256)
+    #                            })
+    #     return None
 
-    def handle_request_increase_brightness(request, w_en, HAS_inst):
-        entity_id = w_en.entity['entity_id']
-        HAS_inst.HA.execute_service('light',
-                                    'turn_on',
-                                    {'entity_id': f'{entity_id}',
-                                     'brightness_step_pct': f'{self.BRIGHNTESS_STEP}'})
-        return HMI_dlg_rtn.SUCCESS
+    # def handle_request_change_brightness(request, w_en, HAS_inst):
+    #     ''' Handle changing brigtness to exact value'''
+    #     # Check if found light support brightness
+    #     if w_en.entity['attributes']['supported_features'] & self.SUPPORT_BRIGHTNESS:
+    #         entity_id = w_en.entity['entity_id']
+    #         HAS_inst.HA.execute_service('light',
+    #                                     'turn_on',
+    #                                     {'entity_id': f'{entity_id}',
+    #                                      'brightness_pct': f'{request.value * 100}'})
+    #         dialog_rtn = HMI_dlg_rtn.SUCCESS
+    #     else:
+    #         dialog_rtn = HMI_dlg_rtn.UF_BRIGHTNESS
 
-    def handle_request_decrease_brightness(request, w_en, HAS_inst):
-        entity_id = w_en.entity['entity_id']
-        HAS_inst.HA.execute_service('light',
-                                    'turn_on',
-                                    {'entity_id': f'{entity_id}',
-                                     'brightness_step_pct': f'{self.BRIGHNTESS_STEP * -1}'})
-        return HMI_dlg_rtn.SUCCESS
+    #     return dialog_rtn
+
+    # def handle_request_increase_brightness(request, w_en, HAS_inst):
+    #     entity_id = w_en.entity['entity_id']
+    #     HAS_inst.HA.execute_service('light',
+    #                                 'turn_on',
+    #                                 {'entity_id': f'{entity_id}',
+    #                                  'brightness_step_pct': f'{self.BRIGHNTESS_STEP}'})
+    #     return HMI_dlg_rtn.SUCCESS
+
+    # def handle_request_decrease_brightness(request, w_en, HAS_inst):
+    #     entity_id = w_en.entity['entity_id']
+    #     HAS_inst.HA.execute_service('light',
+    #                                 'turn_on',
+    #                                 {'entity_id': f'{entity_id}',
+    #                                  'brightness_step_pct': f'{self.BRIGHNTESS_STEP * -1}'})
+    #     return HMI_dlg_rtn.SUCCESS
 
     @staticmethod
     def choose_winner(candidates):
