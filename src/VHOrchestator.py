@@ -1,4 +1,4 @@
-from NLP.NER import config as cfg
+from NLP.NER.config import *
 from NLP.NER.VH_NER import VH_NER
 from NLP.HASkills.common.HAS_request import HAS_request
 from homeassistant_api import Client
@@ -15,7 +15,7 @@ class VHOrchestator():
     """
     def __init__(self) -> None:
         """Initializes the VHOrchestrator."""
-        self.ner: VH_NER = VH_NER(cfg.PATH_TRAINED_MODEL)  # Instance of VH_NER for Named Entity Recognition
+        self.ner: VH_NER = VH_NER(PATH_TRAINED_MODEL)  # Instance of VH_NER for Named Entity Recognition
         self.hass_instance: Client = Client(sec.URL, sec.TOKEN)    # Instance of Home Assistant Client
         self.allEntities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
         self.HA_entity_group_lights: dict = self.allEntities['light']  # Dictionary containing all light entities

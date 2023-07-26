@@ -1,5 +1,5 @@
 # About module
-__name__ = "VoiceHAC NER module"
+__name__ = "VoiceHAC_NER_module"
 __doc__ = """
 The VoiceHAC NER (Named Entity Recognition) module is responsible for parsing utterances 
 to identify entities such as names, locations, and things. This is an integral part of 

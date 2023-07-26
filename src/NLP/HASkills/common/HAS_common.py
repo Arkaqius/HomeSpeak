@@ -1,13 +1,11 @@
 from __future__ import annotations
 from enum import Enum, auto
 from fuzzywuzzy import fuzz
-from typing import List, Dict, Any, Type
-from abc import ABC, abstractmethod
-from .HAS_request import HAS_Request
+from typing import List, Dict, Any
 from homeassistant_api import Entity
 
 
-class HAS_Find:
+class HAS_find:
     @staticmethod
     def _filter_by_entity_type(entity: Dict[str, Any], entity_type: str) -> bool:
         """Filter by entity type.
@@ -51,7 +49,7 @@ class HAS_Find:
 
         for _,entity in list_of_entities.items():
             
-            if not all(HAS_Find.filters[key](entity, value) for key, value in kwargs.items() if key in HAS_Find.filters):
+            if not all(HAS_find.filters[key](entity, value) for key, value in kwargs.items() if key in HAS_Find.filters):
                 continue
 
             ratio = fuzz.ratio(query, entity.entity_id)
@@ -69,7 +67,7 @@ class HAS_requestStatus(Enum):
     UNKNOWN_ENTITY = "entity_not_found"
     UNKNOWN_ACTION = "entity_not_support_action"
 
-class HAS_Result:
+class HAS_result:
     def __init__(self, status: HAS_requestStatus, data: dict = None):
         self.status = status
         self.data = data if data is not None else {}

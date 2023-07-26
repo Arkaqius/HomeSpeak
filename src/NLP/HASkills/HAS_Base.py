@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from .common.HAS_request import HAS_request
-from ...HomeAssistantAPI.homeassistant_api import Client
+from HomeAssistantAPI.homeassistant_api import Client
 from .common.HAS_common import HAS_result
 
 class HAS_Base(ABC):

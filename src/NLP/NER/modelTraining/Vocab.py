@@ -1,4 +1,4 @@
-from .. import config as cfg
+from NLP.NER.config import *
 import os
 import glob
 import json
@@ -19,7 +19,7 @@ class Vocab:
         Read data from the vocabulary files and populate the label_entity_dict and
         synonyms_dict with the appropriate information.
         """
-        for label_dir in glob.glob(os.path.join(cfg.PATH_VOCAB, '*')):
+        for label_dir in glob.glob(os.path.join(PATH_VOCAB, '*')):
             label = os.path.basename(label_dir)
             label = label.lower()
             self.label_entity_dict[label] = []

@@ -1,14 +1,14 @@
 # Path to the trained model directory
-PATH_TRAINED_MODEL = "./src/NER/modelTraining/trainedModel"
+PATH_TRAINED_MODEL = "./src/NLP/NER/modelTraining/trainedModel"
 
 # Path to the test sentences file
-PATH_TEST_SENTENCES = "./src/NER/modelTraining/rawDataSet/sentances.txt"
+PATH_TEST_SENTENCES = "./src/NLP/NER/modelTraining/rawDataSet/sentances.txt"
 
 # Path to the training data file in JSON format
-PATH_TRAIN_DATA = "./src/NER/modelTraining/rawDataSet/spacy_training_data_generated.json"
+PATH_TRAIN_DATA = "./src/NLP/NER/modelTraining/rawDataSet/spacy_training_data_generated.json"
 
 # Path to the vocabulary directory
-PATH_VOCAB = './src/NER/vocab/en-us'
+PATH_VOCAB = './src/NLP/NER/vocab/en-us'
 
 # The size of the training dataset
 SIZE_OF_TRAIN_DATA = 3000
