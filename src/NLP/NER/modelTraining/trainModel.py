@@ -1,6 +1,6 @@
 from spacy.util import minibatch, compounding
 from spacy.training import Example
-from .. import config as cfg
+import NLP.NER.config as cfg
 import spacy
 import random
 import typing as T

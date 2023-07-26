@@ -1,7 +1,7 @@
-from NLP.NER.config import *
+import NLP.NER.config as cfg
 from typing import Dict, List, Tuple, Union
 import sys
-from NLP.NER.modelTraining import Vocab
+from NLP.NER.modelTraining.Vocab import Vocab
 import typing
 import random
 import json
@@ -305,7 +305,7 @@ class TrainingDataGenerator:
 
         return sentence, {"entities": entity_data}
 
-    def generate_training_data(self, n: int = SIZE_OF_TRAIN_DATA, sentence_type: int = 0) -> Tuple[List[str], List[Tuple[str, Dict[str, List[Tuple[int, int, str]]]]]]: 
+    def generate_training_data(self, n: int = cfg.SIZE_OF_TRAIN_DATA, sentence_type: int = 0) -> Tuple[List[str], List[Tuple[str, Dict[str, List[Tuple[int, int, str]]]]]]: 
         """
         Generate a specified number of training data samples with sentences and their corresponding entity data.
 

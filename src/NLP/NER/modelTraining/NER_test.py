@@ -1,5 +1,5 @@
-from ..VH_NER import VH_NER
-from .. import config as cfg
+from NLP.NER.VH_NER import VH_NER
+import NLP.NER.config as cfg
 import random
 
 def main():
