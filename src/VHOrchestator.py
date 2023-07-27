@@ -5,7 +5,8 @@ from homeassistant_api import Client
 from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type,AnyStr
 import SECRETS as sec
-
+from NLP.NLP_skill import NLPSkill
+from NLP.HASkills import HAS_Base
 
 class VHOrchestator():
     """
@@ -17,15 +18,16 @@ class VHOrchestator():
         """Initializes the VHOrchestrator."""
         self.ner: VH_NER = VH_NER(PATH_TRAINED_MODEL)  # Instance of VH_NER for Named Entity Recognition
         self.hass_instance: Client = Client(sec.URL, sec.TOKEN)    # Instance of Home Assistant Client
-        self.allEntities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
-        self.HA_entity_group_lights: dict = self.allEntities['light']  # Dictionary containing all light entities
+        self.all_entities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
+        self.HA_entity_group_lights: dict = self.all_entities['light']  # Dictionary containing all light entities
+        self.nlp_skills_list = NLPSkill.__subclasses__() # All child classes that inherit from NLPSkills
+        self._find_skill("arel")
 
     
-    def _find_skill(utterence: AnyStr):
-        """
-        PlaceHolder
-        """
-        pass
+    def _find_skill(self,utterance: AnyStr):
+
+        for skill in self.nlp_skills_list:
+            skill.request_handling_score(utterance)
 
     def _execute_results(utterence: AnyStr):
         """
