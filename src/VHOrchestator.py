@@ -6,6 +6,8 @@ from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type,AnyStr
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
+# Import all skills endpoint classes to register
+from NLP.HASkills.HAS_Lights import HAS_Lights
 from NLP.HASkills import HAS_Base
 
 class VHOrchestator():
@@ -21,14 +23,14 @@ class VHOrchestator():
         self.all_entities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
         self.HA_entity_group_lights: dict = self.all_entities['light']  # Dictionary containing all light entities
         self.nlp_skills_list = NLPSkill.__subclasses__() # All child classes that inherit from NLPSkills
-        self._find_skill("arel")
+        self._find_skill("turn on light")
 
     
     def _find_skill(self,utterance: AnyStr):
-
+        skills_score : dict = {}
         for skill in self.nlp_skills_list:
-            skill.request_handling_score(utterance)
-
+            skills_score[skill] = skill.request_handling_score(self.ner,utterance)
+        
     def _execute_results(utterence: AnyStr):
         """
         PlaceHolder

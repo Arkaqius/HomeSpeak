@@ -1,9 +1,8 @@
 from __future__ import annotations
-from enum import Enum, auto
+from enum import Enum
 from fuzzywuzzy import fuzz
 from typing import List, Dict, Any
 from homeassistant_api import Entity
-
 
 class HAS_find:
     @staticmethod
@@ -57,7 +56,7 @@ class HAS_find:
                 candidates.append({"entity": entity, "similarity": ratio})
 
         return candidates
-    
+          
 class HAS_requestStatus(Enum):
     UNKNOWN = "unknown"
     SUCCESS = "success"

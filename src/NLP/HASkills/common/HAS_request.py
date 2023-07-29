@@ -10,7 +10,7 @@ class HAS_request:
         Initialize a HAS_Request instance with attributes based on the NER_Dict.
 
         Args:
-            text (str): The text input (not used in the current implementation).
+            text (str): The text input
             NER_Dict (Dict[str, Any]): A dictionary containing keys and values for various NER categories.
             values_dict (Dict[str, Any]): A dictionary containing values.
         """

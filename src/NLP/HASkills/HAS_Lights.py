@@ -1,12 +1,11 @@
 from __future__ import annotations
-from .common import HAS_enums
+import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any
 from .common.HAS_request import HAS_request
 from .common.HAS_common import *
 from .HAS_Base import HAS_Base
 
-
-class HMI_Lights(HAS_Base):
+class HAS_Lights(HAS_Base):
     '''
     HA supported features bit
     '''
@@ -19,11 +18,11 @@ class HMI_Lights(HAS_Base):
     SUPPORT_WHITE_VALUE = 128
     BRIGHNTESS_STEP = 25  # in %
 
-    def can_handle(self, request):
+    def get_req_score(self, request):
         if (HAS_enums.Things.LIGHT.name.lower() == request.thing):
-            return True
+            return 100
         else:
-            return False
+            return 0
 
     def handle_utterance(self, request: HAS_request, VH_Orch : 'VHOrchestator') -> HAS_result:
         dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)

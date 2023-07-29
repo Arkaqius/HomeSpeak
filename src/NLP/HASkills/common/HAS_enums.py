@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from ...NER import config as cfg
+import NER.config as cfg
 
 def generate_enum_from_files(directory: str, enum_name: str) -> Enum:
     """
