@@ -6,6 +6,7 @@ from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type,AnyStr
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
+from NLP.NLP_action import NLP_action
 # Import all skills endpoint classes to register
 from NLP.HASkills.HAS_Lights import HAS_Lights
 from NLP.HASkills import HAS_Base
@@ -22,14 +23,20 @@ class VHOrchestator():
         self.hass_instance: Client = Client(sec.URL, sec.TOKEN)    # Instance of Home Assistant Client
         self.all_entities: dict = self.hass_instance.get_entities()  # Dictionary containing all entities from Home Assistant
         self.HA_entity_group_lights: dict = self.all_entities['light']  # Dictionary containing all light entities
-        self.nlp_skills_list = NLPSkill.__subclasses__() # All child classes that inherit from NLPSkills
-        self._find_skill("turn on light")
+        self.nlp_skills_dict = {skill.__name__: skill() for skill in NLPSkill.__subclasses__()} # All child classes instances that inherit from NLPSkills
 
-    
     def _find_skill(self,utterance: AnyStr):
         skills_score : dict = {}
-        for skill in self.nlp_skills_list:
-            skills_score[skill] = skill.request_handling_score(self.ner,utterance)
+        
+        # Skill_instance contains concreate class
+        for skill_instance in self.nlp_skills_dict.values():
+            result_skill , result_skill_score= skill_instance.request_handling_score(self.ner,utterance)
+            skills_score[result_skill] = result_skill_score
+        
+        # Call best skill
+        skill_to_call = max(skills_score,key=skills_score.get)
+
+        return skill_to_call
         
     def _execute_results(utterence: AnyStr):
         """
@@ -43,7 +50,7 @@ class VHOrchestator():
         """
         pass
 
-    def _run_requestTODO(self, request: HAS_request) -> None:
+    def _run_request(self, utterance: str) -> None:
         """
         Processes the provided request, finds the appropriate handler for it and handles the utterance.
 
@@ -51,13 +58,18 @@ class VHOrchestator():
             request (VH_Request): The request to be processed.
 
         """
-        # Find a handler for the request and handle the utterance
-        handler: Type[HAS_Base] = HAS_Base._find_handler(request)
-        if handler is not None:
-            result = handler().handle_utterance(request, self)
-            print(result)  # TODO Debug
-        else:
-            print("Handler not found for the request.")
+
+        # 10. Find best skill to handle utterance
+        skill_to_call : NLPSkill = self._find_skill(utterance)
+
+        # 20. Call best skill to handle utterance
+        action_to_perform : NLP_action = skill_to_call.handle_utterence(utterance)
+
+        # 30. Perform actions
+        # TODO
+
+        # 40. Speak dialog
+        # TODO
 
     def testMode(self) -> None:
         """
@@ -78,18 +90,5 @@ class VHOrchestator():
             if user_input.strip() in predefined_inputs:
                 user_input = predefined_inputs[user_input.strip()]
 
-            # Process the user input using Named Entity Recognition
-            named_entities, numerical_values = self.ner.process_text(user_input)
-            print("Named entities:")
-            for entity, label in named_entities.items():
-                print(f"{entity}: {label}")
-
-            print("Values:")
-            if numerical_values:
-                for val in numerical_values:
-                    print(f"{val}")
-
-            # Create a VH_Request object with the extracted named entities and numerical values
-            req = HAS_request(user_input, named_entities, numerical_values)
-            # Call the run_request method to handle the VH_Request using Home Assistant module
-            self._run_requestTODO(req)
+            # Call the run_request method to handle utterence
+            self._run_request(user_input)

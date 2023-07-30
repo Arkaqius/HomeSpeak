@@ -18,16 +18,25 @@ class HAS_Lights(HAS_Base):
     SUPPORT_WHITE_VALUE = 128
     BRIGHNTESS_STEP = 25  # in %
 
+    def __init__(self):
+        pass
+
     def get_req_score(self, request):
         if (HAS_enums.Things.LIGHT.name.lower() == request.thing):
             return 100
         else:
             return 0
 
-    def handle_utterance(self, request: HAS_request, VH_Orch : 'VHOrchestator') -> HAS_result:
+    def handle_utterence(self,utterance : str, ner = None, ner_data = None) -> HAS_result:
+        
         dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)
+
+        request_to_handle =  self.latest_utterance_data['ner_result']
+
+        # Everything to TODO below!
+        
         # Create queary and find matchign candidates
-        candidates = HAS_find.find_candidates(HMI_Lights.build_suggest_entity_name(request),
+        candidates = HAS_find.find_candidates(HAS_Lights.build_suggest_entity_name(request_to_handle),
                                               VH_Orch.HA_entity_group_lights.entities)
         # Choose one or ask for more specific information
         w_en = HMI_Lights.choose_winner(candidates)
