@@ -62,31 +62,3 @@ class HAS_find:
                 candidates.append({"entity": entity, "similarity": ratio})
 
         return candidates
-
-
-class HAS_requestStatus(Enum):
-    UNKNOWN = "unknown"
-    SUCCESS = "success"
-    FAILURE = "failure"
-    NOT_FOUND = "not_found"
-    NO_RESPONSE = "no_response"
-    UNKNOWN_ENTITY = "entity_not_found"
-    UNKNOWN_ACTION = "entity_not_support_action"
-
-
-class HAS_result:
-    def __init__(self, status: HAS_requestStatus, data: dict = None):
-        self.status = status
-        self.data = data if data is not None else {}
-
-    def is_successful(self) -> bool:
-        return self.status == HAS_requestStatus.SUCCESS
-
-    def set_state(self, status: HAS_requestStatus) -> None:
-        self.status = status
-
-    def set_entitiy_state(self, state):
-        self.data["state"] = state
-
-    def __str__(self) -> str:
-        return f"Status: {self.status.value}, Data: {self.data}"

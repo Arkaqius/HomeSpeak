@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from HomeAssistantAPI.homeassistant_api import Client
-from .common.HAS_common import HAS_result
 from ..NLP_skill import NLPSkill
 from typing import Tuple, TYPE_CHECKING
 from ..NER.NER_result import NER_result
+from ..NLP_common import NLP_result
 import inspect, sys
 
 if TYPE_CHECKING:
@@ -50,5 +50,5 @@ class HAS_Base(NLPSkill):
 
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
-    ) -> HAS_result:
+    ) -> NLP_result:
         pass

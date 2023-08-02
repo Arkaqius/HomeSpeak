@@ -6,7 +6,7 @@ from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type, AnyStr
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
-from NLP.NLP_action import NLP_action
+from NLP.NLP_common import NLP_result
 
 # Import all skills endpoint classes to register
 from NLP.HASkills.HAS_Lights import HAS_Lights
@@ -81,10 +81,10 @@ class VHOrchestator:
         skill_to_call: NLPSkill = self._find_skill(utterance, ner_result)
 
         # 30. Call best skill to handle utterance
-        action_to_perform: NLP_action = skill_to_call.handle_utterance(
+        action_to_perform: NLP_result = skill_to_call.handle_utterance(
             self, ner_result, utterance
         )
-
+        print(action_to_perform)
         # 40. Perform actions
         # TODO
 

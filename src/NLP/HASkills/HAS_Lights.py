@@ -3,6 +3,8 @@ import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any, TYPE_CHECKING
 from .common.HAS_common import *
 from .HAS_Base import HAS_Base
+from ..NER.NER_result import NER_result
+from ..NLP_common import NLP_result, NLP_result_status
 
 if TYPE_CHECKING:
     from VHOrchestator import VHOrchestator
@@ -27,9 +29,11 @@ class HAS_Lights(HAS_Base):
 
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
-    ) -> HAS_result:
+    ) -> NLP_result:
         # 10. Prepare object to return
-        dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)
+        result = NLP_result(
+            NLP_result_status.UNKNOWN, "ERROR : HAS lights skill failed"
+        )
 
         # 20. Looking for matching entities
         candidates: List[Dict[str, Any]] = HAS_find.find_candidates(
@@ -42,25 +46,23 @@ class HAS_Lights(HAS_Base):
 
         # 40. If winner was not found decide to fail execution or ask user for more details
         if winner_entity is None:
-            dlg_result.set_state(HAS_requestStatus.UNKNOWN_ENTITY)
-            # TODO Ask for more details
+            result.set_state(NLP_result_status.NEED_MORE_INFO, None)
 
         # 50. Delegation of action handling to dedicated functions
         else:
-            if ner_result.action:
-                action = ner_result.action.lower()
-            if ner_result.attribute:
-                attribute = ner_result.attribute.lower()
+            action = ner_result.action.lower() if ner_result.action else None
+            attribute = ner_result.action.lower() if ner_result.action else None
 
             # ON/OFF
             if action in [
                 HAS_enums.Actions.ON.name.lower(),
                 HAS_enums.Actions.OFF.name.lower(),
             ]:
-                dlg_result = self.handle_request_turn_onoff(
-                    ner_result, winner_entity, orchst
+                self.handle_request_turn_onoff(
+                    ner_result, winner_entity, orchst, result
                 )
 
+            # Brightness
             elif (
                 action == HAS_enums.Actions.ADJUST.name.lower()
                 and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()
@@ -100,7 +102,7 @@ class HAS_Lights(HAS_Base):
             else:
                 dlg_result.set_state(HAS_requestStatus.UNKNOWN_ACTION)
 
-        return dlg_result
+        return result
 
     def get_req_score(self, ner_result: NER_result):
         if HAS_enums.Things.LIGHT.name.lower() == ner_result.thing:
@@ -113,18 +115,22 @@ class HAS_Lights(HAS_Base):
         ner_result: NER_result,
         winner_entity: Dict[str, Any],
         VH_Orch: "VHOrchestator",
-    ) -> HAS_result:
+        dlg_result: NLP_result,
+    ) -> None:
         entity_id = winner_entity["entity"].entity_id
-        dlg_result = HAS_result(HAS_requestStatus.SUCCESS)
-
         try:
             VH_Orch.hass_instance.trigger_service(
-                "light", "turn_" + str.lower(ner_result.action), entity_id=f"{entity_id}"
+                "light",
+                "turn_" + str.lower(ner_result.action),
+                entity_id=f"{entity_id}",
             )
-        except Exception as e:
-            print(str(e))
-            dlg_result.set_state(HAS_requestStatus.FAILURE)
-        return dlg_result
+            dlg_result.set_state(
+                NLP_result_status.SUCCESS, "The operation was successful"
+            )
+        except:
+            dlg_result.set_state(
+                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+            )
 
     # def handle_req_bq(request, w_en, VH_Orch : 'VHOrchestator'):
     #     dlg_result = HAResult(HARequestStatus.SUCCESS)

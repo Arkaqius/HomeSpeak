@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING
 from .NER.NER_result import NER_result
+from .NLP_common import NLP_result
 
 if TYPE_CHECKING:
     from VHOrchestator import VHOrchestator
@@ -14,7 +15,7 @@ class NLPSkill(ABC):
     @abstractmethod
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
-    ) -> NER_result:
+    ) -> NLP_result:
         pass
 
     @abstractmethod
