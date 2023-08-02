@@ -25,18 +25,20 @@ class VHOrchestator():
         self.HA_entity_group_lights: dict = self.all_entities['light']  # Dictionary containing all light entities
         self.nlp_skills_dict = {skill.__name__: skill() for skill in NLPSkill.__subclasses__()} # All child classes instances that inherit from NLPSkills
 
+        for skill in self.nlp_skills_dict.values():
+            skill.init_own_childs()
+
     def _find_skill(self,utterance: AnyStr):
         skills_score : dict = {}
-        
-        # Skill_instance contains concreate class
+
         for skill_instance in self.nlp_skills_dict.values():
             result_skill , result_skill_score= skill_instance.request_handling_score(self.ner,utterance)
             skills_score[result_skill] = result_skill_score
         
-        # Call best skill
-        skill_to_call = max(skills_score,key=skills_score.get)
-
-        return skill_to_call
+        # Get the skill with the max score
+        max_score_skill = max(skills_score, key=skills_score.get)
+        
+        return max_score_skill
         
     def _execute_results(utterence: AnyStr):
         """
@@ -63,7 +65,7 @@ class VHOrchestator():
         skill_to_call : NLPSkill = self._find_skill(utterance)
 
         # 20. Call best skill to handle utterance
-        action_to_perform : NLP_action = skill_to_call.handle_utterence(utterance)
+        action_to_perform : NLP_action = skill_to_call.handle_utterance(self,utterance)
 
         # 30. Perform actions
         # TODO

@@ -37,7 +37,7 @@ class HAS_find:
     }
 
     @staticmethod
-    def find_candidates(query: str, list_of_entities:Dict[str,Entity], **kwargs) -> None:
+    def find_candidates(query: str, list_of_entities:Dict[str,Entity], **kwargs) -> List[Dict[str, Any]]:
         """Populate the candidates list with optional filters.
 
         Args:

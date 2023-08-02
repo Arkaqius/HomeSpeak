@@ -3,23 +3,29 @@ from .common.HAS_request import HAS_request
 from HomeAssistantAPI.homeassistant_api import Client
 from .common.HAS_common import HAS_result
 from ..NLP_skill import NLPSkill
-from typing import Dict, Tuple
+from typing import Tuple, TYPE_CHECKING
 import inspect,sys
 from NLP.NER.VH_NER import VH_NER
 import hashlib
 
+if TYPE_CHECKING:
+    from VHOrchestator import VHOrchestator
+
 class HAS_Base(NLPSkill):
     def __init__(self):
-        self.latest_utterance_data = {'utterance_hash': None, 'ner_result': None}
+        self.latest_utterance_data = {'utterance_hash': None, 'request': None}
+        self.child_skills_dict = {}
+        
+    def init_own_childs(self):
         self.child_skills_dict = {skill.__name__: skill() for skill in HAS_Base.__subclasses__()} # All child classes instances that inherit from HAS_Base
-
+    
     def request_handling_score(self,ner : VH_NER,utterance : str) -> Tuple:
         ner_result = ner.process_text(utterance)
         req : HAS_request = HAS_request(utterance,*ner_result)
         handler, best_score = self._find_handler(req)
         if handler is not None:
             utterance_hash = hashlib.sha256(utterance.encode()).hexdigest()
-            self.latest_utterance_data = {'utterance_hash': utterance_hash, 'ner_result': ner_result}
+            self.latest_utterance_data = {'utterance_hash': utterance_hash, 'request': req}
             return (handler,best_score)
         return 0
     
@@ -46,7 +52,7 @@ class HAS_Base(NLPSkill):
                 subclasses.append(obj)
         return subclasses
     
-    def handle_utterence(self,utterance : str, ner = None, ner_data = None) -> HAS_result:
+    def handle_utterance(self, orchst : 'VHOrchestator', utterance : str) -> HAS_result:
         pass
 
 

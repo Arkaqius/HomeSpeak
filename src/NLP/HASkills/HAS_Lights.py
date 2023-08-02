@@ -1,9 +1,11 @@
 from __future__ import annotations
 import NLP.HASkills.common.HAS_enums as HAS_enums
-from typing import List, Dict, Any
+from typing import List, Dict, Any, TYPE_CHECKING
 from .common.HAS_request import HAS_request
 from .common.HAS_common import *
 from .HAS_Base import HAS_Base
+if TYPE_CHECKING:
+    from VHOrchestator import VHOrchestator
 
 class HAS_Lights(HAS_Base):
     '''
@@ -19,64 +21,71 @@ class HAS_Lights(HAS_Base):
     BRIGHNTESS_STEP = 25  # in %
 
     def __init__(self):
-        pass
+        print("Instace created!")
+        super().__init__()
 
+    def handle_utterance(self, orchst : 'VHOrchestator', utterance : str) -> HAS_result:
+        # 10. Prepare object to return
+        dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)
+        request_to_handle = self.latest_utterance_data['request']
+
+        # 20. Looking for matching entities
+        candidates : List[Dict[str, Any]] = HAS_find.find_candidates(  HAS_Lights.build_suggest_entity_name(request_to_handle),
+                                                orchst.HA_entity_group_lights.entities)
+        
+        # 30. Choose winner
+        winner_entity : Dict[str, Any] = HAS_Lights.choose_winner(candidates)
+
+        # 40. If winner was not found decide to fail execution or ask user for more details
+        if winner_entity is None:
+            dlg_result.set_state(HAS_requestStatus.UNKNOWN_ENTITY)
+            # TODO Ask for more details
+
+        # 50. Delegation of action handling to dedicated functions
+        else:
+            action = request_to_handle.action.lower()
+            attribute = request_to_handle.attribute.lower()
+
+            # ON/OFF
+            if action in [HAS_enums.Actions.ON.name.lower(), HAS_enums.Actions.OFF.name.lower()]:
+                dlg_result = self.handle_request_turn_onoff(request_to_handle, winner_entity, orchst)
+            
+            elif action == HAS_enums.Actions.ADJUST.name.lower() and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower():
+                dlg_result = self.handle_request_change_brightness(request,winner_entity,VH_Orch)
+            
+            elif action == HAS_enums.Actions.INCREASE.name.lower() and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower():
+                dlg_result = self.handle_request_increase_brightness(request,winner_entity,VH_Orch)
+            
+            elif action == HAS_enums.Actions.DECREASE.name.lower() and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower():
+                dlg_result = self.handle_request_decrease_brightness(request,winner_entity,VH_Orch)
+            
+            elif action == HAS_enums.Actions.BINARY_QUERY.name.lower() and attribute == HAS_enums.States.POWERED.name.lower():
+                dlg_result = self.handle_req_bq(request,winner_entity,VH_Orch)
+            
+            elif action == HAS_enums.Actions.INFORMATION_QUERY.name.lower() and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower():
+                dlg_result = self.handle_req_iq_brgth(request,winner_entity,VH_Orch)
+            
+            else:
+                dlg_result.set_state(HAS_requestStatus.UNKNOWN_ACTION)
+
+        return dlg_result
+    
     def get_req_score(self, request):
         if (HAS_enums.Things.LIGHT.name.lower() == request.thing):
             return 100
         else:
             return 0
 
-    def handle_utterence(self,utterance : str, ner = None, ner_data = None) -> HAS_result:
-        
-        dlg_result = HAS_result(HAS_requestStatus.UNKNOWN)
-
-        request_to_handle =  self.latest_utterance_data['ner_result']
-
-        # Everything to TODO below!
-        
-        # Create queary and find matchign candidates
-        candidates = HAS_find.find_candidates(HAS_Lights.build_suggest_entity_name(request_to_handle),
-                                              VH_Orch.HA_entity_group_lights.entities)
-        # Choose one or ask for more specific information
-        w_en = HMI_Lights.choose_winner(candidates)
-        if w_en is None:
-           dlg_result.set_state(HAS_requestStatus.UNKNOWN_ENTITY)
-        else:
-            # Determinate which action shall be run
-            # Simple ON/OFF
-            if (request.action == HAS_enums.Actions.ON.name.lower() or request.action == HAS_enums.Actions.OFF.name.lower()):
-                dlg_result = self.handle_request_turn_onoff(request, w_en, VH_Orch)
-            #Change brightness to exact value
-            elif(request.action == HAS_enums.Actions.ADJUST.name.lower() and request.attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()):
-                dlg_result = self.handle_request_change_brightness(request,w_en,VH_Orch)
-            #Increase brightness
-            elif((request.action == HAS_enums.Actions.INCREASE.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_request_increase_brightness(request,w_en,VH_Orch)
-            #Decrease brightness
-            elif((request.action == HAS_enums.Actions.DECREASE.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_request_decrease_brightness(request,w_en,VH_Orch)
-            #Binary queary
-            elif((request.action == HAS_enums.Actions.BINARY_QUERY.name.lower() and request.state == HAS_enums.States.POWERED.name.lower())):
-                dlg_result =self. handle_req_bq(request,w_en,VH_Orch)
-            #Information queary - brightness
-            elif((request.action == HAS_enums.Actions.INFORMATION_QUERY.name.lower() and HAS_enums.Attributes.BRIGTHNESS.name.lower())):
-                dlg_result = self.handle_req_iq_brgth(request,w_en,VH_Orch)
-            else:
-                dlg_result.set_state(HAS_requestStatus.UNKNOWN_ACTION)
-
-        return dlg_result
-    
-    def handle_request_turn_onoff(self,request, w_en, VH_Orch : 'VHOrchestator') -> HAS_result:
-        entity_id = w_en['entity'].entity_id
+    def handle_request_turn_onoff(self, request : HAS_request, winner_entity : Dict[str, Any] , VH_Orch : 'VHOrchestator') -> HAS_result:
+        entity_id = winner_entity['entity'].entity_id
         dlg_result = HAS_result(HAS_requestStatus.SUCCESS)
+
         try:
             VH_Orch.hass_instance.trigger_service(
                 'light', 'turn_'+str.lower(request.action), entity_id=f'{entity_id}')
         except Exception as e:
             print(str(e))
             dlg_result.set_state(HAS_requestStatus.FAILURE)
-
         return dlg_result
 
     # def handle_req_bq(request, w_en, VH_Orch : 'VHOrchestator'):
@@ -126,7 +135,7 @@ class HAS_Lights(HAS_Base):
     #     return HMI_dlg_rtn.SUCCESS
 
     @staticmethod
-    def choose_winner(candidates):
+    def choose_winner(candidates : List[Dict[str, Any]]) -> Dict[str, Any]:
         return max(candidates, key=lambda x: x['similarity'])
 
     @staticmethod
