@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./HomeAssistantAPI"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic"
 }

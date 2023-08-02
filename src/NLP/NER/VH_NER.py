@@ -1,6 +1,7 @@
 import spacy
 import typing as T
 
+
 class VH_NER:
 
     """
@@ -72,7 +73,7 @@ class VH_NER:
         numerical_values = []
         fraction_mapping = {
             "half": 0.5,
-            "third": 1/3,
+            "third": 1 / 3,
             "fourth": 0.25,
             "fifth": 0.2,
             "quarter": 0.25,
@@ -89,15 +90,15 @@ class VH_NER:
             if token.is_digit or token.pos_ == "NUM":
                 try:
                     if token.text[-1] == "%":
-                        number = float(token.text[:-1].replace(',', '')) / 100
+                        number = float(token.text[:-1].replace(",", "")) / 100
                     elif i + 1 < len(doc) and doc[i + 1].lower_ == "percent":
-                        number = float(token.text.replace(',', '')) / 100
+                        number = float(token.text.replace(",", "")) / 100
                     else:
-                        number = float(token.text.replace(',', ''))
-                    
+                        number = float(token.text.replace(",", ""))
+
                     if i + 1 < len(doc) and doc[i + 1].lower_ == "celsius":
                         number = (number, "C")
-                    
+
                     numerical_values.append(number)
                 except ValueError:
                     pass
@@ -107,9 +108,8 @@ class VH_NER:
                 numerical_values.append(preset_mapping[token.lower_])
 
         return numerical_values if numerical_values else None
-    
 
-    def process_text(self, text: str) -> T.Tuple[dict,list]:
+    def process_text(self, text: str) -> T.Tuple[dict, list]:
         """
         Processes the given text and returns a tuple containing the extracted named
         entities and numerical values as dictionaries. Returns (None, None) if no named

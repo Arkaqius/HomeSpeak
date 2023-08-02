@@ -22,7 +22,9 @@ def load_spacy_json(file_path: str) -> list:
     return data
 
 
-def create_model(train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]]) -> spacy.Language:
+def create_model(
+    train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]]
+) -> spacy.Language:
     """
     Create a spaCy NER model with custom labels from the training data.
 
@@ -47,7 +49,10 @@ def create_model(train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int,
     return nlp
 
 
-def train_model(nlp: spacy.Language, train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]]):
+def train_model(
+    nlp: spacy.Language,
+    train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]],
+):
     """
     Train the NER model using the provided training data.
 
@@ -67,8 +72,8 @@ def train_model(nlp: spacy.Language, train_data: T.List[T.Tuple[str, T.Dict[str,
         examples.append(example)
 
     # Split the data into training and validation sets
-    train_examples = examples[:int(len(examples) * cfg.TRAIN_VAL_RATION)]
-    val_examples = examples[int(len(examples) * cfg.TRAIN_VAL_RATION):]
+    train_examples = examples[: int(len(examples) * cfg.TRAIN_VAL_RATION)]
+    val_examples = examples[int(len(examples) * cfg.TRAIN_VAL_RATION) :]
 
     # Get the names of the model's other pipes (to disable during training)
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
@@ -86,7 +91,9 @@ def train_model(nlp: spacy.Language, train_data: T.List[T.Tuple[str, T.Dict[str,
 
             # Evaluate the model on the validation set
             val_metrics = nlp.evaluate(val_examples)
-            print(f"Epoch: {itn + 1},\n Loss: {losses['ner']},\n Validation Metrics: {val_metrics}\n")
+            print(
+                f"Epoch: {itn + 1},\n Loss: {losses['ner']},\n Validation Metrics: {val_metrics}\n"
+            )
 
     nlp.to_disk(cfg.PATH_TRAINED_MODEL)
 
@@ -102,5 +109,5 @@ def main():
     train_model(nlp, train_data)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

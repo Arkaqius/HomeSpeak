@@ -1,4 +1,2 @@
-
-
-class NLP_action():
+class NLP_action:
     pass

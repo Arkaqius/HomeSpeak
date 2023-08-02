@@ -1,18 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Tuple,TYPE_CHECKING
-from .HASkills.common.HAS_common import HAS_result # TODO Move HAS_result to NLP as NLP_result
+from typing import Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from VHOrchestator import VHOrchestator
 
+
 class NLPSkill(ABC):
-    
     @abstractmethod
-    def request_handling_score(self,ner,utterance) -> Tuple:
+    def request_handling_score(self, ner_result: NER_result, utterance: str) -> Tuple:
         pass
 
     @abstractmethod
-    def handle_utterance(self, orchst : 'VHOrchestator', utterance : str) -> HAS_result:
+    def handle_utterance(
+        self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
+    ) -> HAS_result:
         pass
 
     @abstractmethod

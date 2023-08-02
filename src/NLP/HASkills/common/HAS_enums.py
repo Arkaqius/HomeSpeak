@@ -2,6 +2,7 @@ import os
 from enum import Enum
 import NER.config as cfg
 
+
 def generate_enum_from_files(directory: str, enum_name: str) -> Enum:
     """
     Generate a Python Enum class from the files in the specified directory.
@@ -22,9 +23,14 @@ def generate_enum_from_files(directory: str, enum_name: str) -> Enum:
     # Create the enum
     return Enum(enum_name, {name.upper(): name for name in names})
 
+
 # Generate Enums based on files in the respective directories
-Things = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB,'things') , 'Things')
-Actions = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB,'actions') , 'Actions')
-Attributes = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB,'attributes') , 'Attributes')
-Locations = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB,'location') , 'Locations')
-States = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB,'states') , 'States')
+Things = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB, "things"), "Things")
+Actions = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB, "actions"), "Actions")
+Attributes = generate_enum_from_files(
+    os.path.join(cfg.PATH_VOCAB, "attributes"), "Attributes"
+)
+Locations = generate_enum_from_files(
+    os.path.join(cfg.PATH_VOCAB, "location"), "Locations"
+)
+States = generate_enum_from_files(os.path.join(cfg.PATH_VOCAB, "states"), "States")

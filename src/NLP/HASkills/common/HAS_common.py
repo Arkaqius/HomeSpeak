@@ -4,6 +4,7 @@ from fuzzywuzzy import fuzz
 from typing import List, Dict, Any
 from homeassistant_api import Entity
 
+
 class HAS_find:
     @staticmethod
     def _filter_by_entity_type(entity: Dict[str, Any], entity_type: str) -> bool:
@@ -32,12 +33,14 @@ class HAS_find:
         return entity.get("location") == location
 
     filters = {
-        'entity_type': _filter_by_entity_type.__func__,
-        'location': _filter_by_location.__func__,
+        "entity_type": _filter_by_entity_type.__func__,
+        "location": _filter_by_location.__func__,
     }
 
     @staticmethod
-    def find_candidates(query: str, list_of_entities:Dict[str,Entity], **kwargs) -> List[Dict[str, Any]]:
+    def find_candidates(
+        query: str, list_of_entities: Dict[str, Entity], **kwargs
+    ) -> List[Dict[str, Any]]:
         """Populate the candidates list with optional filters.
 
         Args:
@@ -46,9 +49,12 @@ class HAS_find:
         """
         candidates: List[Dict[str, Any]] = []
 
-        for _,entity in list_of_entities.items():
-            
-            if not all(HAS_find.filters[key](entity, value) for key, value in kwargs.items() if key in HAS_Find.filters):
+        for _, entity in list_of_entities.items():
+            if not all(
+                HAS_find.filters[key](entity, value)
+                for key, value in kwargs.items()
+                if key in HAS_Find.filters
+            ):
                 continue
 
             ratio = fuzz.ratio(query, entity.entity_id)
@@ -56,7 +62,8 @@ class HAS_find:
                 candidates.append({"entity": entity, "similarity": ratio})
 
         return candidates
-          
+
+
 class HAS_requestStatus(Enum):
     UNKNOWN = "unknown"
     SUCCESS = "success"
@@ -66,6 +73,7 @@ class HAS_requestStatus(Enum):
     UNKNOWN_ENTITY = "entity_not_found"
     UNKNOWN_ACTION = "entity_not_support_action"
 
+
 class HAS_result:
     def __init__(self, status: HAS_requestStatus, data: dict = None):
         self.status = status
@@ -73,13 +81,12 @@ class HAS_result:
 
     def is_successful(self) -> bool:
         return self.status == HAS_requestStatus.SUCCESS
-    
+
     def set_state(self, status: HAS_requestStatus) -> None:
         self.status = status
 
-    def set_entitiy_state(self,state):
-        self.data['state'] = state
+    def set_entitiy_state(self, state):
+        self.data["state"] = state
 
     def __str__(self) -> str:
         return f"Status: {self.status.value}, Data: {self.data}"
-    
