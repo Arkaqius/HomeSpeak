@@ -1,13 +1,12 @@
 from NLP.NER.config import *
 from NLP.NER.VH_NER import VH_NER
-from NLP.HASkills.common.HAS_request import HAS_request
+from NLP.NER.NER_result import NER_result
 from homeassistant_api import Client
 from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type, AnyStr
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
 from NLP.NLP_action import NLP_action
-from NLP.NER.NER_result import NER_result
 
 # Import all skills endpoint classes to register
 from NLP.HASkills.HAS_Lights import HAS_Lights
@@ -75,8 +74,8 @@ class VHOrchestator:
 
         """
         # 10. Perform NER analysis
-        ner_raw_result = ner.process_text(utterance)
-        ner_result: NER_result = NER_request(utterance, *ner_raw_result)
+        ner_raw_result = self.ner.process_text(utterance)
+        ner_result: NER_result = NER_result(utterance, *ner_raw_result)
 
         # 20. Find best skill to handle utterance
         skill_to_call: NLPSkill = self._find_skill(utterance, ner_result)

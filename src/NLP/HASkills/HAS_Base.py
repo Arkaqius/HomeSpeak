@@ -1,12 +1,10 @@
 from abc import abstractmethod
-from .common.HAS_request import HAS_request
 from HomeAssistantAPI.homeassistant_api import Client
 from .common.HAS_common import HAS_result
 from ..NLP_skill import NLPSkill
 from typing import Tuple, TYPE_CHECKING
+from ..NER.NER_result import NER_result
 import inspect, sys
-from NLP.NER.VH_NER import VH_NER
-import hashlib
 
 if TYPE_CHECKING:
     from VHOrchestator import VHOrchestator
@@ -14,7 +12,6 @@ if TYPE_CHECKING:
 
 class HAS_Base(NLPSkill):
     def __init__(self):
-        self.latest_utterance_data = {"utterance_hash": None, "request": None}
         self.child_skills_dict = {}
 
     def init_own_childs(self):
@@ -25,13 +22,8 @@ class HAS_Base(NLPSkill):
     def request_handling_score(self, ner_result: NER_result, utterance: str) -> Tuple:
         handler, best_score = self._find_handler(ner_result)
         if handler is not None:
-            utterance_hash = hashlib.sha256(utterance.encode()).hexdigest()
-            self.latest_utterance_data = {
-                "utterance_hash": utterance_hash,
-                "request": req,
-            }
             return (handler, best_score)
-        return 0
+        return (None,0)
 
     def _find_handler(self, ner_result: NER_result):
         score_dict: dict = {}

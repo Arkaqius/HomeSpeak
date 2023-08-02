@@ -1,7 +1,6 @@
 from __future__ import annotations
 import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any, TYPE_CHECKING
-from .common.HAS_request import HAS_request
 from .common.HAS_common import *
 from .HAS_Base import HAS_Base
 
@@ -24,7 +23,6 @@ class HAS_Lights(HAS_Base):
     BRIGHNTESS_STEP = 25  # in %
 
     def __init__(self):
-        print("Instace created!")
         super().__init__()
 
     def handle_utterance(
@@ -49,8 +47,10 @@ class HAS_Lights(HAS_Base):
 
         # 50. Delegation of action handling to dedicated functions
         else:
-            action = ner_result.action.lower()
-            attribute = ner_result.attribute.lower()
+            if ner_result.action:
+                action = ner_result.action.lower()
+            if ner_result.attribute:
+                attribute = ner_result.attribute.lower()
 
             # ON/OFF
             if action in [
@@ -119,7 +119,7 @@ class HAS_Lights(HAS_Base):
 
         try:
             VH_Orch.hass_instance.trigger_service(
-                "light", "turn_" + str.lower(request.action), entity_id=f"{entity_id}"
+                "light", "turn_" + str.lower(ner_result.action), entity_id=f"{entity_id}"
             )
         except Exception as e:
             print(str(e))
