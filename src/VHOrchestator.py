@@ -6,7 +6,7 @@ from NLP.HASkills.HAS_Base import HAS_Base
 from typing import Type, AnyStr
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
-from NLP.NLP_common import NLP_result
+from NLP.NLP_common import NLP_result, NLP_result_status
 
 # Import all skills endpoint classes to register
 from NLP.HASkills.HAS_Lights import HAS_Lights
@@ -19,6 +19,19 @@ class VHOrchestator:
     actions between different parts of the system. This includes named entity recognition,
     handling user requests, and interacting with the Home Assistant API.
     """
+
+    """
+    Dialogs to say. Later, replace it with dialog files supported by voice OS.
+    """
+    UNKNOWN_DIALOG = "I'm sorry, I couldn't understand that."
+    SUCCESS_DIALOG = "The operation was successful."
+    FAILURE_DIALOG = "I'm sorry, there was a problem with the operation."
+    NOT_FOUND_DIALOG = "I'm sorry, I couldn't find what you were looking for."
+    NO_RESPONSE_DIALOG = "I'm sorry, I didn't receive a response."
+    UNKNOWN_ENTITY_DIALOG = "I'm sorry, I couldn't identify the entity."
+    UNKNOWN_ACTION_DIALOG = "I'm sorry, that action is not supported."
+    NEED_MORE_INFO_DIALOG = "Can you provide more information?"
+    DEFAULT_DIALOG = "I'm sorry, an unexpected error occurred."
 
     def __init__(self) -> None:
         """Initializes the VHOrchestrator."""
@@ -51,18 +64,35 @@ class VHOrchestator:
         max_score_skill = max(skills_score, key=skills_score.get)
 
         return max_score_skill
-
-    def _execute_results(utterence: AnyStr):
+    
+    def _send_response(self,response: NLP_result):
         """
         PlaceHolder
         """
-        pass
+        
+        # 10
+        if response.status == NLP_result_status.UNKNOWN:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_DIALOG)
+        elif response.status == NLP_result_status.SUCCESS:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.SUCCESS_DIALOG)
+        elif response.status == NLP_result_status.FAILURE:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.FAILURE_DIALOG)
+        elif response.status == NLP_result_status.NOT_FOUND:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NOT_FOUND_DIALOG)
+        elif response.status == NLP_result_status.NO_RESPONSE:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NO_RESPONSE_DIALOG)
+        elif response.status == NLP_result_status.UNKNOWN_ENTITY:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ENTITY_DIALOG)
+        elif response.status == NLP_result_status.UNKNOWN_ACTION:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ACTION_DIALOG)
+        elif response.status == NLP_result_status.NEED_MORE_INFO:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NEED_MORE_INFO_DIALOG)
+        else:
+            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.DEFAULT_DIALOG)
 
-    def _send_response():
-        """
-        PlaceHolder
-        """
-        pass
+    @staticmethod
+    def say_dialog_stub(dialog: str):
+        print(f"Dialog stub: {dialog} ")
 
     def _run_request(self, utterance: str) -> None:
         """
@@ -76,6 +106,7 @@ class VHOrchestator:
         # 10. Perform NER analysis
         ner_raw_result = self.ner.process_text(utterance)
         ner_result: NER_result = NER_result(utterance, *ner_raw_result)
+        print(f"ner_result:{ner_result}")
 
         # 20. Find best skill to handle utterance
         skill_to_call: NLPSkill = self._find_skill(utterance, ner_result)
@@ -84,12 +115,9 @@ class VHOrchestator:
         action_to_perform: NLP_result = skill_to_call.handle_utterance(
             self, ner_result, utterance
         )
-        print(action_to_perform)
-        # 40. Perform actions
-        # TODO
 
         # 50. Speak dialog
-        # TODO
+        self._send_response(action_to_perform)
 
     def testMode(self) -> None:
         """

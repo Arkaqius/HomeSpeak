@@ -22,7 +22,7 @@ class NER_result:
         self.state = ""
         self.action = ""
         ner_keys = ["thing", "attribute", "location", "state", "action"]
-
+        self.value = None
         for key in ner_keys:
             setattr(self, key, NER_Dict.get(key, [None])[0])
 
@@ -58,4 +58,11 @@ class NER_result:
         Returns:
             str: A string representation of the instance.
         """
-        return f"Thing: {self.thing}, Attribute: {self.attribute}, Location: {self.location}, Value: {self.value}, Action: {self.action}"
+        thing = self.thing if self.thing is not None else 'None'
+        attribute = self.attribute if self.attribute is not None else 'None'
+        location = self.location if self.location is not None else 'None'
+        value = self.value if self.value is not None else 'None'
+        action = self.action if self.action is not None else 'None'
+
+        return f"Thing: {thing}, Attribute: {attribute}, Location: {location}, Value: {value}, Action: {action}"
+

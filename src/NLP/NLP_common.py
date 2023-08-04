@@ -19,6 +19,6 @@ class NLP_result:
     def is_successful(self) -> bool:
         return self.status == NLP_result_status.SUCCESS
     
-    def set_state(self,status : NLP_result_status , dialog : str | None):
+    def set_state(self,status : NLP_result_status , dialog : str | None = None):
         self.status = status
         self.dialog_to_say = dialog

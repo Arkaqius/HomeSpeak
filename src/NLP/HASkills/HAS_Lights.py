@@ -5,6 +5,7 @@ from .common.HAS_common import *
 from .HAS_Base import HAS_Base
 from ..NER.NER_result import NER_result
 from ..NLP_common import NLP_result, NLP_result_status
+from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
 
 if TYPE_CHECKING:
     from VHOrchestator import VHOrchestator
@@ -46,7 +47,7 @@ class HAS_Lights(HAS_Base):
 
         # 40. If winner was not found decide to fail execution or ask user for more details
         if winner_entity is None:
-            result.set_state(NLP_result_status.NEED_MORE_INFO, None)
+            result.set_state(NLP_result_status.NEED_MORE_INFO)
 
         # 50. Delegation of action handling to dedicated functions
         else:
@@ -55,52 +56,38 @@ class HAS_Lights(HAS_Base):
 
             # ON/OFF
             if action in [
-                HAS_enums.Actions.ON.name.lower(),
-                HAS_enums.Actions.OFF.name.lower(),
+                HAS_enums.Actions.ON.name.lower(),  # type: ignore
+                HAS_enums.Actions.OFF.name.lower(),  # type: ignore
             ]:
                 self.handle_request_turn_onoff(
                     ner_result, winner_entity, orchst, result
                 )
 
+            # Binary query
+            elif (
+                action == HAS_enums.Actions.BINARY_QUERY.name.lower()  # type: ignore
+                and attribute == HAS_enums.States.POWERED.name.lower()  # type: ignore
+            ):
+                self.handle_req_binary_query(winner_entity, result)
+
             # Brightness
             elif (
-                action == HAS_enums.Actions.ADJUST.name.lower()
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()
+                (action == HAS_enums.Actions.ADJUST.name.lower() or action == HAS_enums.Actions.INCREASE.name.lower() or action == HAS_enums.Actions.DECREASE.name.lower())  # type: ignore
+                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
-                dlg_result = self.handle_request_change_brightness(
+                self.handle_request_change_brightness(
                     request, winner_entity, VH_Orch
                 )
-
+            
+            # Informational query
             elif (
-                action == HAS_enums.Actions.INCREASE.name.lower()
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()
+                action == HAS_enums.Actions.INFORMATION_QUERY.name.lower() # type: ignore
+                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
-                dlg_result = self.handle_request_increase_brightness(
-                    request, winner_entity, VH_Orch
-                )
-
-            elif (
-                action == HAS_enums.Actions.DECREASE.name.lower()
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()
-            ):
-                dlg_result = self.handle_request_decrease_brightness(
-                    request, winner_entity, VH_Orch
-                )
-
-            elif (
-                action == HAS_enums.Actions.BINARY_QUERY.name.lower()
-                and attribute == HAS_enums.States.POWERED.name.lower()
-            ):
-                dlg_result = self.handle_req_bq(request, winner_entity, VH_Orch)
-
-            elif (
-                action == HAS_enums.Actions.INFORMATION_QUERY.name.lower()
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()
-            ):
-                dlg_result = self.handle_req_iq_brgth(request, winner_entity, VH_Orch)
+                result = self.handle_req_iq_brgth(request, winner_entity, VH_Orch)
 
             else:
-                dlg_result.set_state(HAS_requestStatus.UNKNOWN_ACTION)
+                result.set_state(NLP_result_status.UNKNOWN_ACTION)
 
         return result
 
@@ -114,29 +101,80 @@ class HAS_Lights(HAS_Base):
         self,
         ner_result: NER_result,
         winner_entity: Dict[str, Any],
-        VH_Orch: "VHOrchestator",
+        VH_orch: "VHOrchestator",
         dlg_result: NLP_result,
     ) -> None:
         entity_id = winner_entity["entity"].entity_id
+        friendly_name = winner_entity['entity'].state.attributes['friendly_name']
         try:
-            VH_Orch.hass_instance.trigger_service(
+            VH_orch.hass_instance.trigger_service(
                 "light",
                 "turn_" + str.lower(ner_result.action),
                 entity_id=f"{entity_id}",
             )
             dlg_result.set_state(
-                NLP_result_status.SUCCESS, "The operation was successful"
+                NLP_result_status.SUCCESS, f"Ok, I will turn on {friendly_name}"
             )
-        except:
+        except RequestTimeoutError:
             dlg_result.set_state(
                 NLP_result_status.FAILURE, "No connection to Home Assistant server"
             )
 
-    # def handle_req_bq(request, w_en, VH_Orch : 'VHOrchestator'):
-    #     dlg_result = HAResult(HARequestStatus.SUCCESS)
-    #     w_en['entity'].get_state()
-    #     dlg_result.set_entitiy_state(w_en['entity'].state.state)
-    #     return dlg_result
+    def handle_req_binary_query(
+        self,
+        winner_entity: Dict[str, Any],
+        dlg_result: NLP_result,
+    ) -> None:
+        friendly_name = winner_entity['entity'].state.attributes['friendly_name']
+        try:
+            winner_entity["entity"].get_state()
+            dlg_result.set_state(
+                NLP_result_status.SUCCESS, f"{friendly_name} is {winner_entity['entity'].state.state}"
+            )
+        except RequestTimeoutError:
+            dlg_result.set_state(
+                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+            )
+
+    def handle_request_change_brightness(
+            self,
+            ner_result: NER_result,
+            winner_entity: Dict[str, Any],
+            VH_orch: "VHOrchestator",
+            dlg_result: NLP_result,
+        ) -> None:
+        ''' Handle changing brigtness to exact value'''
+        entity_id = winner_entity["entity"].entity_id
+        friendly_name = winner_entity['entity'].state.attributes['friendly_name']    
+        # Check if found light support brightness
+        if winner_entity.entity['attributes']['supported_features'] & self.SUPPORT_BRIGHTNESS:
+            desired_brightness : float = 0
+            if ner_result.action == HAS_enums.Actions.ADJUST.name.lower():
+                desired_brightness = ner_result.value
+            elif ner_result.action == HAS_enums.Actions.INCREASE.name.lower():
+                desired_brightness = self.BRIGHNTESS_STEP
+            elif ner_result.action == HAS_enums.Actions.DECREASE.name.lower():
+                desired_brightness = self.BRIGHNTESS_STEP * -1
+
+            try:
+                VH_orch.hass_instance.trigger_service(  "light",
+                                                        'turn_on',
+                                                        entity_id=f"{entity_id}",
+                                                        brightness_pct=f"{desired_brightness * 100}"
+                
+                dlg_result.set_state(
+                    NLP_result_status.SUCCESS, f"Ok, I will change brightness of {friendly_name}"
+                )
+            except RequestTimeoutError:
+                dlg_result.set_state(
+                    NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                )
+        else:
+            dlg_result.set_state(
+                NLP_result_status.FAILURE, "Light {friendly_name} does not support brightness feature."
+            )           
+
+
 
     # def handle_req_iq_brgth(request, w_en, HAS_inst):
     #     entity_id = w_en.entity['entity_id']
