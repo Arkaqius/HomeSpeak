@@ -176,45 +176,70 @@ class HAS_Lights(HAS_Base):
 
 
 
-    # def handle_req_iq_brgth(request, w_en, HAS_inst):
-    #     entity_id = w_en.entity['entity_id']
-    #     state = HAS_inst.HA._get_state(entity_id)
-    #     HAS_inst.speak_dialog('LIGHT_IQ_BRIGHTNESS',
-    #                           {'friendly_name':   entity_id,
-    #                            'brg_level':   (float(state['attributes']['brightness']) * 100/256)
-    #                            })
-    #     return None
+    def handle_request_change_brightness(
+        self,
+        ner_result: NER_result,
+        winner_entity: Dict[str, Any],
+        VH_orch: "VHOrchestator",
+        dlg_result: NLP_result,
+    ) -> None:
+        entity_id = winner_entity["entity"].entity_id
+        friendly_name = winner_entity["entity"].state.attributes["friendly_name"]
 
-    # def handle_request_change_brightness(request, w_en, HAS_inst):
-    #     ''' Handle changing brigtness to exact value'''
-    #     # Check if found light support brightness
-    #     if w_en.entity['attributes']['supported_features'] & self.SUPPORT_BRIGHTNESS:
-    #         entity_id = w_en.entity['entity_id']
-    #         HAS_inst.HA.execute_service('light',
-    #                                     'turn_on',
-    #                                     {'entity_id': f'{entity_id}',
-    #                                      'brightness_pct': f'{request.value * 100}'})
-    #         dialog_rtn = HMI_dlg_rtn.SUCCESS
-    #     else:
-    #         dialog_rtn = HMI_dlg_rtn.UF_BRIGHTNESS
+        # Check if found light support brightness
+        if (
+            winner_entity.entity["attributes"]["supported_features"]
+            & self.SUPPORT_BRIGHTNESS
+        ):
+            desired_brightness: float = 0
+            brightness_type = ""
+            if ner_result.action == HAS_enums.Actions.ADJUST.name.lower():
+                desired_brightness = ner_result.value
+                brightness_type = "brightness_pct"
+            elif ner_result.action == HAS_enums.Actions.INCREASE.name.lower():
+                desired_brightness = self.BRIGHNTESS_STEP
+                brightness_type = "brightness_step_pct"
+            elif ner_result.action == HAS_enums.Actions.DECREASE.name.lower():
+                desired_brightness = self.BRIGHNTESS_STEP * -1
+                brightness_type = "brightness_step_pct"
 
-    #     return dialog_rtn
+            try:
+                VH_orch.hass_instance.trigger_service(
+                    "light",
+                    "turn_on",
+                    entity_id=f"{entity_id}",
+                    **{brightness_type: f"{desired_brightness * 100}"},
+                )
+                dlg_result.set_state(
+                    NLP_result_status.SUCCESS,
+                    f"Ok, I will change brightness of {friendly_name}",
+                )
+            except RequestTimeoutError:
+                dlg_result.set_state(
+                    NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                )
+        else:
+            dlg_result.set_state(
+                NLP_result_status.FAILURE,
+                f"Light {friendly_name} does not support brightness feature.",
+            )
 
-    # def handle_request_increase_brightness(request, w_en, HAS_inst):
-    #     entity_id = w_en.entity['entity_id']
-    #     HAS_inst.HA.execute_service('light',
-    #                                 'turn_on',
-    #                                 {'entity_id': f'{entity_id}',
-    #                                  'brightness_step_pct': f'{self.BRIGHNTESS_STEP}'})
-    #     return HMI_dlg_rtn.SUCCESS
-
-    # def handle_request_decrease_brightness(request, w_en, HAS_inst):
-    #     entity_id = w_en.entity['entity_id']
-    #     HAS_inst.HA.execute_service('light',
-    #                                 'turn_on',
-    #                                 {'entity_id': f'{entity_id}',
-    #                                  'brightness_step_pct': f'{self.BRIGHNTESS_STEP * -1}'})
-    #     return HMI_dlg_rtn.SUCCESS
+    def handle_req_info_query_brgth(
+        self,
+        winner_entity: Dict[str, Any],
+        dlg_result: NLP_result,
+    ) -> None:
+        friendly_name = winner_entity["entity"].state.attributes["friendly_name"]
+        try:
+            winner_entity["entity"].get_state()
+            dlg_result.set_state(
+                NLP_result_status.SUCCESS,
+                f"{friendly_name} brightness level is set to {(float(state['attributes']['brightness']) * 100/256)}",
+            )
+        except RequestTimeoutError:
+            dlg_result.set_state(
+                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+            )
 
     @staticmethod
     def choose_winner(candidates: List[Dict[str, Any]]) -> Dict[str, Any]:
