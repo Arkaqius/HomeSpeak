@@ -49,7 +49,7 @@ class VHOrchestator:
         }
 
         for skill in self.nlp_skills_dict.values():
-            skill.init_own_childs()
+            skill.init_own_children()
 
     def _find_skill(self, utterance: AnyStr, ner_result: NER_result):
         skills_score: dict = {}

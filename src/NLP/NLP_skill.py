@@ -19,5 +19,5 @@ class NLPSkill(ABC):
         pass
 
     @abstractmethod
-    def init_own_childs(self):
+    def init_own_children(self):
         pass

@@ -33,7 +33,6 @@ class HAS_Lights(HAS_Base):
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
     ) -> NLP_result | None:
-        
         """
         Handles a given utterance by checking for matching entities, choosing a winner, and delegating action handling
         to dedicated functions.
@@ -88,10 +87,12 @@ class HAS_Lights(HAS_Base):
 
             # Brightness
             elif (
-                (action == HAS_enums.Actions.ADJUST.name.lower() or action == HAS_enums.Actions.INCREASE.name.lower() or action == HAS_enums.Actions.DECREASE.name.lower())  # type: ignore
+                (action == HAS_enums.Actions.ADJUST.name.lower() or action == HAS_enums.Actions.INCREASE.name.lower( # type: ignore
+                ) or action == HAS_enums.Actions.DECREASE.name.lower())  # type: ignore
                 and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
-                self.handle_request_change_brightness(ner_result, winner_entity, orchst,result)
+                self.handle_request_change_brightness(
+                    ner_result, winner_entity, orchst, result)
 
             # Informational query
             elif (
@@ -117,7 +118,7 @@ class HAS_Lights(HAS_Base):
             int: 100 if the NER result is a light, 0 otherwise. - Simple logic
         """
 
-        if HAS_enums.Things.LIGHT.name.lower() == ner_result.thing: # type: ignore
+        if HAS_enums.Things.LIGHT.name.lower() == ner_result.thing:  # type: ignore
             return 100
         else:
             return 0
@@ -204,13 +205,13 @@ class HAS_Lights(HAS_Base):
         ):
             desired_brightness: float = 0
             brightness_type = ""
-            if ner_result.action == HAS_enums.Actions.ADJUST.name.lower(): # type: ignore
+            if ner_result.action == HAS_enums.Actions.ADJUST.name.lower():  # type: ignore
                 desired_brightness = ner_result.value
                 brightness_type = "brightness_pct"
-            elif ner_result.action == HAS_enums.Actions.INCREASE.name.lower(): # type: ignore
+            elif ner_result.action == HAS_enums.Actions.INCREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP
                 brightness_type = "brightness_step_pct"
-            elif ner_result.action == HAS_enums.Actions.DECREASE.name.lower(): # type: ignore
+            elif ner_result.action == HAS_enums.Actions.DECREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP * -1
                 brightness_type = "brightness_step_pct"
 

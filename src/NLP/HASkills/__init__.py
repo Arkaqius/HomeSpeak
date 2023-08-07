@@ -23,4 +23,4 @@ Please note, this module is designed to work with a Home Assistant server and re
 for successful operation.
 """
 __author__ = "Arkaqius"
-__version__ = "v1.0.0"
+__version__ = "v1.1.0"
