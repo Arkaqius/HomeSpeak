@@ -34,7 +34,10 @@ class VHOrchestator:
     DEFAULT_DIALOG = "I'm sorry, an unexpected error occurred."
 
     def __init__(self) -> None:
-        """Initializes the VHOrchestrator."""
+        """
+        Initializes the VHOrchestrator with instances of VH_NER for Named Entity Recognition,
+        Home Assistant Client, and setups dictionaries for entities and skills.
+        """
         # Instance of VH_NER for Named Entity Recognition
         self.ner: VH_NER = VH_NER(PATH_TRAINED_MODEL)
         # Instance of Home Assistant Client
@@ -52,6 +55,18 @@ class VHOrchestator:
             skill.init_own_children()
 
     def _find_skill(self, utterance: AnyStr, ner_result: NER_result):
+        """
+        Evaluates the user's utterance and NER results to determine which skill is best
+        suited to handle the request.
+
+        Args:
+            utterance (AnyStr): The user's spoken phrase.
+            ner_result (NER_result): The results of the Named Entity Recognition process on the utterance.
+
+        Returns:
+            NLPSkill: The skill determined to be the best fit for the utterance.
+        """
+
         skills_score: dict = {}
 
         for skill_instance in self.nlp_skills_dict.values():
@@ -67,7 +82,11 @@ class VHOrchestator:
     
     def _send_response(self,response: NLP_result):
         """
-        PlaceHolder
+        Evaluates the result of the skill's processing to determine and send the appropriate
+        dialog response.
+
+        Args:
+            response (NLP_result): The results after processing by the selected skill.
         """
         
         # 10
@@ -92,6 +111,12 @@ class VHOrchestator:
 
     @staticmethod
     def say_dialog_stub(dialog: str):
+        """
+        Simulates the system's verbal response by printing the dialog.
+
+        Args:
+            dialog (str): The text to be "spoken" by the system.
+        """
         print(f"Dialog stub: {dialog} ")
 
     def _run_request(self, utterance: str) -> None:
