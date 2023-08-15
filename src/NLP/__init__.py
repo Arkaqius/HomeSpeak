@@ -1,7 +1,7 @@
 # About module
 __name__ = "VoiceHAC - Natural language processing"
 __author__ = "Arkaqius"
-__version__ = "v1.0.0"
+__version__ = "v1.1.0"
 __doc__ = """
 The VoiceHAC module is designed for processing natural language commands 
 and delegating these commands to the appropriate skills for execution.

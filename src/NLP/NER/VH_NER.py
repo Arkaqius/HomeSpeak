@@ -27,6 +27,21 @@ class VH_NER:
             entities and numerical values as dictionaries. Returns (None, None) if no
             named entities or numerical values are found.
     """
+    FRACTION_MAPPING = {
+    "half": 0.5,
+    "third": 1 / 3,
+    "fourth": 0.25,
+    "fifth": 0.2,
+    "quarter": 0.25,
+    }
+
+    PRESET_MAPPING = {
+        "eco": 0.3,
+        "comfort": 0.7,
+        "warm": 0.9,
+        "bright": 0.8,
+        "dark": 0.2,
+    }
 
     def __init__(self, model_path: str) -> None:
         """
@@ -53,8 +68,10 @@ class VH_NER:
         doc = self.nlp(text)
         entities = {}
         for ent in doc.ents:
-            entity_type, attribute = ent.label_.split("_", maxsplit=1)
-            entities[entity_type.rstrip("s")] = (attribute.replace("#", ""), ent.text)
+            split_label = ent.label_.split("_", maxsplit=1)
+            if len(split_label) == 2:
+                entity_type, attribute = split_label
+                entities[entity_type.rstrip("s")] = (attribute.replace("#", ""), ent.text)
         return entities if entities else None
 
     def _extract_numerical_values(self, text: str):
@@ -97,15 +114,15 @@ class VH_NER:
                         number = float(token.text.replace(",", ""))
 
                     if i + 1 < len(doc) and doc[i + 1].lower_ == "celsius":
-                        number = (number, "C")
+                        number = (number, "C") # TODO Make it more general
 
                     numerical_values.append(number)
                 except ValueError:
                     pass
-            elif token.lower_ in fraction_mapping:
-                numerical_values.append(fraction_mapping[token.lower_])
-            elif token.lower_ in preset_mapping:
-                numerical_values.append(preset_mapping[token.lower_])
+            elif token.lower_ in self.FRACTION_MAPPING:
+                numerical_values.append(self.FRACTION_MAPPING[token.lower_])
+            elif token.lower_ in self.PRESET_MAPPING:
+                numerical_values.append(self.PRESET_MAPPING[token.lower_])
 
         return numerical_values if numerical_values else None
 
