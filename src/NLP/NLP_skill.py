@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, TYPE_CHECKING
+from typing import Tuple, TYPE_CHECKING, Optional
 from .NER.NER_result import NER_result
 from .NLP_common import NLP_result
 
@@ -24,7 +24,7 @@ class NLPSkill(ABC):
     """
 
     @abstractmethod
-    def request_handling_score(self, ner_result: NER_result, utterance: str) -> Tuple[float, str]:
+    def request_handling_score(self, ner_result: NER_result, utterance: str) -> Tuple[Optional['NLPSkill'], float]:
         """
         Calculates and returns a score indicating the suitability of the skill for 
         handling the given request based on the named entity recognition result and 

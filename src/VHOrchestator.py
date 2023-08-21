@@ -2,15 +2,14 @@ from NLP.NER.config import *
 from NLP.NER.VH_NER import VH_NER
 from NLP.NER.NER_result import NER_result
 from homeassistant_api import Client
-from NLP.HASkills.HAS_Base import HAS_Base
-from typing import Type, AnyStr
+from NLP.HASkills.HAS_Base import  HAS_Base
+from typing import Type, Optional
 import SECRETS as sec
 from NLP.NLP_skill import NLPSkill
 from NLP.NLP_common import NLP_result, NLP_result_status
 
 # Import all skills endpoint classes to register
 from NLP.HASkills.HAS_Lights import HAS_Lights
-from NLP.HASkills import HAS_Base
 
 
 class VHOrchestator:
@@ -48,37 +47,38 @@ class VHOrchestator:
         self.HA_entity_group_lights: dict = self.all_entities["light"]
         # All child classes instances that inherit from NLPSkills
         self.nlp_skills_dict = {
-            skill.__name__: skill() for skill in NLPSkill.__subclasses__()
+            skill.__name__: skill() for skill in NLPSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class.
         }
 
         for skill in self.nlp_skills_dict.values():
             skill.init_own_children()
 
-    def _find_skill(self, utterance: AnyStr, ner_result: NER_result):
+    def _find_skill(self, utterance: str, ner_result: NER_result) -> Optional[NLPSkill]:
         """
         Evaluates the user's utterance and NER results to determine which skill is best
         suited to handle the request.
 
         Args:
-            utterance (AnyStr): The user's spoken phrase.
+            utterance (str): The user's spoken phrase.
             ner_result (NER_result): The results of the Named Entity Recognition process on the utterance.
 
         Returns:
-            NLPSkill: The skill determined to be the best fit for the utterance.
+            Optional[NLPSkill]: The skill determined to be the best fit for the utterance or None if no skill is found.
         """
-
-        skills_score: dict = {}
+        skills_score: dict[NLPSkill, float] = {}
 
         for skill_instance in self.nlp_skills_dict.values():
-            result_skill, result_skill_score = skill_instance.request_handling_score(
-                ner_result, utterance
-            )
-            skills_score[result_skill] = result_skill_score
+            result_skill, result_skill_score = skill_instance.request_handling_score(ner_result, utterance)
+
+            # Only add to the dictionary if result_skill is not None
+            if result_skill is not None:
+                skills_score[result_skill] = result_skill_score
 
         # Get the skill with the max score
-        max_score_skill = max(skills_score, key=skills_score.get)
+        max_score_skill = max(skills_score, key=lambda skill: skills_score[skill], default=None)
 
         return max_score_skill
+
     
     def _send_response(self,response: NLP_result):
         """
@@ -129,7 +129,7 @@ class VHOrchestator:
 
         """
         # 10. Perform NER analysis
-        ner_raw_result = self.ner.process_text(utterance)
+        ner_raw_result : list[dict] = self.ner.process_text(utterance)
         ner_result: NER_result = NER_result(utterance, *ner_raw_result)
         print(f"ner_result:{ner_result}")
 

@@ -25,7 +25,7 @@ class HAS_Base(NLPSkill):
         """
         Initializes a new instance of the `HAS_Base` class.
         """
-        self.child_skills_dict: dict[str, HAS_Base] = {}
+        self.child_skills_dict: dict[str, 'HAS_Base'] = {}
 
     def init_own_children(self):
         """
@@ -35,7 +35,7 @@ class HAS_Base(NLPSkill):
             skill.__name__: skill() for skill in HAS_Base.__subclasses__()
         }  # All child classes instances that inherit from HAS_Base
 
-    def request_handling_score(self, ner_result: NER_result, _: str) -> Tuple[Optional[HAS_Base], int]:
+    def request_handling_score(self, ner_result: NER_result, _: str) -> Tuple[Optional['HAS_Base'], float]:
         """
         Determine the best handler for a given NER result.
 
@@ -46,12 +46,12 @@ class HAS_Base(NLPSkill):
         Returns:
             Tuple[Optional[HAS_Base], int]: A tuple containing the handler (or None) and the score.
         """
-        handler: HAS_Base | None, best_score: int = self._find_handler(ner_result)
+        handler, best_score = self._find_handler(ner_result)
         if handler is not None:
             return (handler, best_score)
         return (None, 0)
 
-    def _find_handler(self, ner_result: NER_result) -> Tuple[Optional[HAS_Base], int]:
+    def _find_handler(self, ner_result: NER_result) -> Tuple[Optional['HAS_Base'], float]:
         """
         Internal method to find the most suitable handler for a given NER result.
 

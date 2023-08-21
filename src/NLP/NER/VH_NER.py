@@ -1,5 +1,7 @@
 import spacy
-import typing as T
+from typing import Optional, Tuple, Literal
+from spacy.language import Language
+from spacy.tokens.doc import Doc
 
 
 class VH_NER:
@@ -28,11 +30,11 @@ class VH_NER:
             named entities or numerical values are found.
     """
     FRACTION_MAPPING = {
-    "half": 0.5,
-    "third": 1 / 3,
-    "fourth": 0.25,
-    "fifth": 0.2,
-    "quarter": 0.25,
+        "half": 0.5,
+        "third": 1 / 3,
+        "fourth": 0.25,
+        "fifth": 0.2,
+        "quarter": 0.25,
     }
 
     PRESET_MAPPING = {
@@ -50,10 +52,10 @@ class VH_NER:
         Args:
             model_path (str): The path to the Spacy NER model to use for entity extraction.
         """
-        self.nlp = spacy.load(model_path)
-        self.pretrained_nlp = spacy.load("en_core_web_sm")
+        self.nlp: Language = spacy.load(model_path)
+        self.pretrained_nlp: Language = spacy.load("en_core_web_sm")
 
-    def _get_named_entities(self, text: str) -> dict:
+    def _get_named_entities(self, text: str) -> Optional[dict[str, Tuple[str, str]]]:
         """
         Extracts named entities and their attributes from the given text using the Spacy
         NER model.
@@ -65,16 +67,17 @@ class VH_NER:
             dict: A dictionary containing the extracted named entities as keys and their
             attribute
         """
-        doc = self.nlp(text)
-        entities = {}
+        doc: Doc = self.nlp(text)
+        entities: Optional[dict[str, Tuple[str, str]]] = {}
         for ent in doc.ents:
             split_label = ent.label_.split("_", maxsplit=1)
             if len(split_label) == 2:
                 entity_type, attribute = split_label
-                entities[entity_type.rstrip("s")] = (attribute.replace("#", ""), ent.text)
+                entities[entity_type.rstrip("s")] = (
+                    attribute.replace("#", ""), ent.text)
         return entities if entities else None
 
-    def _extract_numerical_values(self, text: str):
+    def _extract_numerical_values(self, text: str) -> Optional[list[tuple[float, Literal['C']] | float]]:
         """
         Extracts numerical values and fractions from the given text using a pretrained
         Spacy NLP pipeline.
@@ -86,22 +89,8 @@ class VH_NER:
             list: A list of extracted numerical values and fractions. Returns None if no
             numerical values are found.
         """
-        doc = self.pretrained_nlp(text)
-        numerical_values = []
-        fraction_mapping = {
-            "half": 0.5,
-            "third": 1 / 3,
-            "fourth": 0.25,
-            "fifth": 0.2,
-            "quarter": 0.25,
-        }
-        preset_mapping = {
-            "eco": 0.3,
-            "comfort": 0.7,
-            "warm": 0.9,
-            "bright": 0.8,
-            "dark": 0.2,
-        }
+        doc: Doc = self.pretrained_nlp(text)
+        numerical_values: list[tuple[float, Literal['C']] | float] = []
 
         for i, token in enumerate(doc):
             if token.is_digit or token.pos_ == "NUM":
@@ -114,7 +103,7 @@ class VH_NER:
                         number = float(token.text.replace(",", ""))
 
                     if i + 1 < len(doc) and doc[i + 1].lower_ == "celsius":
-                        number = (number, "C") # TODO Make it more general
+                        number = (number, "C")  # TODO Make it more general
 
                     numerical_values.append(number)
                 except ValueError:
@@ -126,7 +115,7 @@ class VH_NER:
 
         return numerical_values if numerical_values else None
 
-    def process_text(self, text: str) -> T.Tuple[dict, list]:
+    def process_text(self, text: str) -> Tuple[Optional[dict[str, Tuple[str, str]]], Optional[list[tuple[float, Literal['C']] | float]]]:
         """
         Processes the given text and returns a tuple containing the extracted named
         entities and numerical values as dictionaries. Returns (None, None) if no named
