@@ -9,7 +9,15 @@ from NLP.NLP_common import NLP_result, NLP_result_status
 import SECRETS as sec
 
 # Import all skills endpoint classes to register
-from NLP.HASkills.HAS_Lights import HAS_Lights # pylint: disable=C0412, disable=W0611
+from NLP.HASkills.HAS_Lights import HAS_Lights  # pylint: disable=C0412, disable=W0611
+
+# Custom exceptions
+class NERProcessingError(Exception):
+    pass
+
+
+class SkillNotFoundError(Exception):
+    pass
 
 
 class VHOrchestator:
@@ -66,18 +74,20 @@ class VHOrchestator:
         skills_score: dict[NLPSkill, float] = {}
 
         for skill_instance in self.nlp_skills_dict.values():
-            result_skill, result_skill_score = skill_instance.request_handling_score(ner_result, utterance)
+            result_skill, result_skill_score = skill_instance.request_handling_score(
+                ner_result, utterance)
 
             # Only add to the dictionary if result_skill is not None
             if result_skill is not None:
                 skills_score[result_skill] = result_skill_score
 
         # Get the skill with the max score
-        max_score_skill = max(skills_score, key=lambda skill: skills_score[skill], default=None)
+        max_score_skill = max(
+            skills_score, key=lambda skill: skills_score[skill], default=None)
 
         return max_score_skill
-  
-    def _send_response(self,response: NLP_result):
+
+    def _send_response(self, response: NLP_result):
         """
         Evaluates the result of the skill's processing to determine and send the appropriate
         dialog response.
@@ -85,26 +95,35 @@ class VHOrchestator:
         Args:
             response (NLP_result): The results after processing by the selected skill.
         """
-        
+
         # 10
         if response.status == NLP_result_status.UNKNOWN:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_DIALOG)
         elif response.status == NLP_result_status.SUCCESS:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.SUCCESS_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.SUCCESS_DIALOG)
         elif response.status == NLP_result_status.FAILURE:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.FAILURE_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.FAILURE_DIALOG)
         elif response.status == NLP_result_status.NOT_FOUND:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NOT_FOUND_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.NOT_FOUND_DIALOG)
         elif response.status == NLP_result_status.NO_RESPONSE:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NO_RESPONSE_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.NO_RESPONSE_DIALOG)
         elif response.status == NLP_result_status.UNKNOWN_ENTITY:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ENTITY_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ENTITY_DIALOG)
         elif response.status == NLP_result_status.UNKNOWN_ACTION:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ACTION_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ACTION_DIALOG)
         elif response.status == NLP_result_status.NEED_MORE_INFO:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.NEED_MORE_INFO_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.NEED_MORE_INFO_DIALOG)
         else:
-            VHOrchestator.say_dialog_stub(response.dialog_to_say if response.dialog_to_say else self.DEFAULT_DIALOG)
+            VHOrchestator.say_dialog_stub(
+                response.dialog_to_say if response.dialog_to_say else self.DEFAULT_DIALOG)
 
     @staticmethod
     def say_dialog_stub(dialog: str):
@@ -122,34 +141,47 @@ class VHOrchestator:
         finds the appropriate handler for it and handles the utterance.
 
         Args:
-            request (VH_Request): The request to be processed.
+            utterance (str): The utterance to be processed.
+
+        Raises:
+            NERProcessingError: If the NER processing fails.
+            SkillNotFoundError: If the skill was not found.
 
         """
-        # 10. Perform NER analysis
-        ner_raw_result : VhProcessedText = self.ner.process_text(utterance)
-        if not ner_raw_result[0]:
-            print("NER processing failed")
-        else:
-            result: NerResult = NerResult(utterance, ner_raw_result)
-            print(f"ner_result:{result}")
+        try:
+            # 10. Perform NER analysis
+            ner_raw_result: VhProcessedText = self.ner.process_text(utterance)
+            if not ner_raw_result.named_entities:
+                raise NERProcessingError("NER processing failed")
 
-        # 20. Find best skill to handle utterance
-        skill_to_call: NLPSkill = self._find_skill(utterance, result)
+            text_process_result: NerResult = NerResult(
+                utterance, ner_raw_result)
+            print(f"ner_result: {text_process_result}")
 
-        # 30. Call best skill to handle utterance
-        action_to_perform: NLP_result = skill_to_call.handle_utterance(
-            self, result, utterance
-        )
+            # 20. Find best skill to handle utterance
+            skill_to_call: Optional[NLPSkill] = self._find_skill(
+                utterance, text_process_result)
+            if not skill_to_call:
+                raise SkillNotFoundError("Skill was not found")
 
-        # 50. Speak dialog
-        self._send_response(action_to_perform)
+            # 30. Call best skill to handle utterance
+            action_to_perform: NLP_result = skill_to_call.handle_utterance(
+                self, text_process_result, utterance
+            )
 
-    def testMode(self) -> None:
+            # 50. Speak dialog
+            self._send_response(action_to_perform)
+
+        except (NERProcessingError, SkillNotFoundError) as exception:
+            print(exception)
+
+    def test_mode(self) -> None:
         """
         Enters a test mode where the user can manually enter utterances or predefined commands for processing.
         """
         while True:
-            user_input: str = input("Enter an utterance or type 'quit' to exit: ")
+            user_input: str = input(
+                "Enter an utterance or type 'quit' to exit: ")
 
             if user_input.lower() == "quit":
                 break

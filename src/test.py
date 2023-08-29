@@ -1,9 +1,9 @@
-from VHOrchestator import VHOrchestator
+from vh_orchestrator import VHOrchestator
 
 
 def main():
     orch = VHOrchestator()
-    orch.testMode()
+    orch.test_mode()
 
 
 if __name__ == "__main__":
