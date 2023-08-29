@@ -3,7 +3,7 @@ import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any, TYPE_CHECKING
 from .common.HAS_common import HAS_find
 from .HAS_Base import HAS_Base
-from ..NER.NER_result import NerResult
+from ..NER.ner_result import NerResult
 from ..NLP_common import NLP_result, NLP_result_status
 from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
 

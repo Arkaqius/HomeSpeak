@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING, Optional
-from .NER.NER_result import NerResult
+from .NER.ner_result import NerResult
 from .NLP_common import NLP_result
 
 if TYPE_CHECKING:
