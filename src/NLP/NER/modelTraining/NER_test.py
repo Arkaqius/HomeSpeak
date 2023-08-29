@@ -1,10 +1,10 @@
-from NLP.NER.VH_NER import VH_NER
+from vh_ner import VhNer
 import NLP.NER.config as cfg
 import random
 
 
 def main():
-    ner = VH_NER(cfg.PATH_TRAINED_MODEL)
+    ner = VhNer(cfg.PATH_TRAINED_MODEL)
 
     with open(cfg.PATH_TEST_SENTENCES, "r") as f:
         lines = f.readlines()

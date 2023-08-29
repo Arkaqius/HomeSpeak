@@ -3,12 +3,12 @@ import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any, TYPE_CHECKING
 from .common.HAS_common import HAS_find
 from .HAS_Base import HAS_Base
-from ..NER.NER_result import NER_result
+from ..NER.NER_result import NerResult
 from ..NLP_common import NLP_result, NLP_result_status
 from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
 
 if TYPE_CHECKING:
-    from VHOrchestator import VHOrchestator
+    from vh_orchestrator import VHOrchestator
 
 
 class HAS_Lights(HAS_Base):
@@ -31,7 +31,7 @@ class HAS_Lights(HAS_Base):
     BRIGHNTESS_STEP = 25  # in %
 
     def handle_utterance(
-        self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
+        self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
     ) -> NLP_result | None:
         """
         Handles a given utterance by checking for matching entities, choosing a winner, and delegating action handling
@@ -54,7 +54,7 @@ class HAS_Lights(HAS_Base):
         # 20. Looking for matching entities
         candidates: List[Dict[str, Any]] = HAS_find.find_candidates(
             HAS_Lights.build_suggest_entity_name(ner_result),
-            orchst.HA_entity_group_lights.entities,
+            orchst.ha_entity_group_lights.entities,
         )
 
         # 30. Choose winner
@@ -106,7 +106,7 @@ class HAS_Lights(HAS_Base):
 
         return result
 
-    def get_req_score(self, ner_result: NER_result):
+    def get_req_score(self, ner_result: NerResult):
         """
         Returns a score how good request can be handled by that skill.
         TODO Add more logic
@@ -125,7 +125,7 @@ class HAS_Lights(HAS_Base):
 
     def handle_request_turn_onoff(
         self,
-        ner_result: NER_result,
+        ner_result: NerResult,
         winner_entity: Dict[str, Any],
         VH_orch: "VHOrchestator",
         result: NLP_result,
@@ -181,7 +181,7 @@ class HAS_Lights(HAS_Base):
 
     def handle_request_change_brightness(
         self,
-        ner_result: NER_result,
+        ner_result: NerResult,
         winner_entity: Dict[str, Any],
         VH_orch: "VHOrchestator",
         result: NLP_result,
@@ -275,7 +275,7 @@ class HAS_Lights(HAS_Base):
         return max(candidates, key=lambda x: x["similarity"])
 
     @staticmethod
-    def build_suggest_entity_name(ner_result: NER_result):
+    def build_suggest_entity_name(ner_result: NerResult):
         """
         Build a name to suggest an entity, based on the named entity recognition result. 
         This method constructs an expected light name using the NER result, which is 

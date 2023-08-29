@@ -1,15 +1,15 @@
-from NLP.NER.config import *
-from NLP.NER.VH_NER import VH_NER
-from NLP.NER.NER_result import NER_result
+# pylint: disable=C0114
+from typing import Optional
+from vh_ner import VhNer
 from homeassistant_api import Client
-from NLP.HASkills.HAS_Base import  HAS_Base
-from typing import Type, Optional
-import SECRETS as sec
+from NLP.NER.NER_result import NerResult
+from NLP.NER.config import PATH_TRAINED_MODEL
 from NLP.NLP_skill import NLPSkill
 from NLP.NLP_common import NLP_result, NLP_result_status
+import SECRETS as sec
 
 # Import all skills endpoint classes to register
-from NLP.HASkills.HAS_Lights import HAS_Lights
+from NLP.HASkills.HAS_Lights import HAS_Lights # pylint: disable=C0412, disable=W0611
 
 
 class VHOrchestator:
@@ -19,9 +19,7 @@ class VHOrchestator:
     handling user requests, and interacting with the Home Assistant API.
     """
 
-    """
-    Dialogs to say. Later, replace it with dialog files supported by voice OS.
-    """
+    # Dialogs to say. Later, replace it with dialog files supported by voice OS.
     UNKNOWN_DIALOG = "I'm sorry, I couldn't understand that."
     SUCCESS_DIALOG = "The operation was successful."
     FAILURE_DIALOG = "I'm sorry, there was a problem with the operation."
@@ -38,22 +36,22 @@ class VHOrchestator:
         Home Assistant Client, and setups dictionaries for entities and skills.
         """
         # Instance of VH_NER for Named Entity Recognition
-        self.ner: VH_NER = VH_NER(PATH_TRAINED_MODEL)
+        self.ner: VhNer = VhNer(PATH_TRAINED_MODEL)
         # Instance of Home Assistant Client
         self.hass_instance: Client = Client(sec.URL, sec.TOKEN)
         # Dictionary containing all entities from Home Assistant
         self.all_entities: dict = self.hass_instance.get_entities()
         # Dictionary containing all light entities
-        self.HA_entity_group_lights: dict = self.all_entities["light"]
+        self.ha_entity_group_lights: dict = self.all_entities["light"]
         # All child classes instances that inherit from NLPSkills
         self.nlp_skills_dict = {
-            skill.__name__: skill() for skill in NLPSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class.
+            skill.__name__: skill() for skill in NLPSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class, pylint: disable=C0301
         }
 
         for skill in self.nlp_skills_dict.values():
             skill.init_own_children()
 
-    def _find_skill(self, utterance: str, ner_result: NER_result) -> Optional[NLPSkill]:
+    def _find_skill(self, utterance: str, ner_result: NerResult) -> Optional[NLPSkill]:
         """
         Evaluates the user's utterance and NER results to determine which skill is best
         suited to handle the request.
@@ -78,8 +76,7 @@ class VHOrchestator:
         max_score_skill = max(skills_score, key=lambda skill: skills_score[skill], default=None)
 
         return max_score_skill
-
-    
+  
     def _send_response(self,response: NLP_result):
         """
         Evaluates the result of the skill's processing to determine and send the appropriate
@@ -129,16 +126,19 @@ class VHOrchestator:
 
         """
         # 10. Perform NER analysis
-        ner_raw_result : list[dict] = self.ner.process_text(utterance)
-        ner_result: NER_result = NER_result(utterance, *ner_raw_result)
-        print(f"ner_result:{ner_result}")
+        ner_raw_result : tuple[Optional[dict],Optional[list]] = self.ner.process_text(utterance)
+        if not ner_raw_result[0]:
+            print("NER processing failed")
+        else:
+            result: NerResult = NerResult(utterance, *ner_raw_result)
+            print(f"ner_result:{result}")
 
         # 20. Find best skill to handle utterance
-        skill_to_call: NLPSkill = self._find_skill(utterance, ner_result)
+        skill_to_call: NLPSkill = self._find_skill(utterance, result)
 
         # 30. Call best skill to handle utterance
         action_to_perform: NLP_result = skill_to_call.handle_utterance(
-            self, ner_result, utterance
+            self, result, utterance
         )
 
         # 50. Speak dialog

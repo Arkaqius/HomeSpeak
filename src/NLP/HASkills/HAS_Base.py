@@ -1,11 +1,11 @@
 from abc import abstractmethod
 from ..NLP_skill import NLPSkill
 from typing import Tuple, TYPE_CHECKING, Optional
-from ..NER.NER_result import NER_result
+from ..NER.NER_result import NerResult
 from ..NLP_common import NLP_result
 
 if TYPE_CHECKING:
-    from VHOrchestator import VHOrchestator
+    from vh_orchestrator import VHOrchestator
 
 
 class HAS_Base(NLPSkill):
@@ -35,7 +35,7 @@ class HAS_Base(NLPSkill):
             skill.__name__: skill() for skill in HAS_Base.__subclasses__()
         }  # All child classes instances that inherit from HAS_Base
 
-    def request_handling_score(self, ner_result: NER_result, _: str) -> Tuple[Optional['HAS_Base'], float]:
+    def request_handling_score(self, ner_result: NerResult, _: str) -> Tuple[Optional['HAS_Base'], float]:
         """
         Determine the best handler for a given NER result.
 
@@ -51,7 +51,7 @@ class HAS_Base(NLPSkill):
             return (handler, best_score)
         return (None, 0)
 
-    def _find_handler(self, ner_result: NER_result) -> Tuple[Optional['HAS_Base'], float]:
+    def _find_handler(self, ner_result: NerResult) -> Tuple[Optional['HAS_Base'], float]:
         """
         Internal method to find the most suitable handler for a given NER result.
 
@@ -71,7 +71,7 @@ class HAS_Base(NLPSkill):
                 best_handler = subclass_inst
         return best_handler, best_score
 
-    def get_req_score(self, ner_result: NER_result):
+    def get_req_score(self, ner_result: NerResult):
         """
         Get the request score for a given NER result.
 
@@ -87,7 +87,7 @@ class HAS_Base(NLPSkill):
             "This method should be overridden in subclasses.")
 
     def handle_utterance(
-        self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
+        self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
     ) -> NLP_result:
         """
         Handles the provided utterance based on the NER result.

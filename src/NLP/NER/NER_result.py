@@ -1,15 +1,14 @@
-from typing import Any, Dict
+from typing import Optional, Literal
 import itertools
 
-
-from typing import Dict, List, Any
-import itertools
-
-class NER_result:
+class NerResult:
+    '''
+    CLass to keep NER result of text processing.
+    '''
     PREPOSITIONS = ["in", "on", "at"]
     NER_KEYS = ["thing", "attribute", "location", "state", "action"]
 
-    def __init__(self, text: str, NER_Dict: Dict[str, Any], values_dict: Dict[str, Any]) -> None:
+    def __init__(self, text: str, ner_dict: Optional[dict[str, tuple[str, str]]], values_dict: Optional[list[tuple[float, Literal['C']] | float]]) -> None:
         """
         Initialize a NER_Request instance with attributes based on the NER_Dict.
 
@@ -20,14 +19,14 @@ class NER_result:
         """
         # Set default attributes
         for key in self.NER_KEYS:
-            setattr(self, key, NER_Dict.get(key, [None])[0])
+            setattr(self, key, ner_dict.get(key, [None])[0])
             
         # Handle value attributes
         self.value = values_dict.get(0, None) if values_dict else None
         self.value_type = values_dict.get(1, None) if values_dict else None
 
         # Generate description based on the input text and NER_Dict
-        self.description = self._generate_description(text, NER_Dict)
+        self.description = self._generate_description(text, ner_dict)
 
         # Store the original input
         self.input = text

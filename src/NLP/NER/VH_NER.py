@@ -1,10 +1,49 @@
+# pylint: disable=C0114
+from typing import Optional, Tuple, NamedTuple
 import spacy
-from typing import Optional, Tuple, Literal
 from spacy.language import Language
-from spacy.tokens.doc import Doc
+from spacy.tokens.doc import Doc  # pylint: disable=E0611
 
 
-class VH_NER:
+class VhNumericalValue(NamedTuple):
+    """
+    A NamedTuple for representing numerical values extracted from text.
+
+    Attributes:
+        value (float): The numerical value extracted from the text.
+        unit (str): The unit associated with the numerical value.
+    """
+    value: float
+    unit: str
+
+
+class VhNamedEntity(NamedTuple):
+    """
+    A NamedTuple for representing named entities extracted from text.
+
+    Attributes:
+        entity_type (str): The type of the named entity (e.g., thing, location, atttribute, etc.).
+        entity_default_name (str): The default name of the entity.
+        entity_text (str): The actual text of the entity extracted from the text.
+    """
+    entity_type: str
+    entity_default_name: str
+    entity_text: str
+
+
+class VhProcessedText(NamedTuple):
+    """
+    A NamedTuple for representing the results of processing text for named entities and numerical values.
+
+    Attributes:
+        named_entities (list[VhNamedEntity]): A list of named entities extracted from the text.
+        numerical_values (list[VhNumericalValue]): A list of numerical values extracted from the text.
+    """
+    named_entities: list['VhNamedEntity']
+    numerical_values: list['VhNumericalValue']
+
+
+class VhNer:
 
     """
     A class for performing named entity recognition (NER) and numerical value extraction
@@ -52,10 +91,10 @@ class VH_NER:
         Args:
             model_path (str): The path to the Spacy NER model to use for entity extraction.
         """
-        self.nlp: Language = spacy.load(model_path)
-        self.pretrained_nlp: Language = spacy.load("en_core_web_sm")
+        self.nlp: Language = spacy.load(name=model_path)
+        self.pretrained_nlp: Language = spacy.load(name="en_core_web_sm")
 
-    def _get_named_entities(self, text: str) -> Optional[dict[str, Tuple[str, str]]]:
+    def _get_named_entities(self, text: str) -> dict[str, Tuple[str, str]]:
         """
         Extracts named entities and their attributes from the given text using the Spacy
         NER model.
@@ -66,6 +105,12 @@ class VH_NER:
         Returns:
             dict: A dictionary containing the extracted named entities as keys and their
             attribute
+            Example:
+            {
+                'action': ('on', 'on'),
+                'thing': ('plug', 'socket'),
+                'location': ('backyard', 'backyard')
+            }
         """
         doc: Doc = self.nlp(text)
         entities: Optional[dict[str, Tuple[str, str]]] = {}
@@ -75,9 +120,9 @@ class VH_NER:
                 entity_type, attribute = split_label
                 entities[entity_type.rstrip("s")] = (
                     attribute.replace("#", ""), ent.text)
-        return entities if entities else None
+        return entities
 
-    def _extract_numerical_values(self, text: str) -> Optional[list[tuple[float, Literal['C']] | float]]:
+    def _extract_numerical_values(self, text: str) -> list[tuple[float, str]]:  # pylint: disable=C0301
         """
         Extracts numerical values and fractions from the given text using a pretrained
         Spacy NLP pipeline.
@@ -86,11 +131,16 @@ class VH_NER:
             text (str): The text to process.
 
         Returns:
-            list: A list of extracted numerical values and fractions. Returns None if no
-            numerical values are found.
+            list: A list of tuples, each containing a numerical value and a unit (if any).
+            Returns None if no numerical values are found.
+
+        Example:
+            If the input text is "50% of the room is at 20 celsius and the other half is dark",
+            the method would return:
+                [(0.5, ""), (20.0, "C"), (0.5, ""), (0.2, "")]
         """
         doc: Doc = self.pretrained_nlp(text)
-        numerical_values: list[tuple[float, Literal['C']] | float] = []
+        numerical_values: list[tuple[float, str]] = []
 
         for i, token in enumerate(doc):
             if token.is_digit or token.pos_ == "NUM":
@@ -103,19 +153,23 @@ class VH_NER:
                         number = float(token.text.replace(",", ""))
 
                     if i + 1 < len(doc) and doc[i + 1].lower_ == "celsius":
-                        number = (number, "C")  # TODO Make it more general
+                        number = (number, "C")  # TODO Make it more general!
+                    else:
+                        number = (number, "")  # No unit
 
                     numerical_values.append(number)
                 except ValueError:
-                    pass
+                    pass  # TODO Add some logging
             elif token.lower_ in self.FRACTION_MAPPING:
-                numerical_values.append(self.FRACTION_MAPPING[token.lower_])
+                numerical_values.append(
+                    (self.FRACTION_MAPPING[token.lower_], ""))
             elif token.lower_ in self.PRESET_MAPPING:
-                numerical_values.append(self.PRESET_MAPPING[token.lower_])
+                numerical_values.append(
+                    (self.PRESET_MAPPING[token.lower_], ""))
 
-        return numerical_values if numerical_values else None
+        return numerical_values
 
-    def process_text(self, text: str) -> Tuple[Optional[dict[str, Tuple[str, str]]], Optional[list[tuple[float, Literal['C']] | float]]]:
+    def process_text(self, text: str) -> VhProcessedText:  # pylint: disable=C0301
         """
         Processes the given text and returns a tuple containing the extracted named
         entities and numerical values as dictionaries. Returns (None, None) if no named
@@ -132,4 +186,9 @@ class VH_NER:
         """
         named_entities = self._get_named_entities(text)
         numerical_values = self._extract_numerical_values(text)
-        return named_entities, numerical_values
+        return VhProcessedText(
+            named_entities=[VhNamedEntity(entity_type, entity_default_name, entity_text)
+                            for entity_type, (entity_default_name, entity_text) in named_entities.items()],
+            numerical_values=[VhNumericalValue(
+                value, unit) for value, unit in numerical_values],
+        )

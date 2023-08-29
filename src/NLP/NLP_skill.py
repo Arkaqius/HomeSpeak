@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING, Optional
-from .NER.NER_result import NER_result
+from .NER.NER_result import NerResult
 from .NLP_common import NLP_result
 
 if TYPE_CHECKING:
-    from VHOrchestator import VHOrchestator
+    from vh_orchestrator import VHOrchestator
 
 
 class NLPSkill(ABC):
@@ -24,7 +24,7 @@ class NLPSkill(ABC):
     """
 
     @abstractmethod
-    def request_handling_score(self, ner_result: NER_result, utterance: str) -> Tuple[Optional['NLPSkill'], float]:
+    def request_handling_score(self, ner_result: NerResult, utterance: str) -> Tuple[Optional['NLPSkill'], float]:
         """
         Calculates and returns a score indicating the suitability of the skill for 
         handling the given request based on the named entity recognition result and 
@@ -41,7 +41,7 @@ class NLPSkill(ABC):
 
     @abstractmethod
     def handle_utterance(
-        self, orchst: "VHOrchestator", ner_result: NER_result, utterance: str
+        self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
     ) -> NLP_result:
         """
         Processes the utterance based on extracted entities and returns the result.
