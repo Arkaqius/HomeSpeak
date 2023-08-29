@@ -1,71 +1,80 @@
-from typing import Optional, Literal
+# pylint: disable=C0114
 import itertools
+from NER.vh_ner import VhProcessedText, VhNamedEntity, VhNumericalValue
+
 
 class NerResult:
     '''
-    CLass to keep NER result of text processing.
+    Class to keep NER result of text processing.
+
+    Attributes:
+        text (str): The text input.
+        ner_raw (VhProcessedText): A VhProcessedText object containing the named entities 
+                                   and numerical values extracted from the text.
+
+    Methods:
+        _generate_description(text: str, ner_dict: Dict[str, Any]) -> str:
+            Generate a description from the input text by excluding recognized entities 
+            and prepositions.
+
+        _extract_recognized_literals(ner_dict: Dict[str, Any]) -> List[str]:
+            Extract recognized literals/entities from the NER dictionary.
+
+        __str__() -> str:
+            Provide a string representation of the NER_result instance.
     '''
+
     PREPOSITIONS = ["in", "on", "at"]
     NER_KEYS = ["thing", "attribute", "location", "state", "action"]
 
-    def __init__(self, text: str, ner_dict: Optional[dict[str, tuple[str, str]]], values_dict: Optional[list[tuple[float, Literal['C']] | float]]) -> None:
+    def __init__(self, text: str, ner_raw: VhProcessedText) -> None:
         """
-        Initialize a NER_Request instance with attributes based on the NER_Dict.
+        Initialize a NER_Request instance with attributes based on the ner_raw.
 
         Args:
             text (str): The text input.
-            NER_Dict (Dict[str, Any]): A dictionary containing keys and values for various NER categories.
-            values_dict (Dict[str, Any]): A dictionary containing values.
+            ner_raw (VhProcessedText): A VhProcessedText object containing the named entities 
+                                       and numerical values extracted from the text.
+
         """
         # Set default attributes
         for key in self.NER_KEYS:
-            setattr(self, key, ner_dict.get(key, [None])[0])
-            
+            setattr(self, key, getattr(ner_raw.named_entities, key, None))
+
         # Handle value attributes
-        self.value = values_dict.get(0, None) if values_dict else None
-        self.value_type = values_dict.get(1, None) if values_dict else None
+        self.values: list[VhNumericalValue] = ner_raw.numerical_values
 
         # Generate description based on the input text and NER_Dict
-        self.description = self._generate_description(text, ner_dict)
+        self.description: str = self._generate_description(
+            text, ner_raw.named_entities)
 
         # Store the original input
-        self.input = text
+        self.input: str = text
 
-    def _generate_description(self, text: str, ner_dict: Dict[str, Any]) -> str:
+    def _generate_description(self, text: str, ner_entities: list[VhNamedEntity]) -> str:
         """
         Generate a description from the input text by excluding recognized entities and prepositions.
 
         Args:
             text (str): The input text.
-            ner_dict (Dict[str, Any]): The named entity recognition dictionary.
+            ner_entities (List[VhNamedEntity]): A list of named entities extracted from the text.
 
         Returns:
             str: A description extracted from the text.
         """
         tokens = text.split()
-        recognized_literals = self._extract_recognized_literals(ner_dict)
+        recognized_literals = self._extract_recognized_literals(ner_entities)
         return " ".join(token for token in tokens if token not in recognized_literals and token not in self.PREPOSITIONS).strip()
 
-    def _extract_recognized_literals(self, ner_dict: Dict[str, Any]) -> List[str]:
+    def _extract_recognized_literals(self, ner_entities: list[VhNamedEntity]) -> list[str]:
         """
-        Extract recognized literals/entities from the NER dictionary.
+        Extract recognized literals/entities from the list of named entities.
 
         Args:
-            ner_dict (Dict[str, Any]): The named entity recognition dictionary.
+            ner_entities (List[VhNamedEntity]): A list of named entities extracted from the text.
 
         Returns:
             List[str]: A list of recognized literals/entities.
         """
-        literals = [literal.split() for _, literal in ner_dict.values()]
+        literals = [entity.entity_text.split() for entity in ner_entities]
         return list(itertools.chain(*literals))
-
-    def __str__(self) -> str:
-        """
-        Provide a string representation of the NER_result instance.
-
-        Returns:
-            str: A string representation of the instance.
-        """
-        values = [f"{key.capitalize()}: {getattr(self, key) or 'None'}" for key in self.NER_KEYS]
-        values.append(f"Value: {self.value or 'None'}")
-        return ", ".join(values)

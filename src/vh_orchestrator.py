@@ -1,8 +1,8 @@
 # pylint: disable=C0114
 from typing import Optional
-from vh_ner import VhNer
+from vh_ner import VhNer, VhProcessedText
 from homeassistant_api import Client
-from NLP.NER.NER_result import NerResult
+from ner_result import NerResult
 from NLP.NER.config import PATH_TRAINED_MODEL
 from NLP.NLP_skill import NLPSkill
 from NLP.NLP_common import NLP_result, NLP_result_status
@@ -126,11 +126,11 @@ class VHOrchestator:
 
         """
         # 10. Perform NER analysis
-        ner_raw_result : tuple[Optional[dict],Optional[list]] = self.ner.process_text(utterance)
+        ner_raw_result : VhProcessedText = self.ner.process_text(utterance)
         if not ner_raw_result[0]:
             print("NER processing failed")
         else:
-            result: NerResult = NerResult(utterance, *ner_raw_result)
+            result: NerResult = NerResult(utterance, ner_raw_result)
             print(f"ner_result:{result}")
 
         # 20. Find best skill to handle utterance
