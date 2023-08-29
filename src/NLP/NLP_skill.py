@@ -1,7 +1,8 @@
+# pylint: disable=C0114
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING, Optional
 from .NER.ner_result import NerResult
-from .NLP_common import NLP_result
+from .nlp_common import NlpResult
 
 if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
@@ -37,12 +38,11 @@ class NLPSkill(ABC):
         Returns:
         - Tuple[float, str]: A tuple containing a score (float) and a debug message (str).
         """
-        pass
 
     @abstractmethod
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
-    ) -> NLP_result:
+    ) -> NlpResult:
         """
         Processes the utterance based on extracted entities and returns the result.
 
@@ -54,7 +54,6 @@ class NLPSkill(ABC):
         Returns:
         - NLP_result: The result of processing the utterance.
         """
-        pass
 
     @abstractmethod
     def init_own_children(self) -> None:
@@ -63,4 +62,3 @@ class NLPSkill(ABC):
         should be overridden to set up any child processes or data structures that 
         are unique to the specific NLP skill.
         """
-        pass

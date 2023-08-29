@@ -1,8 +1,8 @@
 from abc import abstractmethod
-from ..NLP_skill import NLPSkill
+from ..nlp_skill import NLPSkill
 from typing import Tuple, TYPE_CHECKING, Optional
 from ..NER.ner_result import NerResult
-from ..NLP_common import NLP_result
+from ..nlp_common import NlpResult
 
 if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
@@ -88,7 +88,7 @@ class HAS_Base(NLPSkill):
 
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
-    ) -> NLP_result:
+    ) -> NlpResult:
         """
         Handles the provided utterance based on the NER result.
 

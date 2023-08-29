@@ -1,13 +1,16 @@
-import NLP.NER.config as cfg
-from typing import Dict, List, Tuple, Union
-import sys
-from NLP.NER.modelTraining.Vocab import Vocab
-import typing
+'''
+Module conatins main function and is used to generate NER model training data.
+'''
 import random
 import json
+from vocab import Vocab
+import NLP.NER.config as cfg
 
 
 class TrainingDataGenerator:
+    """
+    A utility class for generating training data.
+    """
     @staticmethod
     def find_substring(substring: str, string: str) -> list:
         """
@@ -20,7 +23,8 @@ class TrainingDataGenerator:
         Returns:
             list: A list of tuples, each containing the start and end indices of the substring's occurrences.
         """
-        indices = [i for i in range(len(string)) if string.startswith(substring, i)]
+        indices = [i for i in range(len(string))
+                   if string.startswith(substring, i)]
         whole_word_indices = []
 
         for index in indices:
@@ -36,10 +40,10 @@ class TrainingDataGenerator:
 
     def __init__(
         self,
-        predefined_entities: Dict[str, List[str]],
-        synonyms: Dict[str, Union[str, List[str]]],
-        helpDescriptor: Dict[str, str],
-        helpswitchableThing: Dict[str, str],
+        predefined_entities: dict[str, list[str]],
+        synonyms: dict[str, str | list[str]],
+        help_descriptor: dict[str, str],
+        help_switchable_thing: dict[str, str],
     ) -> None:
         """
         Initialize the TrainingDataGenerator with predefined entities, synonyms, and helper dictionaries.
@@ -54,8 +58,8 @@ class TrainingDataGenerator:
 
         self.predefined_entities = predefined_entities
         self.synonyms = synonyms
-        self.helper["descriptor"] = helpDescriptor
-        self.helper["switchableThing"] = helpswitchableThing
+        self.helper["descriptor"] = help_descriptor
+        self.helper["switchableThing"] = help_switchable_thing
 
     def get_random_entities(self, label: str) -> str:
         """
@@ -67,10 +71,10 @@ class TrainingDataGenerator:
         Returns:
             str: A random synonym for the selected entity.
         """
-        entityName = random.choice(self.predefined_entities[label])
-        return self.get_random_synonym(entityName)
+        entity_name = random.choice(self.predefined_entities[label])
+        return self.get_random_synonym(entity_name)
 
-    def get_random_synonym(self, enititName: str) -> str:
+    def get_random_synonym(self, entity_name: str) -> str:
         """
         Get a random synonym for the given entity name.
 
@@ -80,15 +84,15 @@ class TrainingDataGenerator:
         Returns:
             str: A random synonym for the given entity name.
         """
-        retVal = ""
-        synonym = self.synonyms.get(enititName, enititName)
-        if type(synonym) is list:
-            retVal = random.choice(synonym)
+        ret_val = ""
+        synonym = self.synonyms.get(entity_name, entity_name)
+        if isinstance(synonym, list):
+            ret_val = random.choice(synonym)
         else:
-            retVal = synonym
-        return retVal
+            ret_val = synonym
+        return ret_val
 
-    def getAllSynonyms(self, enititName: str) -> str:
+    def get_all_synonyms(self, enitity_name: str) -> list[str]:
         """
         Get all synonyms for the given entity names.
 
@@ -98,13 +102,13 @@ class TrainingDataGenerator:
         Returns:
             str: A list containing all synonyms for the given entity names.
         """
-        retVal = []
-        for element in enititName:
-            retVal.append(self.synonyms[element])
+        ret_val = []
+        for element in enitity_name:
+            ret_val.append(self.synonyms[element])
 
-        return retVal
+        return ret_val
 
-    def get_random_helper(self, helperName: str) -> str:
+    def get_random_helper(self, helper_name: str) -> str:
         """
         Get a random helper for the given helper name and find a random synonym for it.
 
@@ -114,7 +118,7 @@ class TrainingDataGenerator:
         Returns:
             str: A random synonym for the selected helper.
         """
-        return self.get_random_synonym(random.choice(self.helper[helperName]))
+        return self.get_random_synonym(random.choice(self.helper[helper_name]))
 
     def get_random_value_string(self):
         """
@@ -135,7 +139,8 @@ class TrainingDataGenerator:
         ]
 
         # Add random percent values
-        value_strings.extend([f"{random.randint(1, 100)} percent" for _ in range(10)])
+        value_strings.extend(
+            [f"{random.randint(1, 100)} percent" for _ in range(10)])
 
         # Add temperature values in Celsius
         value_strings.extend(
@@ -144,8 +149,16 @@ class TrainingDataGenerator:
 
         return random.choice(value_strings)
 
-    def generate_sentence_type_1(self) -> typing.Tuple[str, dict]:
-        switchableThing = self.get_random_helper("switchableThing")
+    def generate_sentence_type_1(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 1 and its corresponding entities list.
+
+        Type 1 Sentence: "<action> the <switchable_thing> in <location>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
+        switchable_thing = self.get_random_helper("switchableThing")
         action = random.choice(
             [
                 self.get_random_synonym("on"),
@@ -155,16 +168,24 @@ class TrainingDataGenerator:
         )
         location = self.get_random_entities("location")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
-            "things": switchableThing,
+            "things": switchable_thing,
             "location": location,
         }
-        sentence = f"{action} the {switchableThing} in {location}"
-        return sentence, entitiesList
+        sentence = f"{action} the {switchable_thing} in {location}"
+        return sentence, entities_list
 
-    def generate_sentence_type_2(self) -> typing.Tuple[str, dict]:
-        switchableThing = self.get_random_helper("switchableThing")
+    def generate_sentence_type_2(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 2 and its corresponding entities list.
+
+        Type 2 Sentence: "<action> the <descriptor> <switchable_thing> in <location>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
+        switchable_thing = self.get_random_helper("switchableThing")
         action = random.choice(
             [
                 self.get_random_synonym("on"),
@@ -175,118 +196,186 @@ class TrainingDataGenerator:
         location = self.get_random_entities("location")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
-            "things": switchableThing,
+            "things": switchable_thing,
             "location": location,
         }
-        sentence = f"{action} the {desc} {switchableThing} in {location}"
-        return sentence, entitiesList
+        sentence = f"{action} the {desc} {switchable_thing} in {location}"
+        return sentence, entities_list
 
-    def generate_sentence_type_3(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_3(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 3 and its corresponding entities list.
+
+        Type 3 Sentence: "<adjust> <attribute> of <descriptor> <thing> in <location>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         thing = self.get_random_entities("things")
         adjust = self.get_random_synonym("adjust")
         location = self.get_random_entities("location")
         attribute = self.get_random_entities("attributes")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {
+        entities_list = {
             "actions": adjust,
             "attributes": attribute,
             "things": thing,
             "location": location,
         }
         sentence = f"{adjust} {attribute} of {desc} {thing} in {location}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_4(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_4(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 4 and its corresponding entities list.
+
+        Type 4 Sentence: "<adjust> <attribute> of <descriptor> <thing>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         thing = self.get_random_entities("things")
         adjust = self.get_random_synonym("adjust")
         attribute = self.get_random_entities("attributes")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {"actions": adjust, "attributes": attribute, "things": thing}
+        entities_list = {"actions": adjust,
+                         "attributes": attribute, "things": thing}
         sentence = f"{adjust} {attribute} of {desc} {thing}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_5(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_5(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 5 and its corresponding entities list.
+
+        Type 5 Sentence: "<action> <attribute> of <descriptor> <thing> in <location>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = random.choice(
-            [self.get_random_synonym("increase"), self.get_random_synonym("decrease")]
+            [self.get_random_synonym("increase"),
+             self.get_random_synonym("decrease")]
         )
         thing = self.get_random_entities("things")
         location = self.get_random_entities("location")
         attribute = self.get_random_entities("attributes")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
             "attributes": attribute,
             "things": thing,
             "location": location,
         }
         sentence = f"{action} {attribute} of {desc} {thing} in {location}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_6(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_6(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 6 and its corresponding entities list.
+
+        Type 6 Sentence: "<action> <attribute> of <descriptor> <thing>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = random.choice(
-            [self.get_random_synonym("increase"), self.get_random_synonym("decrease")]
+            [self.get_random_synonym("increase"),
+             self.get_random_synonym("decrease")]
         )
         thing = self.get_random_entities("things")
         attribute = self.get_random_entities("attributes")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {"actions": action, "attributes": attribute, "things": thing}
+        entities_list = {"actions": action,
+                         "attributes": attribute, "things": thing}
         sentence = f"{action} {attribute} of {desc} {thing}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_7(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_7(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 7 and its corresponding entities list.
+
+        Type 7 Sentence: "<binary_query> <thing> in <location> <state>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = self.get_random_synonym("binary_query")
         thing = self.get_random_entities("things")
         state = self.get_random_entities("states")
         location = self.get_random_entities("location")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
             "things": thing,
             "location": location,
             "state": state,
         }
         sentence = f"{action} {thing} in {location} {state}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_8(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_8(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 8 and its corresponding entities list.
+
+        Type 8 Sentence: "<binary_query> <descriptor> <thing> in <location> <state>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = self.get_random_synonym("binary_query")
         thing = self.get_random_entities("things")
         state = self.get_random_entities("states")
         location = self.get_random_entities("location")
         desc = self.get_random_helper("descriptor")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
             "things": thing,
             "location": location,
             "state": state,
         }
         sentence = f"{action} {desc} {thing} in {location} {state}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_9(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_9(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 9 and its corresponding entities list.
+
+        Type 9 Sentence: "<information_query> <attribute> of <descriptor> <thing> in <location>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = self.get_random_synonym("information_query")
         attribute = self.get_random_entities("attributes")
         desc = self.get_random_helper("descriptor")
         thing = self.get_random_entities("things")
         location = self.get_random_entities("location")
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
             "attributes": attribute,
             "things": thing,
             "location": location,
         }
         sentence = f"{action} {attribute} of {desc} {thing} in {location}"
-        return sentence, entitiesList
+        return sentence, entities_list
 
-    def generate_sentence_type_10(self) -> typing.Tuple[str, dict]:
+    def generate_sentence_type_10(self) -> tuple[str, dict]:
+        """
+        Generate a sentence of type 10 and its corresponding entities list.
+
+        Type 10 Sentence: "<set> <attribute> of <descriptor> <thing> in <location> to <value>"
+
+        Returns:
+            tuple: A tuple containing the generated sentence and a dictionary of entities.
+        """
         action = self.get_random_synonym("set")
         attribute = self.get_random_entities("attributes")
         descriptor = self.get_random_helper("descriptor")
@@ -294,7 +383,7 @@ class TrainingDataGenerator:
         location = self.get_random_entities("location")
         value = self.get_random_value_string()
 
-        entitiesList = {
+        entities_list = {
             "actions": action,
             "attributes": attribute,
             "things": thing,
@@ -303,11 +392,11 @@ class TrainingDataGenerator:
         sentence = (
             f"{action} {attribute} of {descriptor} {thing} in {location} to {value}"
         )
-        return sentence, entitiesList
+        return sentence, entities_list
 
     def generate_sentence(
         self, sentence_type: int = 0
-    ) -> Tuple[str, Dict[str, List[Tuple[int, int, str]]]]:
+    ) -> tuple[str, dict[str, list[tuple[int, int, str]]]]:
         """
         Generate a sentence and its entity data for the given sentence type.
 
@@ -315,10 +404,9 @@ class TrainingDataGenerator:
             sentence_type (int, optional): The sentence type to generate. Default is 0 (random).
 
         Returns:
-            typing.Tuple[str, dict]: A tuple containing the generated sentence and its entity data.
-        """
+            tuple[str, dict]: A tuple containing the generated sentence and its entity data.
 
-        """
+        Implemented cases:    
         1. ON/OFF/TOGGLE the {switchableThing} in {location}
         2. ON/OFF/TOGGLE the {descriptor} {switchableThing} in {location}
 
@@ -335,9 +423,10 @@ class TrainingDataGenerator:
 
         10. SET {atribute} of {thing} in {location} to {value}
         """
+
         if sentence_type == 0:
             sentence_type = random.randint(1, 10)
-        entitiesList = {}
+        entities_list = {}
 
         sentence_type_mapping = {
             1: self.generate_sentence_type_1,
@@ -352,22 +441,23 @@ class TrainingDataGenerator:
             10: self.generate_sentence_type_10,
         }
 
-        sentence, entitiesList = sentence_type_mapping[sentence_type]()
+        sentence, entities_list = sentence_type_mapping[sentence_type]()
         sentence = sentence.lower()
 
         entities = []
-        for _, value in entitiesList.items():
-            slice = TrainingDataGenerator.find_substring(value, sentence)
-            if len(slice) > 1:
+        for _, value in entities_list.items():
+            slice_of_entity = TrainingDataGenerator.find_substring(
+                value, sentence)
+            if len(slice_of_entity) > 1:
                 print(sentence)
-            entities.extend(slice)
+            entities.extend(slice_of_entity)
 
         entity_data = []
         for entity in entities:
             start, end = entity
             entity_text = sentence[start:end]
             entity_label = [
-                key for key, value in entitiesList.items() if entity_text == value
+                key for key, value in entities_list.items() if entity_text == value
             ][0]
             entity_name = [
                 key for key, value in self.synonyms.items() if entity_text in value
@@ -378,7 +468,7 @@ class TrainingDataGenerator:
 
     def generate_training_data(
         self, n: int = cfg.SIZE_OF_TRAIN_DATA, sentence_type: int = 0
-    ) -> Tuple[List[str], List[Tuple[str, Dict[str, List[Tuple[int, int, str]]]]]]:
+    ) -> tuple[list[str], list[tuple[str, dict[str, list[tuple[int, int, str]]]]]]:
         """
         Generate a specified number of training data samples with sentences and their corresponding entity data.
 
@@ -387,12 +477,13 @@ class TrainingDataGenerator:
             sentence_type (int, optional): The sentence type to generate. Default is 0 (random).
 
         Returns:
-            typing.Tuple[list, list]: A tuple containing lists of generated sentences and training data.
+            tuple[list, list]: A tuple containing lists of generated sentences and training data.
         """
         training_data = []
         sentences_data = []
         for _ in range(n):
-            sentence, entities = self.generate_sentence(sentence_type=sentence_type)
+            sentence, entities = self.generate_sentence(
+                sentence_type=sentence_type)
             training_data.append((sentence, entities))
             sentences_data.append(sentence)
         return sentences_data, training_data
@@ -423,17 +514,19 @@ def main() -> None:
         try:
             with open(geneareted_file_path, "w", encoding="utf-8") as file:
                 json.dump(generated_data, file, ensure_ascii=False, indent=2)
-        except IOError as e:
-            print(f"An error occurred while writing to {geneareted_file_path}: {e}")
+        except IOError as exception:
+            print(
+                f"An error occurred while writing to {geneareted_file_path}: {exception}")
 
         try:
             with open(sentances_file_path, "w", encoding="utf-8") as file:
                 file.writelines(line + "\n" for line in sentences_data)
-        except IOError as e:
-            print(f"An error occurred while writing to {sentances_file_path}: {e}")
+        except IOError as exception:
+            print(
+                f"An error occurred while writing to {sentances_file_path}: {exception}")
 
-    except Exception as e:
-        print(f"An error occurred during the execution: {e}")
+    except Exception as exception:
+        print(f"An error occurred during the execution: {exception}")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,12 @@
+''''
+Module contais functions to train NER module
+'''
+import random
+import json
+import spacy
 from spacy.util import minibatch, compounding
 from spacy.training import Example
 import NLP.NER.config as cfg
-import spacy
-import random
-import typing as T
-import json
 
 
 def load_spacy_json(file_path: str) -> list:
@@ -23,7 +25,7 @@ def load_spacy_json(file_path: str) -> list:
 
 
 def create_model(
-    train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]]
+    train_data: list[tuple[str, dict[str, list[tuple[int, int, str]]]]]
 ) -> spacy.Language:
     """
     Create a spaCy NER model with custom labels from the training data.
@@ -51,7 +53,7 @@ def create_model(
 
 def train_model(
     nlp: spacy.Language,
-    train_data: T.List[T.Tuple[str, T.Dict[str, T.List[T.Tuple[int, int, str]]]]],
+    train_data: list[tuple[str, dict[str, list[tuple[int, int, str]]]]],
 ):
     """
     Train the NER model using the provided training data.
@@ -73,7 +75,7 @@ def train_model(
 
     # Split the data into training and validation sets
     train_examples = examples[: int(len(examples) * cfg.TRAIN_VAL_RATION)]
-    val_examples = examples[int(len(examples) * cfg.TRAIN_VAL_RATION) :]
+    val_examples = examples[int(len(examples) * cfg.TRAIN_VAL_RATION):]
 
     # Get the names of the model's other pipes (to disable during training)
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
@@ -83,7 +85,8 @@ def train_model(
         optimizer = nlp.begin_training()
         for itn in range(cfg.NUMBER_OF_EPOCHS):  # Number of iterations (epochs)
             random.shuffle(train_examples)
-            batches = minibatch(train_examples, size=compounding(4.0, 32.0, 1.001))
+            batches = minibatch(
+                train_examples, size=compounding(4.0, 32.0, 1.001))
             losses = {}
 
             for batch in batches:

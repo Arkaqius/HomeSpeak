@@ -1,7 +1,11 @@
+'''
+Module contains common Nlp classes 
+'''
 from enum import Enum
 from typing import Union
 
-class NLP_result_status(Enum):
+
+class NlpResultStatus(Enum):
     """
     Enum representing various statuses for NLP results.
 
@@ -26,7 +30,7 @@ class NLP_result_status(Enum):
     NEED_MORE_INFO = 'need_more_info'
 
 
-class NLP_result:
+class NlpResult:
     """
     Represents the result of an NLP process.
 
@@ -39,7 +43,7 @@ class NLP_result:
     - set_state: Sets the state and associated dialog of the NLP result.
     """
 
-    def __init__(self, status: NLP_result_status, dialog_to_say: str):
+    def __init__(self, status: NlpResultStatus, dialog_to_say: str):
         """
         Initializes a new instance of the NLP_result class.
 
@@ -47,7 +51,7 @@ class NLP_result:
         - status (NLP_result_status): The status of the NLP result.
         - dialog_to_say (str): The response dialog associated with the result.
         """
-        self.status: NLP_result_status = status
+        self.status: NlpResultStatus = status
         self.dialog_to_say: str = dialog_to_say
 
     def is_successful(self) -> bool:
@@ -57,9 +61,9 @@ class NLP_result:
         Returns:
         - bool: True if the status is SUCCESS, False otherwise.
         """
-        return self.status == NLP_result_status.SUCCESS
-    
-    def set_state(self, status: NLP_result_status, dialog: Union[str, None] = None):
+        return self.status == NlpResultStatus.SUCCESS
+
+    def set_state(self, status: NlpResultStatus, dialog: Union[str, None] = None):
         """
         Sets the state and associated dialog of the NLP result.
 

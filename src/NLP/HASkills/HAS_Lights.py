@@ -4,7 +4,7 @@ from typing import List, Dict, Any, TYPE_CHECKING
 from .common.HAS_common import HAS_find
 from .HAS_Base import HAS_Base
 from ..NER.ner_result import NerResult
-from ..NLP_common import NLP_result, NLP_result_status
+from ..nlp_common import NlpResult, NlpResultStatus
 from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class HAS_Lights(HAS_Base):
 
     def handle_utterance(
         self, orchst: "VHOrchestator", ner_result: NerResult, utterance: str
-    ) -> NLP_result | None:
+    ) -> NlpResult | None:
         """
         Handles a given utterance by checking for matching entities, choosing a winner, and delegating action handling
         to dedicated functions.
@@ -47,8 +47,8 @@ class HAS_Lights(HAS_Base):
         """
 
         # 10. Prepare object to return
-        result = NLP_result(
-            NLP_result_status.UNKNOWN, "ERROR : HAS lights skill failed"
+        result = NlpResult(
+            NlpResultStatus.UNKNOWN, "ERROR : HAS lights skill failed"
         )
 
         # 20. Looking for matching entities
@@ -62,7 +62,7 @@ class HAS_Lights(HAS_Base):
 
         # 40. If winner was not found decide to fail execution or ask user for more details
         if winner_entity is None:
-            result.set_state(NLP_result_status.NEED_MORE_INFO)
+            result.set_state(NlpResultStatus.NEED_MORE_INFO)
 
         # 50. Delegation of action handling to dedicated functions
         else:
@@ -102,7 +102,7 @@ class HAS_Lights(HAS_Base):
                 self.handle_req_info_query_brgth(winner_entity, result)
 
             else:
-                result.set_state(NLP_result_status.UNKNOWN_ACTION)
+                result.set_state(NlpResultStatus.UNKNOWN_ACTION)
 
         return result
 
@@ -128,7 +128,7 @@ class HAS_Lights(HAS_Base):
         ner_result: NerResult,
         winner_entity: Dict[str, Any],
         VH_orch: "VHOrchestator",
-        result: NLP_result,
+        result: NlpResult,
     ) -> None:
         """
         Handles a request to turn the light on or off.
@@ -148,17 +148,17 @@ class HAS_Lights(HAS_Base):
                 entity_id=f"{entity_id}",
             )
             result.set_state(
-                NLP_result_status.SUCCESS, f"Ok, I will turn on {friendly_name}"
+                NlpResultStatus.SUCCESS, f"Ok, I will turn on {friendly_name}"
             )
         except RequestTimeoutError:
             result.set_state(
-                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                NlpResultStatus.FAILURE, "No connection to Home Assistant server"
             )
 
     def handle_req_binary_query(
         self,
         winner_entity: Dict[str, Any],
-        result: NLP_result,
+        result: NlpResult,
     ) -> None:
         """
         Handles a binary query by getting the state of the winner entity and updating the dialogue result.
@@ -171,12 +171,12 @@ class HAS_Lights(HAS_Base):
         try:
             winner_entity["entity"].get_state()
             result.set_state(
-                NLP_result_status.SUCCESS,
+                NlpResultStatus.SUCCESS,
                 f"{friendly_name} is {winner_entity['entity'].state.state}",
             )
         except RequestTimeoutError:
             result.set_state(
-                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                NlpResultStatus.FAILURE, "No connection to Home Assistant server"
             )
 
     def handle_request_change_brightness(
@@ -184,7 +184,7 @@ class HAS_Lights(HAS_Base):
         ner_result: NerResult,
         winner_entity: Dict[str, Any],
         VH_orch: "VHOrchestator",
-        result: NLP_result,
+        result: NlpResult,
     ) -> None:
         """
         Handles a request to change the brightness of the light.
@@ -223,23 +223,23 @@ class HAS_Lights(HAS_Base):
                     **{brightness_type: f"{desired_brightness * 100}"},
                 )
                 result.set_state(
-                    NLP_result_status.SUCCESS,
+                    NlpResultStatus.SUCCESS,
                     f"Ok, I will change brightness of {friendly_name}",
                 )
             except RequestTimeoutError:
                 result.set_state(
-                    NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                    NlpResultStatus.FAILURE, "No connection to Home Assistant server"
                 )
         else:
             result.set_state(
-                NLP_result_status.FAILURE,
+                NlpResultStatus.FAILURE,
                 f"Light {friendly_name} does not support brightness feature.",
             )
 
     def handle_req_info_query_brgth(
         self,
         winner_entity: Dict[str, Any],
-        result: NLP_result,
+        result: NlpResult,
     ) -> None:
         """
         Handles an information query by getting the brightness of the winner entity and updating the dialogue result.
@@ -252,12 +252,12 @@ class HAS_Lights(HAS_Base):
         try:
             winner_entity["entity"].get_state()
             result.set_state(
-                NLP_result_status.SUCCESS,
+                NlpResultStatus.SUCCESS,
                 f"{friendly_name} brightness level is set to {(float(winner_entity['entity'].state.attributes['brightness']) * 100/256)}",
             )
         except RequestTimeoutError:
             result.set_state(
-                NLP_result_status.FAILURE, "No connection to Home Assistant server"
+                NlpResultStatus.FAILURE, "No connection to Home Assistant server"
             )
 
     @staticmethod

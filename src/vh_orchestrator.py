@@ -4,8 +4,8 @@ from vh_ner import VhNer, VhProcessedText
 from homeassistant_api import Client
 from ner_result import NerResult
 from NLP.NER.config import PATH_TRAINED_MODEL
-from NLP.NLP_skill import NLPSkill
-from NLP.NLP_common import NLP_result, NLP_result_status
+from nlp_skill import NLPSkill
+from nlp_common import NlpResult, NlpResultStatus
 import SECRETS as sec
 
 # Import all skills endpoint classes to register
@@ -87,7 +87,7 @@ class VHOrchestator:
 
         return max_score_skill
 
-    def _send_response(self, response: NLP_result):
+    def _send_response(self, response: NlpResult):
         """
         Evaluates the result of the skill's processing to determine and send the appropriate
         dialog response.
@@ -97,28 +97,28 @@ class VHOrchestator:
         """
 
         # 10
-        if response.status == NLP_result_status.UNKNOWN:
+        if response.status == NlpResultStatus.UNKNOWN:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_DIALOG)
-        elif response.status == NLP_result_status.SUCCESS:
+        elif response.status == NlpResultStatus.SUCCESS:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.SUCCESS_DIALOG)
-        elif response.status == NLP_result_status.FAILURE:
+        elif response.status == NlpResultStatus.FAILURE:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.FAILURE_DIALOG)
-        elif response.status == NLP_result_status.NOT_FOUND:
+        elif response.status == NlpResultStatus.NOT_FOUND:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.NOT_FOUND_DIALOG)
-        elif response.status == NLP_result_status.NO_RESPONSE:
+        elif response.status == NlpResultStatus.NO_RESPONSE:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.NO_RESPONSE_DIALOG)
-        elif response.status == NLP_result_status.UNKNOWN_ENTITY:
+        elif response.status == NlpResultStatus.UNKNOWN_ENTITY:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ENTITY_DIALOG)
-        elif response.status == NLP_result_status.UNKNOWN_ACTION:
+        elif response.status == NlpResultStatus.UNKNOWN_ACTION:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_ACTION_DIALOG)
-        elif response.status == NLP_result_status.NEED_MORE_INFO:
+        elif response.status == NlpResultStatus.NEED_MORE_INFO:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.NEED_MORE_INFO_DIALOG)
         else:
@@ -165,7 +165,7 @@ class VHOrchestator:
                 raise SkillNotFoundError("Skill was not found")
 
             # 30. Call best skill to handle utterance
-            action_to_perform: NLP_result = skill_to_call.handle_utterance(
+            action_to_perform: NlpResult = skill_to_call.handle_utterance(
                 self, text_process_result, utterance
             )
 

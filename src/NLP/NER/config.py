@@ -1,3 +1,6 @@
+'''
+Module to keep NER config
+'''
 # Path to the trained model directory
 PATH_TRAINED_MODEL = "./src/NLP/NER/modelTraining/trainedModel"
 

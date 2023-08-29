@@ -1,2 +1,2 @@
-class NLP_action:
+class NlpAction:
     pass
