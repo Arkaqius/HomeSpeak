@@ -2,6 +2,7 @@
 from typing import Optional
 from vh_ner import VhNer, VhProcessedText
 from homeassistant_api import Client
+from homeassistant_api.models import Group
 from ner_result import NerResult
 from NLP.NER.config import PATH_TRAINED_MODEL
 from nlp_skill import NLPSkill
@@ -48,9 +49,9 @@ class VHOrchestator:
         # Instance of Home Assistant Client
         self.hass_instance: Client = Client(sec.URL, sec.TOKEN)
         # Dictionary containing all entities from Home Assistant
-        self.all_entities: dict = self.hass_instance.get_entities()
+        self.all_entities: dict[str, Group] = self.hass_instance.get_entities()
         # Dictionary containing all light entities
-        self.ha_entity_group_lights: dict = self.all_entities["light"]
+        self.ha_entity_group_lights: Group = self.all_entities["light"]
         # All child classes instances that inherit from NLPSkills
         self.nlp_skills_dict = {
             skill.__name__: skill() for skill in NLPSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class, pylint: disable=C0301

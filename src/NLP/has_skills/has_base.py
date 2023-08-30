@@ -1,14 +1,14 @@
-from abc import abstractmethod
-from ..nlp_skill import NLPSkill
+# pylint: disable=C0114
 from typing import Tuple, TYPE_CHECKING, Optional
-from ..NER.ner_result import NerResult
+from ..nlp_skill import NLPSkill
+from ..ner.ner_result import NerResult
 from ..nlp_common import NlpResult
 
 if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
 
 
-class HAS_Base(NLPSkill):
+class HasBase(NLPSkill):
     """
     Base class for Home Assistant Skills.
 
@@ -25,17 +25,17 @@ class HAS_Base(NLPSkill):
         """
         Initializes a new instance of the `HAS_Base` class.
         """
-        self.child_skills_dict: dict[str, 'HAS_Base'] = {}
+        self.child_skills_dict: dict[str, 'HasBase'] = {}
 
     def init_own_children(self):
         """
         Initializes the `child_skills_dict` attribute with instances of all subclasses of `HAS_Base`.
         """
         self.child_skills_dict = {
-            skill.__name__: skill() for skill in HAS_Base.__subclasses__()
+            skill.__name__: skill() for skill in HasBase.__subclasses__()
         }  # All child classes instances that inherit from HAS_Base
 
-    def request_handling_score(self, ner_result: NerResult, _: str) -> Tuple[Optional['HAS_Base'], float]:
+    def request_handling_score(self, ner_result: NerResult, _: str) -> Tuple[Optional['HasBase'], float]:
         """
         Determine the best handler for a given NER result.
 
@@ -51,7 +51,7 @@ class HAS_Base(NLPSkill):
             return (handler, best_score)
         return (None, 0)
 
-    def _find_handler(self, ner_result: NerResult) -> Tuple[Optional['HAS_Base'], float]:
+    def _find_handler(self, ner_result: NerResult) -> Tuple[Optional['HasBase'], float]:
         """
         Internal method to find the most suitable handler for a given NER result.
 

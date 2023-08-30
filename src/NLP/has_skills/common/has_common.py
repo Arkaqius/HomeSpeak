@@ -1,5 +1,6 @@
-from fuzzywuzzy import fuzz
+# pylint: disable=C0114
 from typing import List, Dict, Any, Callable
+from fuzzywuzzy import fuzz
 from homeassistant_api import Entity
 
 
@@ -7,7 +8,7 @@ CANDIDATES_ADD_THRESHOLD: int = 50
 """Threshold above which entities are considered as valid candidates."""
 
 
-class HAS_find:
+class HasFind:
     """Helper class to find entities based on filters and similarity to a given query."""
     @staticmethod
     def _filter_by_entity_type(entity: Dict[str, Any], entity_type: str) -> bool:
@@ -68,9 +69,9 @@ class HAS_find:
 
         for _, entity in list_of_entities.items():
             if not all(
-                HAS_find.filters[key](entity, value)
+                HasFind.filters[key](entity, value)
                 for key, value in kwargs.items()
-                if key in HAS_Find.filters
+                if key in HasFind.filters
             ):
                 continue
 

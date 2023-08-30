@@ -1,17 +1,18 @@
+# pylint: disable=C0114
 from __future__ import annotations
-import NLP.HASkills.common.HAS_enums as HAS_enums
 from typing import List, Dict, Any, TYPE_CHECKING
-from .common.HAS_common import HAS_find
-from .HAS_Base import HAS_Base
-from ..NER.ner_result import NerResult
-from ..nlp_common import NlpResult, NlpResultStatus
 from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
+from nlp.has_skills.common import has_enums
+from .common.has_common import HasFind
+from .has_base import HasBase
+from ..ner.ner_result import NerResult
+from ..nlp_common import NlpResult, NlpResultStatus
 
 if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
 
 
-class HAS_Lights(HAS_Base):
+class HasLights(HasBase):
     """
     A class used to handle voice request to lights thing type.
 
@@ -52,13 +53,13 @@ class HAS_Lights(HAS_Base):
         )
 
         # 20. Looking for matching entities
-        candidates: List[Dict[str, Any]] = HAS_find.find_candidates(
-            HAS_Lights.build_suggest_entity_name(ner_result),
+        candidates: List[Dict[str, Any]] = HasFind.find_candidates(
+            HasLights.build_suggest_entity_name(ner_result),
             orchst.ha_entity_group_lights.entities,
         )
 
         # 30. Choose winner
-        winner_entity: Dict[str, Any] = HAS_Lights.choose_winner(candidates)
+        winner_entity: Dict[str, Any] = HasLights.choose_winner(candidates)
 
         # 40. If winner was not found decide to fail execution or ask user for more details
         if winner_entity is None:
@@ -66,13 +67,13 @@ class HAS_Lights(HAS_Base):
 
         # 50. Delegation of action handling to dedicated functions
         else:
-            action = ner_result.action.lower() if ner_result.action else None
-            attribute = ner_result.action.lower() if ner_result.action else None
+            action = ner_result.action.lower() if ner_result.action else None  # type: ignore
+            attribute = ner_result.action.lower() if ner_result.action else None  # type: ignore
 
             # ON/OFF
             if action in [
-                HAS_enums.Actions.ON.name.lower(),  # type: ignore
-                HAS_enums.Actions.OFF.name.lower(),  # type: ignore
+                has_enums.Actions.ON.name.lower(),  # type: ignore
+                has_enums.Actions.OFF.name.lower(),  # type: ignore
             ]:
                 self.handle_request_turn_onoff(
                     ner_result, winner_entity, orchst, result
@@ -80,24 +81,24 @@ class HAS_Lights(HAS_Base):
 
             # Binary query
             elif (
-                action == HAS_enums.Actions.BINARY_QUERY.name.lower()  # type: ignore
-                and attribute == HAS_enums.States.POWERED.name.lower()  # type: ignore
+                action == has_enums.Actions.BINARY_QUERY.name.lower()  # type: ignore
+                and attribute == has_enums.States.POWERED.name.lower()  # type: ignore
             ):
                 self.handle_req_binary_query(winner_entity, result)
 
             # Brightness
             elif (
-                (action == HAS_enums.Actions.ADJUST.name.lower() or action == HAS_enums.Actions.INCREASE.name.lower( # type: ignore
-                ) or action == HAS_enums.Actions.DECREASE.name.lower())  # type: ignore
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                (action == has_enums.Actions.ADJUST.name.lower() or action == has_enums.Actions.INCREASE.name.lower(  # type: ignore
+                ) or action == has_enums.Actions.DECREASE.name.lower())  # type: ignore
+                and attribute == has_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
                 self.handle_request_change_brightness(
                     ner_result, winner_entity, orchst, result)
 
             # Informational query
             elif (
-                action == HAS_enums.Actions.INFORMATION_QUERY.name.lower()  # type: ignore
-                and attribute == HAS_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                action == has_enums.Actions.INFORMATION_QUERY.name.lower()  # type: ignore
+                and attribute == has_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
                 self.handle_req_info_query_brgth(winner_entity, result)
 
@@ -118,7 +119,7 @@ class HAS_Lights(HAS_Base):
             int: 100 if the NER result is a light, 0 otherwise. - Simple logic
         """
 
-        if HAS_enums.Things.LIGHT.name.lower() == ner_result.thing:  # type: ignore
+        if has_enums.Things.LIGHT.name.lower() == ner_result.thing:  # type: ignore
             return 100
         else:
             return 0
@@ -127,7 +128,7 @@ class HAS_Lights(HAS_Base):
         self,
         ner_result: NerResult,
         winner_entity: Dict[str, Any],
-        VH_orch: "VHOrchestator",
+        vh_orch: "VHOrchestator",
         result: NlpResult,
     ) -> None:
         """
@@ -136,15 +137,15 @@ class HAS_Lights(HAS_Base):
         Args:
             ner_result (NER_result): The result of named entity recognition.
             winner_entity (Dict[str, Any]): The winning entity to use.
-            VH_orch (VHOrchestator): The orchestator object to use.
+            vh_orch (VHOrchestator): The orchestator object to use.
             result (NLP_result): The dialogue result to modify.
         """
         entity_id = winner_entity["entity"].entity_id
         friendly_name = winner_entity["entity"].state.attributes["friendly_name"]
         try:
-            VH_orch.hass_instance.trigger_service(
+            vh_orch.hass_instance.trigger_service(
                 "light",
-                "turn_" + str.lower(ner_result.action),
+                "turn_" + str.lower(ner_result.action),  # type: ignore
                 entity_id=f"{entity_id}",
             )
             result.set_state(
@@ -183,7 +184,7 @@ class HAS_Lights(HAS_Base):
         self,
         ner_result: NerResult,
         winner_entity: Dict[str, Any],
-        VH_orch: "VHOrchestator",
+        vh_orch: "VHOrchestator",
         result: NlpResult,
     ) -> None:
         """
@@ -192,7 +193,7 @@ class HAS_Lights(HAS_Base):
         Args:
             ner_result (NER_result): The result of named entity recognition.
             winner_entity (Dict[str, Any]): The winning entity to use.
-            VH_orch (VHOrchestator): The orchestator object to use.
+            vh_orch (VHOrchestator): The orchestator object to use.
             result (NLP_result): The dialogue result to modify.
         """
         entity_id = winner_entity["entity"].entity_id
@@ -200,23 +201,24 @@ class HAS_Lights(HAS_Base):
 
         # Check if found light support brightness
         if (
-            winner_entity.entity["attributes"]["supported_features"]
+            # type: ignore
+            winner_entity.entity["attributes"]["supported_features"] # type: ignore
             & self.SUPPORT_BRIGHTNESS
         ):
             desired_brightness: float = 0
             brightness_type = ""
-            if ner_result.action == HAS_enums.Actions.ADJUST.name.lower():  # type: ignore
-                desired_brightness = ner_result.value
+            if ner_result.action == has_enums.Actions.ADJUST.name.lower():  # type: ignore
+                desired_brightness = ner_result.value # type: ignore
                 brightness_type = "brightness_pct"
-            elif ner_result.action == HAS_enums.Actions.INCREASE.name.lower():  # type: ignore
+            elif ner_result.action == has_enums.Actions.INCREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP
                 brightness_type = "brightness_step_pct"
-            elif ner_result.action == HAS_enums.Actions.DECREASE.name.lower():  # type: ignore
+            elif ner_result.action == has_enums.Actions.DECREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP * -1
                 brightness_type = "brightness_step_pct"
 
             try:
-                VH_orch.hass_instance.trigger_service(
+                vh_orch.hass_instance.trigger_service(
                     "light",
                     "turn_on",
                     entity_id=f"{entity_id}",
@@ -291,8 +293,8 @@ class HAS_Lights(HAS_Base):
         location = ""
         if ner_result.description:
             description = "_".join(list(ner_result.description))
-        if ner_result.location:
-            location = ner_result.location
+        if ner_result.location:  # type: ignore
+            location = ner_result.location  # type: ignore
 
         if description:
             description = "_" + description

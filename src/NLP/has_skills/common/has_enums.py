@@ -1,6 +1,7 @@
+# pylint: disable=C0114
 import os
 from enum import Enum
-import NER.config as cfg
+import ner.config as cfg
 
 
 def generate_enum_from_files(directory: str, enum_name: str) -> Enum:
