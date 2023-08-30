@@ -1,6 +1,6 @@
 # pylint: disable=C0114
 import itertools
-from NER.vh_ner import VhProcessedText, VhNamedEntity, VhNumericalValue
+from ner.vh_ner import VhProcessedText, VhNamedEntity, VhNumericalValue
 
 
 class NerResult:

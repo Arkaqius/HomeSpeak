@@ -4,7 +4,7 @@ Module conatins main function and is used to generate NER model training data.
 import random
 import json
 from vocab import Vocab
-import NLP.NER.config as cfg
+import nlp.ner.config as cfg
 
 
 class TrainingDataGenerator:
@@ -467,7 +467,7 @@ class TrainingDataGenerator:
         return sentence, {"entities": entity_data}
 
     def generate_training_data(
-        self, n: int = cfg.SIZE_OF_TRAIN_DATA, sentence_type: int = 0
+        self, nbr: int = cfg.SIZE_OF_TRAIN_DATA, sentence_type: int = 0
     ) -> tuple[list[str], list[tuple[str, dict[str, list[tuple[int, int, str]]]]]]:
         """
         Generate a specified number of training data samples with sentences and their corresponding entity data.
@@ -481,7 +481,7 @@ class TrainingDataGenerator:
         """
         training_data = []
         sentences_data = []
-        for _ in range(n):
+        for _ in range(nbr):
             sentence, entities = self.generate_sentence(
                 sentence_type=sentence_type)
             training_data.append((sentence, entities))

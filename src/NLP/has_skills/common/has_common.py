@@ -69,7 +69,7 @@ class HasFind:
 
         for _, entity in list_of_entities.items():
             if not all(
-                HasFind.filters[key](entity, value)
+                HasFind.filters[key](entity, value) # type: ignore
                 for key, value in kwargs.items()
                 if key in HasFind.filters
             ):

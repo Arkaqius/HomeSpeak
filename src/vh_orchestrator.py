@@ -4,13 +4,14 @@ from vh_ner import VhNer, VhProcessedText
 from homeassistant_api import Client
 from homeassistant_api.models import Group
 from ner_result import NerResult
-from NLP.NER.config import PATH_TRAINED_MODEL
 from nlp_skill import NLPSkill
 from nlp_common import NlpResult, NlpResultStatus
+from nlp.ner.config import PATH_TRAINED_MODEL
+
 import SECRETS as sec
 
 # Import all skills endpoint classes to register
-from NLP.HASkills.HAS_Lights import HAS_Lights  # pylint: disable=C0412, disable=W0611
+from nlp.has_skills.has_lights import HasLights  # pylint: disable=C0412, disable=W0611
 
 # Custom exceptions
 class NERProcessingError(Exception):
