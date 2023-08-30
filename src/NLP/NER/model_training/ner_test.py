@@ -3,7 +3,7 @@ Module to test NER model
 '''
 import random
 from vh_ner import VhNer, VhProcessedText
-import NLP.NER.config as cfg
+import nlp.ner.config as cfg
 
 
 def main():

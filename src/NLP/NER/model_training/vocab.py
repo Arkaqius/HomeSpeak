@@ -2,7 +2,7 @@
 import os
 import glob
 import json
-from NLP.NER.config import PATH_VOCAB
+from nlp.ner.config import PATH_VOCAB
 
 
 class Vocab:

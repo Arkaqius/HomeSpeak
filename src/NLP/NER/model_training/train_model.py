@@ -6,7 +6,7 @@ import json
 import spacy
 from spacy.util import minibatch, compounding
 from spacy.training import Example
-import NLP.NER.config as cfg
+import nlp.ner.config as cfg
 
 
 def load_spacy_json(file_path: str) -> list:
