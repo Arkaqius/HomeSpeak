@@ -1,7 +1,7 @@
 # pylint: disable=C0114
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING, Optional
-from .NER.ner_result import NerResult
+from .ner.ner_result import NerResult
 from .nlp_common import NlpResult
 
 if TYPE_CHECKING:
