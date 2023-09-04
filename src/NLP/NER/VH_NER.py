@@ -94,7 +94,7 @@ class VhNer:
         self.nlp: Language = spacy.load(name=model_path)
         self.pretrained_nlp: Language = spacy.load(name="en_core_web_sm")
 
-    def _get_named_entities(self, text: str) -> dict[str, Tuple[str, str]]:
+    def _get_named_entities(self, text: str) -> dict[str, list[Tuple[str, str]]]:
         """
         Extracts named entities and their attributes from the given text using the Spacy
         NER model.
@@ -113,13 +113,21 @@ class VhNer:
             }
         """
         doc: Doc = self.nlp(text)
-        entities: Optional[dict[str, Tuple[str, str]]] = {}
+        entities: dict[str, list[Tuple[str, str]]] = {}
         for ent in doc.ents:
             split_label = ent.label_.split("_", maxsplit=1)
             if len(split_label) == 2:
                 entity_type, attribute = split_label
-                entities[entity_type.rstrip("s")] = (
-                    attribute.replace("#", ""), ent.text)
+                entity_type = entity_type.rstrip("s")
+                
+                # If entity type not in dictionary, add it with an empty list
+                if entity_type not in entities:
+                    entities[entity_type] = []
+
+                # Append the tuple (attribute, ent.text) to the list
+                entities[entity_type].append(
+                    (attribute.replace("#", ""), ent.text)
+                )
         return entities
 
     def _extract_numerical_values(self, text: str) -> list[tuple[float, str]]:  # pylint: disable=C0301
@@ -187,8 +195,13 @@ class VhNer:
         named_entities = self._get_named_entities(text)
         numerical_values = self._extract_numerical_values(text)
         return VhProcessedText(
-            named_entities=[VhNamedEntity(entity_type, entity_default_name, entity_text)
-                            for entity_type, (entity_default_name, entity_text) in named_entities.items()],
-            numerical_values=[VhNumericalValue(
-                value, unit) for value, unit in numerical_values],
+            named_entities=[
+                VhNamedEntity(entity_type, entity_default_name, entity_text)
+                for entity_type, entity_list in named_entities.items()
+                for (entity_default_name, entity_text) in entity_list
+            ],
+            numerical_values=[
+                VhNumericalValue(value, unit)
+                for value, unit in numerical_values
+            ],
         )

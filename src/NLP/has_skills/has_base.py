@@ -1,6 +1,6 @@
 # pylint: disable=C0114
 from typing import Tuple, TYPE_CHECKING, Optional
-from ..nlp_skill import NLPSkill
+from ..nlp_skill import NlpSkill
 from ..ner.ner_result import NerResult
 from ..nlp_common import NlpResult
 
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
 
 
-class HasBase(NLPSkill):
+class HasBase(NlpSkill):
     """
     Base class for Home Assistant Skills.
 

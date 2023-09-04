@@ -4,14 +4,14 @@ from vh_ner import VhNer, VhProcessedText
 from homeassistant_api import Client
 from homeassistant_api.models import Group
 from ner_result import NerResult
-from nlp_skill import NLPSkill
+from nlp_skill import NlpSkill
 from nlp_common import NlpResult, NlpResultStatus
 from nlp.ner.config import PATH_TRAINED_MODEL
 
 import SECRETS as sec
 
 # Import all skills endpoint classes to register
-from nlp.has_skills.has_lights import HasLights  # pylint: disable=C0412, disable=W0611
+from nlp.has_skills.has_lights import HasBase, HasLights # pylint: disable=C0412, disable=W0611
 
 # Custom exceptions
 class NERProcessingError(Exception):
@@ -54,14 +54,19 @@ class VHOrchestator:
         # Dictionary containing all light entities
         self.ha_entity_group_lights: Group = self.all_entities["light"]
         # All child classes instances that inherit from NLPSkills
+
+        #self.nlp_skills_dict = {
+        #    skill.__name__: skill() for skill in NlpSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class, pylint: disable=C0301
+        #}
+        
         self.nlp_skills_dict = {
-            skill.__name__: skill() for skill in NLPSkill.__subclasses__() # type: ignore We are instanting subclasses not parent, abstract class, pylint: disable=C0301
+            'HasBase': HasBase()
         }
 
         for skill in self.nlp_skills_dict.values():
             skill.init_own_children()
 
-    def _find_skill(self, utterance: str, ner_result: NerResult) -> Optional[NLPSkill]:
+    def _find_skill(self, utterance: str, ner_result: NerResult) -> Optional[NlpSkill]:
         """
         Evaluates the user's utterance and NER results to determine which skill is best
         suited to handle the request.
@@ -73,7 +78,7 @@ class VHOrchestator:
         Returns:
             Optional[NLPSkill]: The skill determined to be the best fit for the utterance or None if no skill is found.
         """
-        skills_score: dict[NLPSkill, float] = {}
+        skills_score: dict[NlpSkill, float] = {}
 
         for skill_instance in self.nlp_skills_dict.values():
             result_skill, result_skill_score = skill_instance.request_handling_score(
@@ -161,7 +166,7 @@ class VHOrchestator:
             print(f"ner_result: {text_process_result}")
 
             # 20. Find best skill to handle utterance
-            skill_to_call: Optional[NLPSkill] = self._find_skill(
+            skill_to_call: Optional[NlpSkill] = self._find_skill(
                 utterance, text_process_result)
             if not skill_to_call:
                 raise SkillNotFoundError("Skill was not found")
@@ -193,6 +198,7 @@ class VHOrchestator:
                 "1": "turn on lights in office",
                 "2": "turn off kitchen light",
                 "3": "set warm water to eco",
+                "4": "turn on lights in kitchen and bathroom",
             }
             if user_input.strip() in predefined_inputs:
                 user_input = predefined_inputs[user_input.strip()]

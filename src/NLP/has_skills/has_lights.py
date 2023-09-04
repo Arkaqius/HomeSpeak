@@ -2,10 +2,11 @@
 from __future__ import annotations
 from typing import List, Dict, Any, TYPE_CHECKING
 from HomeAssistantAPI.homeassistant_api.errors import RequestTimeoutError
-from nlp.has_skills.common import has_enums
-from .common.has_common import HasFind
+import sys
+from .common_pkg.has_enums import *
+from .common_pkg.has_common import HasFind
 from .has_base import HasBase
-from ..ner.ner_result import NerResult
+from ..ner.ner_result import NerResult, NerResultSingle
 from ..nlp_common import NlpResult, NlpResultStatus
 
 if TYPE_CHECKING:
@@ -47,6 +48,8 @@ class HasLights(HasBase):
             NLP_result: The result of NLP skill, overall outcome
         """
 
+        # 0.- TODO Limit for first  occurence:
+        single_request: NerResultSingle = ner_result.to_single_first_occurrences()
         # 10. Prepare object to return
         result = NlpResult(
             NlpResultStatus.UNKNOWN, "ERROR : HAS lights skill failed"
@@ -54,7 +57,7 @@ class HasLights(HasBase):
 
         # 20. Looking for matching entities
         candidates: List[Dict[str, Any]] = HasFind.find_candidates(
-            HasLights.build_suggest_entity_name(ner_result),
+            HasLights.build_suggest_entity_name(single_request),
             orchst.ha_entity_group_lights.entities,
         )
 
@@ -67,38 +70,38 @@ class HasLights(HasBase):
 
         # 50. Delegation of action handling to dedicated functions
         else:
-            action = ner_result.action.lower() if ner_result.action else None  # type: ignore
-            attribute = ner_result.action.lower() if ner_result.action else None  # type: ignore
+            action = single_request.action.lower() if single_request.action else None  # type: ignore
+            attribute = single_request.action.lower() if single_request.action else None  # type: ignore
 
             # ON/OFF
             if action in [
-                has_enums.Actions.ON.name.lower(),  # type: ignore
-                has_enums.Actions.OFF.name.lower(),  # type: ignore
+                Actions.ON.name.lower(),  # type: ignore
+                Actions.OFF.name.lower(),  # type: ignore
             ]:
                 self.handle_request_turn_onoff(
-                    ner_result, winner_entity, orchst, result
+                    single_request, winner_entity, orchst, result
                 )
 
             # Binary query
             elif (
-                action == has_enums.Actions.BINARY_QUERY.name.lower()  # type: ignore
-                and attribute == has_enums.States.POWERED.name.lower()  # type: ignore
+                action == Actions.BINARY_QUERY.name.lower()  # type: ignore
+                and attribute == States.POWERED.name.lower()  # type: ignore
             ):
                 self.handle_req_binary_query(winner_entity, result)
 
             # Brightness
             elif (
-                (action == has_enums.Actions.ADJUST.name.lower() or action == has_enums.Actions.INCREASE.name.lower(  # type: ignore
-                ) or action == has_enums.Actions.DECREASE.name.lower())  # type: ignore
-                and attribute == has_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                (action == Actions.ADJUST.name.lower() or action == Actions.INCREASE.name.lower(  # type: ignore
+                ) or action == Actions.DECREASE.name.lower())  # type: ignore
+                and attribute == Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
                 self.handle_request_change_brightness(
-                    ner_result, winner_entity, orchst, result)
+                    single_request, winner_entity, orchst, result)
 
             # Informational query
             elif (
-                action == has_enums.Actions.INFORMATION_QUERY.name.lower()  # type: ignore
-                and attribute == has_enums.Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                action == Actions.INFORMATION_QUERY.name.lower()  # type: ignore
+                and attribute == Attributes.BRIGTHNESS.name.lower()  # type: ignore
             ):
                 self.handle_req_info_query_brgth(winner_entity, result)
 
@@ -119,7 +122,7 @@ class HasLights(HasBase):
             int: 100 if the NER result is a light, 0 otherwise. - Simple logic
         """
 
-        if has_enums.Things.LIGHT.name.lower() == ner_result.thing:  # type: ignore
+        if any(thing == Things.LIGHT.name.lower() for thing in ner_result.thing): # type: ignore
             return 100
         else:
             return 0
@@ -198,7 +201,6 @@ class HasLights(HasBase):
         """
         entity_id = winner_entity["entity"].entity_id
         friendly_name = winner_entity["entity"].state.attributes["friendly_name"]
-
         # Check if found light support brightness
         if (
             # type: ignore
@@ -207,13 +209,13 @@ class HasLights(HasBase):
         ):
             desired_brightness: float = 0
             brightness_type = ""
-            if ner_result.action == has_enums.Actions.ADJUST.name.lower():  # type: ignore
+            if ner_result.action == Actions.ADJUST.name.lower():  # type: ignore
                 desired_brightness = ner_result.value # type: ignore
                 brightness_type = "brightness_pct"
-            elif ner_result.action == has_enums.Actions.INCREASE.name.lower():  # type: ignore
+            elif ner_result.action == Actions.INCREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP
                 brightness_type = "brightness_step_pct"
-            elif ner_result.action == has_enums.Actions.DECREASE.name.lower():  # type: ignore
+            elif ner_result.action == Actions.DECREASE.name.lower():  # type: ignore
                 desired_brightness = self.BRIGHNTESS_STEP * -1
                 brightness_type = "brightness_step_pct"
 

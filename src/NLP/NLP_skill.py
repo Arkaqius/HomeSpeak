@@ -1,14 +1,14 @@
 # pylint: disable=C0114
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING, Optional
-from .ner.ner_result import NerResult
-from .nlp_common import NlpResult
+from ner.ner_result import NerResult
+from nlp.nlp_common import NlpResult
 
 if TYPE_CHECKING:
     from vh_orchestrator import VHOrchestator
 
 
-class NLPSkill(ABC):
+class NlpSkill(ABC):
     """
     Abstract base class representing an NLP skill. Any specific NLP skill should subclass
     this class and implement its abstract methods.
@@ -25,7 +25,7 @@ class NLPSkill(ABC):
     """
 
     @abstractmethod
-    def request_handling_score(self, ner_result: NerResult, utterance: str) -> Tuple[Optional['NLPSkill'], float]:
+    def request_handling_score(self, ner_result: NerResult, utterance: str) -> Tuple[Optional['NlpSkill'], float]:
         """
         Calculates and returns a score indicating the suitability of the skill for 
         handling the given request based on the named entity recognition result and 
