@@ -1,3 +1,7 @@
+# Blog
+
+Project is maintened and described in my [blog](arekdevdiary.wordpress.com). Check it!
+
 # VoiceHAC
 
 VoiceHAC (Voice Home Automation Controller) is a comprehensive solution for controlling smart home devices through natural language processing. The project uses custom-trained NER models to understand voice commands, enabling users to control various aspects of their smart home environment.  
