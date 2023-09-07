@@ -7,6 +7,7 @@ from ner_result import NerResult
 from nlp_skill import NlpSkill
 from nlp_common import NlpResult, NlpResultStatus
 from nlp.ner.config import PATH_TRAINED_MODEL
+import openai
 
 import SECRETS as sec
 
@@ -66,6 +67,8 @@ class VHOrchestator:
         for skill in self.nlp_skills_dict.values():
             skill.init_own_children()
 
+        openai.api_key = sec.OPENAI_TOKEN
+
     def _find_skill(self, utterance: str, ner_result: NerResult) -> Optional[NlpSkill]:
         """
         Evaluates the user's utterance and NER results to determine which skill is best
@@ -103,7 +106,14 @@ class VHOrchestator:
             response (NLP_result): The results after processing by the selected skill.
         """
 
-        # 10
+        # 10 Determinate dialog
+        response = openai.Completion.create(
+            engine="davinci",
+            prompt="Translate the following English text to French: 'Hello, how are you?'",
+            max_tokens=50
+            )
+
+        print(response.choices[0].text.strip())
         if response.status == NlpResultStatus.UNKNOWN:
             VHOrchestator.say_dialog_stub(
                 response.dialog_to_say if response.dialog_to_say else self.UNKNOWN_DIALOG)
