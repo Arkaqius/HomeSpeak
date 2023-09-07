@@ -1,12 +1,41 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "echo",
+            "label": "Run orchestrator",
             "type": "shell",
-            "command": "echo Hello"
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/src/test.py"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate dataset",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/src/nlp/ner/model_training/generate_raw_data.py"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Train model",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/src/nlp/ner/model_training/train_model.py"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Test model",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/src/nlp/ner/model_training/ner_test.py"
+            ],
+            "problemMatcher": []
         }
     ]
 }

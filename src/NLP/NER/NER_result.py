@@ -41,6 +41,10 @@ class NerResult:
                                        and numerical values extracted from the text.
 
         """
+        # Initialize all keys with None
+        for key in self.NER_KEYS:
+            setattr(self, key, None)
+        
         if ner_raw: # If None, we are spliting multirequest to single one
             # Set default attributes
             for key in self.NER_KEYS:

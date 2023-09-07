@@ -14,10 +14,10 @@ PATH_TRAIN_DATA = "./src/nlp/ner/model_training/rawDataSet/spacy_training_data_g
 PATH_VOCAB = './src/nlp/ner/vocab/en-us'
 
 # The size of the training dataset
-SIZE_OF_TRAIN_DATA = 10000
+SIZE_OF_TRAIN_DATA = 1000
 
 # The number of epochs for training the model
-NUMBER_OF_EPOCHS = 100
+NUMBER_OF_EPOCHS = 50
 
 # The train-validation data ratio
-TRAIN_VAL_RATION = 0.6
+TRAIN_VAL_RATION = 0.8

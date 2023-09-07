@@ -71,12 +71,13 @@ class HasLights(HasBase):
         # 50. Delegation of action handling to dedicated functions
         else:
             action = single_request.action.lower() if single_request.action else None  # type: ignore
-            attribute = single_request.action.lower() if single_request.action else None  # type: ignore
+            attribute = single_request.attribute.lower() if single_request.attribute else None  # type: ignore
+            states = single_request.state.lower() if single_request.state else None # type: ignore
 
             # ON/OFF
             if action in [
-                Actions.ON.name.lower(),  # type: ignore
-                Actions.OFF.name.lower(),  # type: ignore
+                Actions.TURN_ON.name.lower(),  # type: ignore
+                Actions.TURN_OFF.name.lower(),  # type: ignore
             ]:
                 self.handle_request_turn_onoff(
                     single_request, winner_entity, orchst, result
@@ -85,7 +86,7 @@ class HasLights(HasBase):
             # Binary query
             elif (
                 action == Actions.BINARY_QUERY.name.lower()  # type: ignore
-                and attribute == States.POWERED.name.lower()  # type: ignore
+                and states == States.POWERED.name.lower()  # type: ignore
             ):
                 self.handle_req_binary_query(winner_entity, result)
 
@@ -93,7 +94,7 @@ class HasLights(HasBase):
             elif (
                 (action == Actions.ADJUST.name.lower() or action == Actions.INCREASE.name.lower(  # type: ignore
                 ) or action == Actions.DECREASE.name.lower())  # type: ignore
-                and attribute == Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                and attribute == Attributes.BRIGHTNESS.name.lower()  # type: ignore
             ):
                 self.handle_request_change_brightness(
                     single_request, winner_entity, orchst, result)
@@ -101,7 +102,7 @@ class HasLights(HasBase):
             # Informational query
             elif (
                 action == Actions.INFORMATION_QUERY.name.lower()  # type: ignore
-                and attribute == Attributes.BRIGTHNESS.name.lower()  # type: ignore
+                and attribute == Attributes.BRIGHTNESS.name.lower()  # type: ignore
             ):
                 self.handle_req_info_query_brgth(winner_entity, result)
 
@@ -148,7 +149,7 @@ class HasLights(HasBase):
         try:
             vh_orch.hass_instance.trigger_service(
                 "light",
-                "turn_" + str.lower(ner_result.action),  # type: ignore
+                str.lower(ner_result.action),  # type: ignore
                 entity_id=f"{entity_id}",
             )
             result.set_state(
@@ -202,11 +203,7 @@ class HasLights(HasBase):
         entity_id = winner_entity["entity"].entity_id
         friendly_name = winner_entity["entity"].state.attributes["friendly_name"]
         # Check if found light support brightness
-        if (
-            # type: ignore
-            winner_entity.entity["attributes"]["supported_features"] # type: ignore
-            & self.SUPPORT_BRIGHTNESS
-        ):
+        if (winner_entity["entity"].state.attributes['supported_features'] & self.SUPPORT_BRIGHTNESS ): # type: ignore
             desired_brightness: float = 0
             brightness_type = ""
             if ner_result.action == Actions.ADJUST.name.lower():  # type: ignore

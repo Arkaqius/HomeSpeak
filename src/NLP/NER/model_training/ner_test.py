@@ -16,7 +16,7 @@ def main():
 
         if user_input.lower() == 'exit':
             break
-        elif user_input.lower() == 'random':
+        elif user_input.lower() == 'r':
             with open(cfg.PATH_TEST_SENTENCES, "r", encoding='UTF-8') as file:
                 lines = file.readlines()
                 user_input = random.choice(lines)

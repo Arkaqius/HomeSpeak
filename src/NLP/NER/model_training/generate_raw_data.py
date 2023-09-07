@@ -161,8 +161,8 @@ class TrainingDataGenerator:
         switchable_thing = self.get_random_helper("switchableThing")
         action = random.choice(
             [
-                self.get_random_synonym("on"),
-                self.get_random_synonym("off"),
+                self.get_random_synonym("turn_on"),
+                self.get_random_synonym("turn_off"),
                 self.get_random_synonym("toggle"),
             ]
         )
@@ -188,8 +188,8 @@ class TrainingDataGenerator:
         switchable_thing = self.get_random_helper("switchableThing")
         action = random.choice(
             [
-                self.get_random_synonym("on"),
-                self.get_random_synonym("off"),
+                self.get_random_synonym("turn_on"),
+                self.get_random_synonym("turn_off"),
                 self.get_random_synonym("toggle"),
             ]
         )
