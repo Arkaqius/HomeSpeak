@@ -83,14 +83,14 @@ class HasLights(HasBase):
                     single_request, winner_entity, orchst, result
                 )
 
-            # Binary query
+            # Binary query for state
             elif (
                 action == Actions.BINARY_QUERY.name.lower()  # type: ignore
                 and states == States.POWERED.name.lower()  # type: ignore
             ):
                 self.handle_req_binary_query(winner_entity, result)
 
-            # Brightness
+            # Brightness command
             elif (
                 (action == Actions.ADJUST.name.lower() or action == Actions.INCREASE.name.lower(  # type: ignore
                 ) or action == Actions.DECREASE.name.lower())  # type: ignore
@@ -99,7 +99,7 @@ class HasLights(HasBase):
                 self.handle_request_change_brightness(
                     single_request, winner_entity, orchst, result)
 
-            # Informational query
+            # Informational query about brightness
             elif (
                 action == Actions.INFORMATION_QUERY.name.lower()  # type: ignore
                 and attribute == Attributes.BRIGHTNESS.name.lower()  # type: ignore
